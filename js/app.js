@@ -183,6 +183,8 @@
 
     var irFinal = $('#ir-final', sec);
     irFinal.hidden = prog.sellos() < cfg.desafios.length;
+    // Con un sello de margen, Three.js se va bajando en segundo plano para que el final no espere
+    if (prog.sellos() >= cfg.desafios.length - 1) PP.precargarThree();
     irFinal.addEventListener('click', function () { location.hash = '#final'; });
 
     if (!PP.hayCripto()) {
@@ -316,6 +318,7 @@
       lugar.scrollIntoView({ block: 'center', behavior: PP.reducirMovimiento() ? 'auto' : 'smooth' });
       await PP.estampar(lugar, selloDe(d, i), ROT[i % ROT.length]);
       var todos = prog.sellos() === cfg.desafios.length;
+      if (prog.sellos() >= cfg.desafios.length - 1) PP.precargarThree();
       PP.confeti({ cantidad: todos ? 160 : 80, y: 0.45 });
       recompensa();
       siguiente();
@@ -355,7 +358,8 @@
       '</header>' +
       '<article class="hoja final-hoja" data-pag="✓">' +
         '<h2><span class="chico">' + esc(cfg.banco) + '</span>Cobro del cheque</h2>' +
-        '<div class="cheque-pantalla" id="cheque">' + PP.chequeHTML(cfg, { monto: '????' }) + '</div>' +
+        '<div class="escena-valija" id="escena-valija"></div>' +
+        '<div class="cheque-pantalla" id="cheque" hidden>' + PP.chequeHTML(cfg, { monto: '????' }) + '</div>' +
         '<p class="verificando" id="verificando" aria-live="polite"></p>' +
         '<div id="revelado" hidden>' +
           '<p class="titulo-final revela">' + esc(f.titulo) + '</p>' +
@@ -375,10 +379,24 @@
     enlazarSonido(sec);
     $('#volver', sec).addEventListener('click', function () { location.hash = '#mapa'; });
     mostrar('final');
-    cobrar(sec);
+    // La valija 3D se arma mientras el banco "verifica" los sellos
+    var foto = (f.proximo.galeria || [])[0];
+    var valija = PP.Valija3D($('#escena-valija', sec), cfg, {
+      sellos: cfg.desafios.map(function (d, i) { return PP.selloSVG(selloDe(d, i)); }),
+      foto: foto && foto.src,
+      pieFoto: f.proximo.titulo,
+      alAterrizar: PP.sonarSello,
+      alAbrir: function () { PP.confeti({ cantidad: 60, y: 0.3, fuerza: 0.8 }); },
+    }).catch(function () { return null; });
+    cobrar(sec, valija);
   }
 
-  async function cobrar(sec) {
+  // Resuelve null si la valija tarda demasiado (conexión lenta): el final sigue en 2D
+  function conLimite(promesa, ms) {
+    return Promise.race([promesa, new Promise(function (r) { setTimeout(function () { r(null); }, ms); })]);
+  }
+
+  async function cobrar(sec, promValija) {
     var f = cfg.final;
     var ver = $('#verificando', sec);
     ver.textContent = f.verificando;
@@ -396,6 +414,19 @@
       return;
     }
     ver.textContent = '';
+    var escena = $('#escena-valija', sec);
+    var valija = await conLimite(promValija, 9000);
+    if (valija) {
+      ver.textContent = 'Abriendo tu valija…';
+      await valija.abrir();
+      ver.textContent = '';
+    } else {
+      escena.hidden = true;
+    }
+    var chequeEl = $('#cheque', sec);
+    chequeEl.hidden = false;
+    chequeEl.classList.add('revela');
+    await esperar(500);
     await PP.estampar($('.ch-sello', sec), {
       forma: 'rect', arriba: cfg.banco.toUpperCase(), centro: f.sello, centroTam: 30,
       abajo: new Date().toLocaleDateString('es-AR'), color: '#9b2c3a', semilla: 21,

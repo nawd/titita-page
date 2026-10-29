@@ -1,8 +1,9 @@
 # Pasaporte · Banco de Nosotros
 
-Un regalo en forma de juego: un cheque impreso de un banco ficticio con un QR que lleva a un **pasaporte** web. Ella resuelve 4 destinos sobre un mapa de Sudamérica escrito con letras, junta 4 sellos, y el banco "aprueba" el cheque: se descifra el monto, aparece tu mensaje y el mapa vuela a los lagos del sur, con fotos del próximo viaje.
+Un regalo en forma de juego: un cheque impreso de un banco ficticio con un QR que lleva a un **pasaporte** web. Ella resuelve 4 destinos sobre un mapa de Sudamérica escrito con letras, junta 4 sellos, y el banco "aprueba" el cheque: aparece una **valija 3D** que se abre y de adentro sale el cheque, se descifra el monto, aparece tu mensaje y el mapa vuela a los lagos del sur, con fotos del próximo viaje.
 
 - HTML + CSS + JS vanilla, sin build. Funciona en GitHub Pages tal cual.
+- La valija 3D usa Three.js desde CDN y se carga solo al final; si el celu no tiene WebGL, el final sigue en 2D.
 - Todo el contenido vive en [`config.js`](config.js).
 - Especificación completa: [`SPEC.md`](SPEC.md).
 
@@ -53,9 +54,10 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
    - `text`: solo `respuestas`.
 4. **Pista oculta:** `pistaOculta.palabra` (ayuda para el desafío 4) y en qué textos se esconden sus letras. El test avisa si la palabra no entra en esos textos.
 5. **Mensaje final:** monto, moneda y tu frase se cifran con `tools/generar.html` y van en `final.cifrado`. Lo demás de `final` (título, guiño a la etiqueta, ruta de los lagos, galería, cierre) es texto plano.
-6. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
-7. **Cheque:** `cheque.microtexto` es la respuesta del desafío 4 impresa en la línea de firma; también el texto del dorso y de la etiqueta.
-8. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
+6. **Valija 3D:** usa sola los sellos de los 4 destinos, la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
+7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
+8. **Cheque:** `cheque.microtexto` es la respuesta del desafío 4 impresa en la línea de firma; también el texto del dorso y de la etiqueta.
+9. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
 
 Si cambiás respuestas o el contenido de los desafíos después de que ella empezó, subí `version` (por ej. `'v2'`) para que el progreso guardado se reinicie.
 
@@ -109,7 +111,7 @@ El repo es `https://github.com/nawd/titita-page`.
 - [ ] Respuestas y `final.cifrado` generados con `tools/generar.html` y probados con **Probar**.
 - [ ] `node tests/run.mjs` en verde (si cambiaste respuestas, actualizá la tabla `EJEMPLO` del test o ignorá esos 2 casos).
 - [ ] Subido a GitHub Pages y abierto desde el celular.
-- [ ] Recorrido completo en el celu: los 4 destinos, la falsa derrota, el cheque aprobado con el monto correcto, la galería.
+- [ ] Recorrido completo en el celu: los 4 destinos, la falsa derrota, la valija 3D abriéndose, el cheque aprobado con el monto correcto, la galería.
 - [ ] `cheque.html`: el microtexto de la firma es la respuesta del desafío 4.
 - [ ] Imprimir el cheque (escala 100%, gráficos de fondo activados) y **escanear el QR impreso** con el celu.
 - [ ] Imprimir la etiqueta en cartulina, recortar, doblar y ponerle hilo.

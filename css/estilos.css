@@ -365,6 +365,8 @@ body.lupa .tl {
 /* ---------- Final ---------- */
 .final-hoja { text-align: center; }
 .cheque-pantalla { margin: 8px -6px 0; position: relative; }
+.escena-valija { margin: 0 -14px; aspect-ratio: 1 / 0.92; position: relative; }
+.escena-valija canvas { display: block; width: 100%; }
 .verificando { font: 13px var(--maquina); color: var(--tinta-suave); margin: 12px 0 0 !important; min-height: 1.5em; }
 .titulo-final { font: 400 30px/1.15 var(--serif); color: var(--bordo); margin: 18px 0 8px; }
 .mensaje-final { font: italic 22px/1.35 var(--serif); color: var(--tinta); margin: 10px 0 !important; }
