@@ -112,6 +112,10 @@
       postal = lista;
       ayuda.textContent = '↻ ' + cfg.portada.ayuda;
       ayuda.disabled = false;
+    }).catch(function () {
+      // Si ni la postal 2D se pudo armar, que igual pueda entrar
+      ayuda.hidden = true;
+      boton.hidden = false;
     });
 
     ayuda.addEventListener('click', function () { if (postal) postal.darVuelta(); });

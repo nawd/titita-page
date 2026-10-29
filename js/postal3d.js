@@ -30,13 +30,30 @@
     ctx.closePath();
   }
 
+  // Grano de papel: un mosaico de ruido propio encima, sin leer los píxeles de la cara
+  // (con file:// las fotos "ensucian" el canvas y getImageData tira SecurityError)
+  var mosaicoGrano = null;
   function grano(ctx, w, h, fuerza) {
-    var datos = ctx.getImageData(0, 0, w, h), d = datos.data;
-    for (var i = 0; i < d.length; i += 4) {
-      var n = (Math.random() - 0.5) * fuerza;
-      d[i] += n; d[i + 1] += n; d[i + 2] += n;
+    if (!mosaicoGrano) {
+      mosaicoGrano = PP.lienzo(128, 128);
+      var g = mosaicoGrano.getContext('2d'), datos = g.createImageData(128, 128), d = datos.data;
+      for (var i = 0; i < d.length; i += 4) {
+        var claro = Math.random() < 0.5;
+        d[i] = d[i + 1] = d[i + 2] = claro ? 255 : 0;
+        d[i + 3] = Math.random() * 255;
+      }
+      g.putImageData(datos, 0, 0);
     }
-    ctx.putImageData(datos, 0, 0);
+    ctx.save();
+    ctx.globalAlpha = fuerza / 160;
+    ctx.fillStyle = ctx.createPattern(mosaicoGrano, 'repeat');
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+  }
+
+  // WebGL no acepta texturas de un canvas "sucio" (fotos de otro origen, como en file://)
+  function sePuedeLeer(c) {
+    try { c.getContext('2d').getImageData(0, 0, 1, 1); return true; } catch (e) { return false; }
   }
 
   function tenir(c, color) {
@@ -268,6 +285,7 @@
     var THREE = await PP.precargarThree();
     if (!THREE) return null;
     var caras = await armarCaras(cfg);
+    if (!sePuedeLeer(caras.frente) || !sePuedeLeer(caras.dorso)) return null;
 
     var renderer;
     try {
