@@ -1,6 +1,6 @@
 # Pasaporte · Banco de Nosotros
 
-Un regalo en forma de juego: un cheque impreso de un banco ficticio con un QR que lleva a un **pasaporte** web. Ella resuelve 4 destinos sobre un mapa de Sudamérica escrito con letras, junta 4 sellos, y el banco "aprueba" el cheque: aparece una **valija 3D** que se abre y de adentro sale el cheque, se descifra el monto, aparece tu mensaje y el mapa vuela a los lagos del sur, con fotos del próximo viaje.
+Un regalo en forma de juego: un cheque impreso de un banco ficticio con un QR que lleva a un **pasaporte** web. Ella resuelve 4 destinos sobre un mapa de Sudamérica escrito con letras, junta 4 sellos, y el banco "aprueba" el cheque: aparece una **valija 3D** que se abre y de adentro sale el cheque, se revela el monto, aparece tu mensaje y el mapa vuela a los lagos del sur, con fotos del próximo viaje.
 
 - HTML + CSS + JS vanilla, sin build. Funciona en GitHub Pages tal cual.
 - La valija 3D usa Three.js desde CDN y se carga solo al final; si el celu no tiene WebGL, el final sigue en 2D.
@@ -14,9 +14,8 @@ index.html          pasaporte (portada, mapa, desafíos, final)
 cheque.html         cheque 20×8 cm + dorso + etiqueta de equipaje, para imprimir
 config.js           TODO el contenido editable
 css/                estilos del pasaporte, del cheque y de impresión
-js/                 lógica (cripto, mapa, desafíos, efectos, galería…)
+js/                 lógica (respuestas, mapa, desafíos, efectos, galería…)
 assets/img/         fotos (ejemplo/ y galeria/ traen mocks para probar)
-tools/generar.html  respuestas + mensaje final → hashes y texto cifrado
 tools/blur.html     una foto → 4 versiones desenfocadas
 tools/mapa-gen.mjs  regenera js/mapa-data.js desde Natural Earth
 tests/run.mjs       tests (node tests/run.mjs)
@@ -39,7 +38,7 @@ Abrí `http://localhost:8080`. Las respuestas de ejemplo son:
 
 La pista oculta del ejemplo es la palabra **FIRMA** (letras apenas más violetas en los textos del titular y del mapa; mantené apretado el logo del banco para resaltarlas).
 
-> Ojo: la validación usa WebCrypto, que solo anda en `https://`, `localhost` o abriendo el archivo con doble clic. Si entrás desde el celular a `http://192.168.x.x:8080` **no** va a validar: para el celu usá la URL de GitHub Pages.
+Para probarlo en el celu sin subir nada: con la compu y el celu en el mismo wifi, entrá desde el celu a `http://<IP de la compu>:8080` (la IP la ves con `ipconfig`).
 
 ## Cómo personalizar
 
@@ -47,13 +46,13 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
 
 1. **Datos generales:** `nombre`, `autor` (tu nombre, va en la firma), `fecha` y `numeroCheque` (la fecha de ustedes), `siteUrl` (la URL de Pages).
 2. **Titular:** `titular.foto` (una foto de ella), nacionalidad, profesión y el texto de bienvenida.
-3. **Desafíos:** cada uno tiene `destino`, `pais`, `lat`/`lon` (dónde va el pin), `enunciado`, 2 `pistas` (aparecen a los 2 y 4 errores), `recompensa` y sus `respuestas` (hashes). Por tipo:
+3. **Desafíos:** cada uno tiene `destino`, `pais`, `lat`/`lon` (dónde va el pin), `enunciado`, 2 `pistas` (aparecen a los 2 y 4 errores), `recompensa` y sus `respuestas`: una lista en texto plano con todas las formas que aceptás. Se comparan sin mayúsculas, tildes, puntuación ni espacios de más, así que `'Río de Janeiro'` ya acepta `rio de janeiro!`. Por tipo:
    - `blur`: `imagenes` con las 4 versiones (usá `tools/blur.html`).
-   - `memotest`: `cartas` con 6 fotos y `palabraClave`.
-   - `order`: `sellos` con `id` y `nombre` (opcional `imagen` y `anio`). El orden del config no importa: se muestra mezclado.
+   - `memotest`: `cartas` con 6 fotos y `palabraClave` (ya vale como respuesta; `respuestas` es para sumar otras).
+   - `order`: `sellos` con `id` y `nombre` (opcional `imagen` y `anio`) y `ordenCorrecto` con los `id` del más viejo al más nuevo. Los sellos se muestran mezclados.
    - `text`: solo `respuestas`.
 4. **Pista oculta:** `pistaOculta.palabra` (ayuda para el desafío 4) y en qué textos se esconden sus letras. El test avisa si la palabra no entra en esos textos.
-5. **Mensaje final:** monto, moneda y tu frase se cifran con `tools/generar.html` y van en `final.cifrado`. Lo demás de `final` (título, guiño a la etiqueta, ruta de los lagos, galería, cierre) es texto plano.
+5. **Mensaje final:** `final.monto` (número, sin puntos), `final.moneda` y `final.mensaje` (tu frase). El resto de `final`: título, guiño a la etiqueta, ruta de los lagos, galería y cierre.
 6. **Valija 3D:** usa sola los sellos de los 4 destinos, la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
 7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
 8. **Cheque:** `cheque.microtexto` es la respuesta del desafío 4 impresa en la línea de firma; también el texto del dorso y de la etiqueta.
@@ -62,15 +61,6 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
 Si cambiás respuestas o el contenido de los desafíos después de que ella empezó, subí `version` (por ej. `'v2'`) para que el progreso guardado se reinicie.
 
 ## Herramientas (`/tools`, uso local)
-
-### `tools/generar.html` — respuestas y mensaje cifrado
-1. Abrilo con doble clic (o desde `http://localhost:8080/tools/generar.html`). Lee los desafíos de `config.js`.
-2. Para cada desafío escribí la respuesta principal y, si querés, otras formas válidas (una por línea). En "ordenar", los `id` en el orden correcto separados por coma. En el memotest, la misma `palabraClave`.
-3. Escribí el monto y tu mensaje y tocá **Generar**.
-4. Pegá cada bloque `respuestas: [...]` en su desafío y el `cifrado: {...}` en `final.cifrado`.
-5. Usá **Probar** para chequear que lo que escribiría ella es aceptado.
-
-Las respuestas se comparan normalizadas: sin mayúsculas, tildes, puntuación ni espacios de más. El monto solo se puede descifrar con las 4 respuestas correctas.
 
 ### `tools/blur.html` — fotos borrosas
 1. Elegí la foto, poné un nombre base (ej. `destino1`) y tocá **Generar**.
@@ -108,8 +98,8 @@ El repo es `https://github.com/nawd/titita-page`.
 ## Checklist antes de imprimir
 
 - [ ] `config.js` sin `[CORCHETES]` (nombre, tu firma, fecha, recuerdos).
-- [ ] Respuestas y `final.cifrado` generados con `tools/generar.html` y probados con **Probar**.
-- [ ] `node tests/run.mjs` en verde (si cambiaste respuestas, actualizá la tabla `EJEMPLO` del test o ignorá esos 2 casos).
+- [ ] Respuestas, `ordenCorrecto`, `final.monto` y `final.mensaje` puestos en `config.js`.
+- [ ] `node tests/run.mjs` en verde (chequea que cada desafío acepte su respuesta y que el microtexto del cheque sea válido).
 - [ ] Subido a GitHub Pages y abierto desde el celular.
 - [ ] Recorrido completo en el celu: los 4 destinos, la falsa derrota, la valija 3D abriéndose, el cheque aprobado con el monto correcto, la galería.
 - [ ] `cheque.html`: el microtexto de la firma es la respuesta del desafío 4.
@@ -124,4 +114,4 @@ El repo es `https://github.com/nawd/titita-page`.
 node tests/run.mjs
 ```
 
-Prueban la normalización, SHA-256, cifrado AES-GCM/PBKDF2, las reglas del juego y que el `config.js` de ejemplo acepte sus respuestas y descifre el final.
+Prueban la normalización, la validación de respuestas, las reglas del juego y que `config.js` sea coherente: cada desafío acepta su respuesta, el orden usa todos los sellos, el microtexto es la respuesta del desafío 4 y la pista oculta entra en los textos.

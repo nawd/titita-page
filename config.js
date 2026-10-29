@@ -1,7 +1,7 @@
 // ============================================================================
 //  CONFIG DEL PASAPORTE — todo el contenido editable vive acá.
 //  Lo marcado con [CORCHETES] es placeholder: reemplazalo por lo tuyo.
-//  Respuestas y mensaje final se generan con tools/generar.html (ver README).
+//  Respuestas, monto y mensaje final están en texto plano: editalos directo acá.
 // ============================================================================
 globalThis.CONFIG = {
   // Cambiá la versión si querés que el progreso guardado se reinicie para todos.
@@ -89,7 +89,8 @@ globalThis.CONFIG = {
         'assets/img/ejemplo/rio-nitida.svg',
       ],
       pistas: ['Hacía muchísimo calor y había un Cristo mirándonos.', 'Empieza con R y tiene carnaval.'],
-      respuestas: [{"h":"2f54e9dfcabf0f571da60b5946c9a26d3195e3afa2a18718e5637dd3bcd0b2fe"},{"h":"682f158037ed29e3b1718ce7060f73e69cfa2673d9bcd898ad4ecdfd4fe7f320","w":{"s":"lPWvvWL2alJeXgyOkqIWTg==","i":"KbDKwsYivIrJA/yC","c":"p+HjPKCFZwvHKqBjU2agNtQkbhLCppotExAMjWWP","n":50000}},{"h":"6c95e8a2026685d9a0e24c5badca1e5d0713037f7bb53acd03bcee618e0be595","w":{"s":"wdrr1kvrBBpPEUleCtD/6A==","i":"D1OTcRdFiaiWNBsj","c":"XuRxE56pmrbE0WovrZJuE5M1+ZOnKD8/icdorJAR","n":50000}},{"h":"908066daa8bdbe1a3dfc7dea403ad953848326cb3b0b0305e5ae8a77dbbfa313","w":{"s":"nkGT9uhTUax7Jrv36hVN3Q==","i":"fOCcra6Q0VvzboWD","c":"42eBmNx1RDOL+TPIeTSctixiFe93h6+ihPddxqYC","n":50000}}],
+      // Respuestas válidas: se comparan sin mayúsculas, tildes ni puntuación.
+      respuestas: ['Río de Janeiro', 'Rio', 'Rio Janeiro', 'Janeiro'],
       recompensa: { texto: 'Todavía me acuerdo de tu cara cuando vimos el mar desde arriba. [TU RECUERDO]' },
     },
     {
@@ -111,7 +112,8 @@ globalThis.CONFIG = {
       palabraClave: 'AVENTURA', // se muestra al completar el memotest
       sinFalsaDerrota: true,
       pistas: ['Las cartas no muerden: dalas vuelta sin miedo.', 'Tip de experta: arrancá por las esquinas.'],
-      respuestas: [{"h":"0ec4cc78a4940545cbc03c90976cd27542e1d71f9de43ccabb7eaad0ec0a28d9"}],
+      // La palabraClave ya vale como respuesta; acá podés sumar otras.
+      respuestas: [],
       recompensa: { texto: 'Memoria de elefante y corazón de golondrina. Sello concedido.' },
     },
     {
@@ -131,7 +133,8 @@ globalThis.CONFIG = {
         { id: 'florianopolis', nombre: 'Florianópolis', anio: '' },
       ],
       pistas: ['El primero fue el que tuvo más sierras.', 'El último fue el más al norte de Argentina.'],
-      respuestas: [{"h":"4c7944a817c2987f47365ef7913cc20b86ef2ed0da116f964aed633f12a32034"}],
+      // Orden correcto (del más viejo al más nuevo), con los ids de arriba.
+      ordenCorrecto: ['cordoba', 'florianopolis', 'mendoza', 'rio', 'salta'],
       recompensa: { texto: 'Cinco viajes en orden y ni un ataque de nervios. Sos la mejor copiloto.' },
     },
     {
@@ -146,7 +149,7 @@ globalThis.CONFIG = {
         'Agarrá el cheque y mirálo de muuuy cerca.',
         'Hay letras tímidas en este pasaporte. Mantené apretado el sello del banco 👀',
       ],
-      respuestas: [{"h":"57ce0e2ba0d91ef2855a10cf319dbe90026b2d53b3db88e13343ac0f03da7659"},{"h":"2be603641c2ba7dcfe32d55c5fc7f118e5fcc34036a5809697963bb31d0e6cdc","w":{"s":"0UmT6hHhACpe/tBX6AV3wg==","i":"KJ6ozw9PXIX/meu1","c":"fDrGiboec0V1UZP68nsNc2U8WGF03VQ=","n":50000}},{"h":"9951e2e5be335832630ff6f9ff4d136d0c249972006084076d39e6d78b306753","w":{"s":"OvIY2h4HRkR+5ujnVqQEWA==","i":"mpfKq5dMkuJsuKaW","c":"Ugh2hp3Fwz3LSes2jzmkjef+Dy524PY=","n":50000}}],
+      respuestas: ['Brujula', 'La brujula', 'Una brujula'],
       recompensa: { texto: 'Lo tuviste en la mano todo el tiempo. Como a mí.' },
     },
   ],
@@ -155,8 +158,9 @@ globalThis.CONFIG = {
     titulo: 'Tu próximo destino necesita una valija',
     verificando: 'Verificando sellos con el gerente…',
     sello: 'APROBADO',
-    // Generado con tools/generar.html: contiene { monto, moneda, mensaje }.
-    cifrado: {"s":"2+4NUgPjBOueMtElNWw1eg==","i":"d6HGSv7rfAX6/YnP","c":"0bhcblXoaBaCaDXLzvkKETjxi9EHc2Cqy15sHNRTjkQJ820nJLruJ792bz3vH8SFQ4bMTcuzivrPn24r0aKv+D/vB0h0OzqGtSc24jlhswL05ROuGpBWLOQMg68DCTCtC9iIQA==","n":200000},
+    monto: 250000,
+    moneda: '$',
+    mensaje: 'Te amorch Titita, sos muy especial para mi',
     guinoEtiqueta: '¿Ahora entendés la etiqueta del sobre? 🧳',
     boton: 'Ver el próximo destino',
 

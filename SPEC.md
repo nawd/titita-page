@@ -117,11 +117,12 @@ Nombres en español, camelCase; CSS con variables en `:root` (`--tinta`, `--bord
 - Post-deploy (lo hacés vos): abrir la URL de Pages en el celular, escanear el QR impreso.
 
 ## Cambios durante la implementación
-- Confeti chico en cada sello y grande en el final (pedido del usuario). Frase final por defecto: "Te amorch Titita, sos muy especial para mi" (va cifrada).
+- Confeti chico en cada sello y grande en el final (pedido del usuario). Frase final por defecto: "Te amorch Titita, sos muy especial para mi".
 - Nombre de la titular: Titita.
 - Ruta de los lagos en orden geográfico: El Bolsón → Bariloche → Villa La Angostura → San Martín de los Andes.
 - Archivos extra: `js/logica.js` (reglas sin DOM, testeadas en Node), `js/graficos.js` (sellos, guilloché, escudo), `js/cheque.js` + `css/cheque.css` (cheque compartido entre el final y `cheque.html`).
-- Sin `tests/index.html`: para probar respuestas reales en el navegador está la sección "Probar" de `tools/generar.html`.
+- Sin `tests/index.html`: los tests de Node ya chequean que el `config.js` real acepte sus respuestas.
 - El microtexto se dibuja en SVG (~3 pt) para que el navegador no le aplique tamaño mínimo de fuente al imprimir.
 - Commits solo con el nombre del autor (sin co-autoría).
 - **Valija 3D en el final** (pedido del usuario, prioridad celular): `js/valija3d.js` con Three.js 0.160 desde jsDelivr, cargado con `import()` solo al llegar al final (se precarga en segundo plano desde el 3er sello). La valija cae con rebote, saltan los cierres, se abre la tapa con luz cálida adentro y sale el cheque, que vuela hacia la pantalla y se convierte en el cheque HTML que recibe el sello APROBADO. Lleva los 4 sellos como calcos en la tapa, una polaroid de la primera foto de la galería en el forro y la etiqueta con su nombre colgando de la manija (dorso: "Destino · Los lagos"). Se puede girar con el dedo sin bloquear el scroll vertical. Mobile: canvas al ancho del contenedor, pixel ratio ≤ 2, sombras 1024 px, render pausado fuera de pantalla. Si no hay WebGL o Three.js tarda más de 9 s, el final sigue en 2D como antes. Con `prefers-reduced-motion` aparece directamente abierta.
+- **Sin anti-trampa** (pedido del usuario: "nadie va a ver el repositorio"): se borraron `js/cripto.js` y `tools/generar.html`. Las respuestas, `ordenCorrecto`, `final.monto`, `final.moneda` y `final.mensaje` van en texto plano en `config.js`; la validación vive en `js/respuestas.js` (misma normalización). Reemplaza la sección "Anti-trampa" y el supuesto 2: sin WebCrypto, también se puede probar desde el celular por la red local (`http://192.168.x.x`).

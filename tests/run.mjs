@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const raiz = fileURLToPath(new URL('..', import.meta.url));
 const cargar = (ruta) => vm.runInThisContext(readFileSync(raiz + ruta, 'utf8'), { filename: ruta });
 
-cargar('js/cripto.js');
+cargar('js/respuestas.js');
 cargar('js/logica.js');
 cargar('config.js');
 const { PP, CONFIG } = globalThis;
@@ -29,14 +29,6 @@ function igual(a, b) {
   }
 }
 
-// Respuestas de ejemplo documentadas en el README
-const EJEMPLO = {
-  'destino-1': 'Río de Janeiro',
-  'destino-2': 'aventura',
-  'destino-3': 'cordoba>florianopolis>mendoza>rio>salta',
-  'destino-4': 'brujula',
-};
-
 console.log('normalizar');
 await test('minúsculas y tildes', () => igual(PP.normalizar('Río DE Janéiro'), 'rio de janeiro'));
 await test('ñ se vuelve n', () => igual(PP.normalizar('Ñandú'), 'nandu'));
@@ -44,36 +36,24 @@ await test('puntuación y espacios extra', () => igual(PP.normalizar('  ¡San   
 await test('guiones separan palabras', () => igual(PP.normalizar('rio-de-janeiro'), 'rio de janeiro'));
 await test('vacío', () => igual(PP.normalizar(''), ''));
 
-console.log('sha256');
-await test('vector conocido "abc"', async () =>
-  igual(await PP.sha256('abc'), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad'));
-
-console.log('cifrado');
-await test('ida y vuelta AES-GCM', async () => {
-  const p = await PP.cifrar('hola valija', 'secreto', 1000);
-  igual(await PP.descifrar(p, 'secreto'), 'hola valija');
-});
-await test('clave incorrecta falla', async () => {
-  const p = await PP.cifrar('hola', 'secreto', 1000);
-  let fallo = false;
-  try { await PP.descifrar(p, 'otro'); } catch { fallo = true; }
-  igual(fallo, true);
-});
-
 console.log('respuestas');
-await test('canónica y variantes recuperan la canónica', async () => {
-  const r = await PP.generarRespuestas('text', 'Río de Janeiro', ['rio', 'RJ']);
-  igual(r.length, 3);
-  igual(await PP.verificar(r, 'text', 'RIO DE JANEIRO!'), 'rio de janeiro');
-  igual(await PP.verificar(r, 'text', 'Río'), 'rio de janeiro');
-  igual(await PP.verificar(r, 'text', 'rj'), 'rio de janeiro');
-  igual(await PP.verificar(r, 'text', 'paris'), null);
-  igual(await PP.verificar(r, 'text', '   '), null);
+await test('cualquier respuesta válida devuelve la principal', () => {
+  const d = { tipo: 'text', respuestas: ['Río de Janeiro', 'rio', 'RJ'] };
+  igual(PP.verificar(d, 'RIO DE JANEIRO!'), 'rio de janeiro');
+  igual(PP.verificar(d, 'Río'), 'rio de janeiro');
+  igual(PP.verificar(d, 'rj'), 'rio de janeiro');
+  igual(PP.verificar(d, 'paris'), null);
+  igual(PP.verificar(d, '   '), null);
 });
-await test('order compara ids tal cual', async () => {
-  const r = await PP.generarRespuestas('order', 'a>b>c');
-  igual(await PP.verificar(r, 'order', 'a>b>c'), 'a>b>c');
-  igual(await PP.verificar(r, 'order', 'b>a>c'), null);
+await test('order compara los ids en orden', () => {
+  const d = { tipo: 'order', ordenCorrecto: ['a', 'b', 'c'] };
+  igual(PP.verificar(d, 'a>b>c'), 'a>b>c');
+  igual(PP.verificar(d, 'b>a>c'), null);
+});
+await test('memotest acepta la palabra clave', () => {
+  const d = { tipo: 'memotest', palabraClave: 'AVENTURA', respuestas: [] };
+  igual(PP.verificar(d, 'Aventura'), 'aventura');
+  igual(PP.verificar(d, 'viaje'), null);
 });
 
 console.log('lógica');
@@ -111,18 +91,26 @@ await test('distribuir letras de la pista oculta', () => {
   igual(PP.posicionesPista(['abc'], 'z'), null);
 });
 
-console.log('config de ejemplo');
-await test('cada desafío acepta su respuesta de ejemplo', async () => {
+console.log('config.js');
+await test('cada desafío tiene respuesta y acepta la principal', () => {
   for (const d of CONFIG.desafios) {
-    const c = await PP.verificar(d.respuestas, d.tipo, EJEMPLO[d.id]);
-    if (!c) throw new Error(d.id + ' no acepta "' + EJEMPLO[d.id] + '"');
+    const validas = PP.respuestasDe(d).filter(Boolean);
+    if (!validas.length) throw new Error(d.id + ' no tiene respuestas');
+    if (!PP.verificar(d, validas[0])) throw new Error(d.id + ' no acepta su propia respuesta');
   }
 });
-await test('el final se descifra con las 4 canónicas', async () => {
-  const canonicas = [];
-  for (const d of CONFIG.desafios) canonicas.push(await PP.verificar(d.respuestas, d.tipo, EJEMPLO[d.id]));
-  const final = await PP.descifrarFinal(CONFIG.final.cifrado, canonicas);
-  if (!final.monto) throw new Error('sin monto');
+await test('el orden correcto usa todos los sellos y ninguno de más', () => {
+  for (const d of CONFIG.desafios.filter((x) => x.tipo === 'order')) {
+    igual([...d.ordenCorrecto].sort(), d.sellos.map((s) => s.id).sort());
+  }
+});
+await test('el microtexto del cheque es una respuesta válida', () => {
+  const ok = CONFIG.desafios.some((d) => d.tipo === 'text' && PP.verificar(d, CONFIG.cheque.microtexto));
+  if (!ok) throw new Error('"' + CONFIG.cheque.microtexto + '" no es respuesta de ningún desafío de texto');
+});
+await test('el final tiene monto y mensaje', () => {
+  if (!isFinite(Number(CONFIG.final.monto))) throw new Error('monto inválido');
+  if (!CONFIG.final.mensaje) throw new Error('falta el mensaje');
 });
 await test('la palabra de la pista oculta entra en los textos', () => {
   const textos = PP.textosPista(CONFIG);

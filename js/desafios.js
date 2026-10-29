@@ -89,8 +89,8 @@
   PP.Desafios.order = function (zona, d, est, api) {
     var porId = {};
     d.sellos.forEach(function (s) { porId[s.id] = s; });
-    var orden = est.hecho && est.canonica
-      ? est.canonica.split('>').map(function (idS) { return porId[idS]; }).filter(Boolean)
+    var orden = est.hecho
+      ? (d.ordenCorrecto || []).map(function (idS) { return porId[idS]; }).filter(Boolean)
       : PP.mezclarDistinto(d.sellos);
 
     var lista = document.createElement('ol');

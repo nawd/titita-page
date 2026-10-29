@@ -186,13 +186,6 @@
     // Con un sello de margen, Three.js se va bajando en segundo plano para que el final no espere
     if (prog.sellos() >= cfg.desafios.length - 1) PP.precargarThree();
     irFinal.addEventListener('click', function () { location.hash = '#final'; });
-
-    if (!PP.hayCripto()) {
-      var aviso = document.createElement('p');
-      aviso.className = 'feedback';
-      aviso.textContent = 'Ojo: este navegador no permite validar respuestas acá. Abrí la página desde https:// (GitHub Pages).';
-      sec.insertBefore(aviso, sec.children[1]);
-    }
     mostrar('pasaporte');
   }
 
@@ -277,13 +270,8 @@
       },
       intentar: async function (valor, elTemblar) {
         if (est.hecho) return true;
-        if (!PP.hayCripto()) {
-          feedback.textContent = 'Este navegador no puede validar acá: abrilo desde https://';
-          return false;
-        }
-        var canonica = await PP.verificar(d.respuestas, d.tipo, valor);
-        if (canonica) {
-          await sellar(canonica);
+        if (PP.verificar(d, valor)) {
+          await sellar();
           return true;
         }
         est.errores++;
@@ -302,9 +290,8 @@
       },
     };
 
-    async function sellar(canonica) {
+    async function sellar() {
       est.hecho = true;
-      est.canonica = canonica;
       prog.guardar();
       form.hidden = true;
       input.blur();
@@ -405,14 +392,7 @@
       ver.textContent = '✔ Sello ' + (k + 1) + ' de ' + cfg.desafios.length + ' · ' + cfg.desafios[k].destino;
       await esperar(480);
     }
-    var canonicas = cfg.desafios.map(function (d) { return prog.de(d.id).canonica || ''; });
-    var datos;
-    try {
-      datos = await PP.descifrarFinal(f.cifrado, canonicas);
-    } catch (e) {
-      ver.textContent = 'Uy, el banco no pudo leer los sellos. Reiniciá el pasaporte (5 toques en el logo) y volvé a sellarlos.';
-      return;
-    }
+    var datos = { monto: f.monto, moneda: f.moneda, mensaje: f.mensaje };
     ver.textContent = '';
     var escena = $('#escena-valija', sec);
     var valija = await conLimite(promValija, 9000);
