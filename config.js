@@ -186,13 +186,13 @@ globalThis.CONFIG = {
       // ids + nombre visible. Opcional: imagen (sin fotos que spoileen la foto borrosa). El orden acá NO importa.
       // Para sumar un viaje: agregalo acá y poné su id en ordenCorrecto.
       sellos: [
-        { id: 'mdq', nombre: 'Mar del Plata', anio: '' },
+        // { id: 'mdq', nombre: 'Mar del Plata', anio: '' },
         { id: 'colon', nombre: 'Colón', anio: '', imagen: 'assets/img/viajes/mini/colon.jpg' },
         { id: 'mendoza', nombre: 'Mendoza', anio: '', imagen: 'assets/img/viajes/mini/mendoza.jpg' },
         { id: 'bariloche-2023', nombre: 'Bariloche · el guiso', anio: '', imagen: 'assets/img/viajes/mini/bariloche-2023.jpg' },
         { id: 'san-martin', nombre: 'San Martín de los Andes', anio: '', imagen: 'assets/img/viajes/mini/san-martin.jpg' },
-        { id: 'tucuman', nombre: 'Tucumán', anio: '' },
-        { id: 'rio', nombre: 'Río de Janeiro', anio: '' },
+        { id: 'tucuman', nombre: 'Tucumán', anio: 'assets/img/viajes/mini/quilmes.jpg' },
+        { id: 'rio', nombre: 'Río de Janeiro', anio: 'assets/img/viajes/mini/rio.jpg' },
         { id: 'maceio', nombre: 'Maceió', anio: '', imagen: 'assets/img/viajes/mini/maceio.jpg' },
         { id: 'bariloche-2026', nombre: 'Bariloche · con el cuñado', anio: '', imagen: 'assets/img/viajes/mini/bariloche-2026.jpg' },
       ],
@@ -201,7 +201,7 @@ globalThis.CONFIG = {
         'Bariloche abre y cierra la lista: una en 2023 y otra con nieve hasta arriba.',
       ],
       // Orden correcto (del más viejo al más nuevo), con los ids de arriba.
-      ordenCorrecto: ['mdq', 'colon', 'mendoza', 'bariloche-2023', 'san-martin', 'tucuman', 'rio', 'maceio', 'bariloche-2026'],
+      ordenCorrecto: ['colon', 'mendoza', 'bariloche-2023', 'san-martin', 'tucuman', 'rio', 'maceio', 'bariloche-2026'],
       recompensa: { texto: 'Nueve viajes en orden. Volvé al mapa: se llenó de recuerdos 📸' },
     },
     {
