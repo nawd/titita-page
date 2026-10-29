@@ -22,19 +22,10 @@
     </filter>
   </svg>
 
-  <section id="portada" class="pantalla" aria-label="Portada del pasaporte">
-    <div class="tapa">
-      <div class="relieve pais" id="portada-banco"></div>
-      <div id="portada-escudo"></div>
-      <div class="relieve">
-        <h1 id="portada-titulo"></h1>
-        <div class="de" id="portada-nombre"></div>
-      </div>
-      <div>
-        <div class="relieve sub" id="portada-sub"></div>
-        <button class="boton-abrir" id="abrir" type="button"></button>
-      </div>
-    </div>
+  <section id="portada" class="pantalla" aria-label="Postal de bienvenida">
+    <div class="postal-escena" id="postal"></div>
+    <button class="postal-ayuda" id="postal-ayuda" type="button" disabled></button>
+    <button class="boton-abrir" id="abrir" type="button" hidden></button>
   </section>
 
   <main id="app">
@@ -59,6 +50,7 @@
   <script src="js/cheque.js"></script>
   <script src="js/galeria.js"></script>
   <script src="js/valija3d.js"></script>
+  <script src="js/postal3d.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

@@ -18,10 +18,19 @@ globalThis.CONFIG = {
   fecha: '14/02/2022', // [NUESTRA FECHA]
   numeroCheque: '14022022', // [NUESTRA FECHA SIN BARRAS]
 
+  // Postal 3D de la portada: frente con foto y letras gordas, dorso con el mensaje.
   portada: {
-    titulo: 'Pasaporte',
-    subtitulo: 'Expedido por Turismo Bombón',
-    boton: 'Abrir pasaporte',
+    saludo: 'Saludos desde',
+    titulo: 'Turismo Bombón', // letras gordas del frente
+    fondo: 'assets/img/fotos_nuestras/lago_lacar_arriba_cerro_colorado_marzo_2024.webp',
+    letras: 'assets/img/fotos_nuestras/Colón_febrero_2023_isla_san_francisco.webp', // foto que rellena las letras
+    mensaje:
+      'Titita: te mando esta postal desde todos los lugares a los que fuimos… y a los que vamos a ir. ' +
+      'El viaje empieza ahora. — Bombón',
+    para: 'Titita',
+    direccion: ['Donde estemos juntos', 'Sudamérica (por ahora)'],
+    ayuda: 'Tocá la postal para darla vuelta',
+    boton: 'Empezar el viaje ✈️',
   },
 
   titular: {

@@ -161,11 +161,12 @@
     return c;
   }
 
-  async function texSello(svg) {
-    var c = lienzo(256, 256);
-    var conTam = svg.replace('<svg ', '<svg width="256" height="256" ');
+  async function texSello(svg, tam) {
+    tam = tam || 256;
+    var c = lienzo(tam, tam);
+    var conTam = svg.replace('<svg ', '<svg width="' + tam + '" height="' + tam + '" ');
     var img = await cargarImagen('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(conTam));
-    if (img) c.getContext('2d').drawImage(img, 0, 0, 256, 256);
+    if (img) c.getContext('2d').drawImage(img, 0, 0, tam, tam);
     return c;
   }
 
@@ -192,6 +193,13 @@
   function suave(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
   function atras(x) { var c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); }
   function tramo(t, a, b) { return Math.min(1, Math.max(0, (t - a) / (b - a))); }
+
+  // Compartidos con la postal de la portada
+  PP.hayWebGL = hayWebGL;
+  PP.cargarImagen = cargarImagen;
+  PP.lienzo = lienzo;
+  PP.svgACanvas = texSello;
+  PP.curvas = { rebote: rebote, suave: suave, atras: atras, tramo: tramo };
 
   // op: { sellos: [svg...], foto: src, pieFoto, alAterrizar(), alAbrir() }
   PP.Valija3D = async function (contenedor, cfg, op) {

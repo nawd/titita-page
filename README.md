@@ -10,7 +10,7 @@ Un regalo en forma de juego: un cheque de viajero impreso de una agencia de turi
 ## Estructura
 
 ```
-index.html          pasaporte (portada, mapa, desafíos, final)
+index.html          postal 3D de portada + pasaporte (mapa, desafíos, final)
 cheque.html         cheque 20×8 cm + dorso + etiqueta de equipaje, para imprimir
 config.js           TODO el contenido editable
 css/                estilos del pasaporte, del cheque y de impresión
@@ -60,7 +60,8 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
    - Los errores de `memotest`, `lancha` y `cerro` cuentan para las pistas pero no disparan la falsa derrota.
 4. **Pista oculta:** `pistaOculta.palabra` (ayuda para el desafío del sobre) y en qué textos se esconden sus letras. El test avisa si la palabra no entra en esos textos.
 5. **Mensaje final:** `final.monto` (número, sin puntos), `final.moneda` y `final.mensaje` (tu frase). El resto de `final`: título, guiño a la etiqueta, ruta de los lagos, galería, cierre y `proximo.eleccion` (las dos opciones para enero 2028: ella toca una y le cae el sello "ELEGIDO"; queda guardada en su celu).
-6. **Valija 3D:** usa sola los sellos de todos los destinos (hasta 8), la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
+6. **Postal 3D de la portada:** `portada` lleva el saludo y el título del frente (letras gordas rellenas con la foto `letras`, sobre la foto `fondo`), y el `mensaje`, `para` y `direccion` del dorso. Se ve solo la primera vez; para volver a verla, reseteá el progreso. Sin WebGL (o si Three.js no carga en 6 s) aparece la misma postal en 2D.
+   **Valija 3D:** usa sola los sellos de todos los destinos (hasta 8), la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
 7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
 8. **Cheque:** `cheque.microtexto` es la respuesta del desafío del sobre impresa en la línea de firma; también el texto del dorso y de la etiqueta.
 9. **Tarjetas de los destinos sellados:** cada desafío tiene `tarjeta` (`foto` miniatura cuadrada o `null` para "foto pendiente", `lugar`, `fecha`, `emociones`, y `dx`/`dy` para correrla si se pisa con otra). Cuando lo sella, el pin del mapa pasa a ser esa tarjeta con el sello encimado; se agranda al pasar el mouse o con el primer toque en el celu (el segundo toque entra al desafío).

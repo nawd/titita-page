@@ -85,23 +85,48 @@
     window.scrollTo(0, 0);
   }
 
-  // ---------- Portada ----------
+  // ---------- Portada: la postal ----------
   function portada() {
-    $('#portada-banco').textContent = cfg.agencia;
-    $('#portada-escudo').innerHTML = PP.escudoSVG();
-    $('#portada-titulo').textContent = cfg.portada.titulo;
-    $('#portada-nombre').textContent = 'de ' + cfg.nombre;
-    $('#portada-sub').textContent = cfg.portada.subtitulo;
-    var boton = $('#abrir');
-    boton.textContent = cfg.portada.boton;
     var p = $('#portada');
+    var ayuda = $('#postal-ayuda');
+    var boton = $('#abrir');
+    var postal = null;
+    boton.textContent = cfg.portada.boton;
+    ayuda.textContent = 'Llegó correo…';
     p.classList.add('activa');
+
+    var op = {
+      alDarVuelta: function () {
+        boton.hidden = false;
+        ayuda.textContent = '↻ Dar vuelta';
+      },
+    };
+    // Postal 3D; si no hay WebGL o Three.js tarda más de 6 s, la misma postal en CSS
+    var tresD = PP.Postal3D($('#postal'), cfg, op).catch(function () { return null; });
+    var plazo = new Promise(function (listo) { setTimeout(function () { listo(null); }, 6000); });
+    Promise.race([tresD, plazo]).then(function (p3) {
+      if (p3) return p3;
+      tresD.then(function (tarde) { if (tarde) tarde.destruir(); });
+      return PP.postalCSS($('#postal'), cfg, op);
+    }).then(function (lista) {
+      postal = lista;
+      ayuda.textContent = '↻ ' + cfg.portada.ayuda;
+      ayuda.disabled = false;
+    });
+
+    ayuda.addEventListener('click', function () { if (postal) postal.darVuelta(); });
     boton.addEventListener('click', function () {
+      boton.disabled = true;
       prog.estado.abierto = true;
       prog.guardar();
-      ruta();
-      p.classList.add('abriendo');
-      setTimeout(function () { p.classList.remove('activa', 'abriendo'); }, PP.reducirMovimiento() ? 300 : 1250);
+      (postal ? postal.salir() : Promise.resolve()).then(function () {
+        ruta();
+        p.classList.add('cerrando');
+        setTimeout(function () {
+          p.classList.remove('activa', 'cerrando');
+          if (postal) postal.destruir();
+        }, PP.reducirMovimiento() ? 0 : 400);
+      });
     });
   }
 
