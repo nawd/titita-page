@@ -38,6 +38,33 @@
     return Math.abs(vaiven) <= tolerancia;
   };
 
+  // ---------- Agua del mapa ----------
+  // Oleaje de un punto del mar (columna, fila) en el segundo t: corrimiento en celdas y escala del punto
+  PP.oleaje = function (c, r, t) {
+    return {
+      x: 0.22 * Math.sin(t * 1.1 + r * 0.32 + c * 0.13),
+      y: 0.16 * Math.cos(t * 0.85 + c * 0.27 - r * 0.11),
+      escala: 0.82 + 0.28 * Math.sin(t * 1.5 - (c + r * 0.6) * 0.28),
+    };
+  };
+
+  // Agujero del puntero: (dx, dy) va del puntero al punto. Adentro del radio, el punto se corre
+  // hacia afuera (más cuanto más cerca) y se achica hasta desaparecer en el centro.
+  PP.empujeAgua = function (dx, dy, radio) {
+    var d = Math.sqrt(dx * dx + dy * dy);
+    if (d >= radio) return { x: 0, y: 0, escala: 1 };
+    var k = 1 - d / radio, empuje = k * k * radio * 0.6;
+    return { x: d ? (dx / d) * empuje : 0, y: d ? (dy / d) * empuje : 0, escala: Math.min(1, d / (radio * 0.5)) };
+  };
+
+  // Onda de un toque: anillo que se abre a `vel` px/s. Devuelve cuánto empuja (0..1) a un punto
+  // a distancia d del toque, `edad` segundos después; a los `vida` segundos ya no empuja.
+  PP.onda = function (d, edad, vel, ancho, vida) {
+    var fuera = Math.abs(d - edad * vel);
+    if (edad >= vida || fuera >= ancho) return 0;
+    return (1 - fuera / ancho) * (1 - edad / vida);
+  };
+
   // Cerro: un acierto sube un tramo, un error resbala uno
   PP.tramoTras = function (tramo, acierto, total) {
     return acierto ? Math.min(total, tramo + 1) : Math.max(0, tramo - 1);

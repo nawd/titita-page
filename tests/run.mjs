@@ -133,6 +133,32 @@ await test('fracción limpia del barro (canal alfa)', () => {
   igual(PP.fraccionLimpia(px([0, 255, 10, 255]), 1), 0.5);
   igual(PP.fraccionLimpia(px([0, 255, 0, 255]), 2), 1);
 });
+await test('el oleaje mueve poco cada punto del mar', () => {
+  for (let t = 0; t < 10; t += 0.37) {
+    for (const [c, r] of [[0, 0], [12, 40], [59, 98]]) {
+      const o = PP.oleaje(c, r, t);
+      if (Math.abs(o.x) > 0.3 || Math.abs(o.y) > 0.3) throw new Error('se mueve demasiado: ' + JSON.stringify(o));
+      if (o.escala < 0.5 || o.escala > 1.15) throw new Error('escala rara: ' + o.escala);
+    }
+  }
+});
+await test('el puntero hace un agujero: empuja hacia afuera y achica, lejos no toca', () => {
+  igual(PP.empujeAgua(100, 0, 50), { x: 0, y: 0, escala: 1 });
+  const cerca = PP.empujeAgua(10, 0, 50);
+  if (!(cerca.x > 0 && cerca.y === 0)) throw new Error('no empuja hacia afuera: ' + JSON.stringify(cerca));
+  if (!(cerca.escala < 0.5)) throw new Error('no achica cerca del centro');
+  const masLejos = PP.empujeAgua(0, -40, 50);
+  if (!(masLejos.y < 0 && Math.abs(masLejos.y) < cerca.x)) throw new Error('el empuje no baja con la distancia');
+  const centro = PP.empujeAgua(0, 0, 50);
+  if (!isFinite(centro.x) || !isFinite(centro.y)) throw new Error('en el centro da NaN');
+});
+await test('la onda de un toque es un anillo que se expande y se apaga', () => {
+  const vel = 100, ancho = 10;
+  igual(PP.onda(0, 0.5, vel, ancho, 1.5), 0); // el centro ya quedó atrás
+  if (!(PP.onda(50, 0.5, vel, ancho, 1.5) > 0)) throw new Error('el anillo no empuja');
+  igual(PP.onda(50, 2, vel, ancho, 1.5), 0); // ya se apagó
+  if (!(PP.onda(50, 0.5, vel, ancho, 1.5) > PP.onda(130, 1.3, vel, ancho, 1.5))) throw new Error('no pierde fuerza');
+});
 await test('distribuir letras de la pista oculta', () => {
   igual(PP.posicionesPista(['Hola fiera', 'ramo'], 'FIRA'), [[0, 5], [0, 6], [0, 8], [1, 1]]);
   igual(PP.posicionesPista(['abc', 'xyz'], 'cx'), [[0, 2], [1, 0]]);

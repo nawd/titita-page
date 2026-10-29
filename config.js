@@ -270,7 +270,10 @@ globalThis.CONFIG = {
         'Hay cosas que te pueden ayudar 🔎',
       ],
       respuestas: ['Gertrudis', 'bernie', 'bernis'],
-      recompensa: { texto: 'Lo tuviste en la mano todo el tiempo. Como a mí.' },
+      recompensa: {
+        imagen: 'assets/img/fotos_nuestras/gertrudis_desafio_7.webp',
+        texto: 'Lo tuviste en la mano todo el tiempo. Como a mí.',
+      },
     },
   ],
 
