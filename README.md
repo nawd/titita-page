@@ -33,7 +33,7 @@ Abrí `http://localhost:8080`. Las respuestas de ejemplo son:
 |---|---|---|
 | 1 · Río de Janeiro | foto borrosa, 3 rondas | `traful`, después `quilmes`, después `rio` |
 | 2 · Buenos Aires | memotest | completar los pares y escribir `aventura` |
-| 3 · Mar del Plata | ordenar | Mar del Plata → Mendoza → Bariloche (guiso) → San Martín → Tucumán → Río → Maceió → Bariloche (cuñado) |
+| 3 · Mar del Plata | ordenar | Mar del Plata → Colón → Mendoza → Bariloche (guiso) → San Martín → Tucumán → Río → Maceió → Bariloche (cuñado) |
 | 4 · Colón | lancha | tocar «¡Saltá!» 3 veces cuando la lancha queda pareja con el muelle |
 | 5 · San Martín de los Andes | cerro | El Lácar · San Martín de los Andes · Villa La Angostura y Bariloche |
 | 6 · Mendoza | barro | limpiar la foto con el dedo y escribir `luigi bosca` (también `luigi`, `bosca`, `finca el paraiso`) |
@@ -59,7 +59,7 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
    - `text`: solo `respuestas`.
    - Los errores de `memotest`, `lancha` y `cerro` cuentan para las pistas pero no disparan la falsa derrota.
 4. **Pista oculta:** `pistaOculta.palabra` (ayuda para el desafío del sobre) y en qué textos se esconden sus letras. El test avisa si la palabra no entra en esos textos.
-5. **Mensaje final:** `final.monto` (número, sin puntos), `final.moneda` y `final.mensaje` (tu frase). El resto de `final`: título, guiño a la etiqueta, ruta de los lagos, galería y cierre.
+5. **Mensaje final:** `final.monto` (número, sin puntos), `final.moneda` y `final.mensaje` (tu frase). El resto de `final`: título, guiño a la etiqueta, ruta de los lagos, galería, cierre y `proximo.eleccion` (las dos opciones para enero 2028: ella toca una y le cae el sello "ELEGIDO"; queda guardada en su celu).
 6. **Valija 3D:** usa sola los sellos de todos los destinos (hasta 8), la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
 7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
 8. **Cheque:** `cheque.microtexto` es la respuesta del desafío del sobre impresa en la línea de firma; también el texto del dorso y de la etiqueta.

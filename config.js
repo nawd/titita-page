@@ -5,7 +5,7 @@
 // ============================================================================
 globalThis.CONFIG = {
   // Cambiá la versión si querés que el progreso guardado se reinicie para todos.
-  version: 'v4',
+  version: 'v5',
 
   // URL pública (GitHub Pages). El QR del cheque apunta acá.
   siteUrl: 'https://nawd.github.io/titita-page/',
@@ -51,16 +51,16 @@ globalThis.CONFIG = {
       { lugar: 'Colón', fecha: 'feb 2023', lat: -32.22, lon: -58.14, dx: 14, dy: 0, rot: 5,
         foto: 'assets/img/viajes/mini/colon.jpg', grande: 'assets/img/fotos_nuestras/Colón_febrero_2023_isla_san_francisco.webp',
         nota: 'Isla San Francisco. Sí, el viaje de la lancha 🥴' },
-      { lugar: 'Mendoza', fecha: 'feb 2023', lat: -33.04, lon: -68.88, dx: -18, dy: -7, rot: -6,
+      { lugar: 'Mendoza', fecha: 'may 2023', lat: -33.04, lon: -68.88, dx: -18, dy: -7, rot: -6,
         foto: 'assets/img/viajes/mini/mendoza.jpg', grande: 'assets/img/fotos_nuestras/mendoza_mayo_2023.webp',
         nota: 'Luján de Cuyo, 9 de la mañana, ni un auto en la calle: multa por una vuelta en U. Vos, mirando todo desde la ventana.' },
       { lugar: 'Bariloche', fecha: 'ago 2023', lat: -41.13, lon: -71.31, dx: 20, dy: 3, rot: 6,
         foto: 'assets/img/viajes/mini/bariloche-2023.jpg', grande: 'assets/img/fotos_nuestras/bariloche_cerro_catedral_agosto_2023.webp',
         nota: 'Cerro Catedral: el guiso que nos devolvió el alma al cuerpo.' },
-      { lugar: 'San Martín', fecha: 'feb 2024', lat: -40.16, lon: -71.35, dx: -14, dy: -6, rot: 4,
+      { lugar: 'San Martín', fecha: 'mar 2024', lat: -40.16, lon: -71.35, dx: -14, dy: -6, rot: 4,
         foto: 'assets/img/viajes/mini/san-martin.jpg', grande: 'assets/img/fotos_nuestras/lago_lacar_arriba_cerro_colorado_marzo_2024.webp',
         nota: 'El lago Lácar desde arriba del Cerro Colorado.' },
-      { lugar: 'V. La Angostura', fecha: 'feb 2024', lat: -40.76, lon: -71.65, dx: -13, dy: 7, rot: -5,
+      { lugar: 'V. La Angostura', fecha: 'mar 2024', lat: -40.76, lon: -71.65, dx: -13, dy: 7, rot: -5,
         foto: 'assets/img/viajes/mini/villa-la-angostura.jpg', grande: 'assets/img/fotos_nuestras/villa_langostura.webp',
         nota: 'Villa La Angostura, desde el auto.' },
       { lugar: 'Tucumán', fecha: 'jun 2024', lat: -26.47, lon: -66.03, dx: -24, dy: -10, rot: 3, tras: ['destino-3', 'destino-1'],
@@ -119,7 +119,7 @@ globalThis.CONFIG = {
       rondas: [
         {
           imagenes: ['assets/img/viajes/traful-blur-3.jpg', 'assets/img/viajes/traful-blur-2.jpg', 'assets/img/viajes/traful-blur-1.jpg', 'assets/img/viajes/traful-nitida.jpg'],
-          pie: 'Río Traful, Neuquén · feb 2024',
+          pie: 'Río Traful, Neuquén · mar 2024',
           respuestas: ['Río Traful', 'Traful', 'Villa Traful', 'Río Limay', 'Limay'],
           pistas: ['Mate, termo y una playita de arena en la Patagonia.', 'Fue en el viaje de San Martín de los Andes. Es un río.'],
         },
@@ -173,6 +173,7 @@ globalThis.CONFIG = {
       // Para sumar un viaje: agregalo acá y poné su id en ordenCorrecto.
       sellos: [
         { id: 'mdq', nombre: 'Mar del Plata', anio: '' },
+        { id: 'colon', nombre: 'Colón', anio: '', imagen: 'assets/img/viajes/mini/colon.jpg' },
         { id: 'mendoza', nombre: 'Mendoza', anio: '', imagen: 'assets/img/viajes/mini/mendoza.jpg' },
         { id: 'bariloche-2023', nombre: 'Bariloche · el guiso', anio: '', imagen: 'assets/img/viajes/mini/bariloche-2023.jpg' },
         { id: 'san-martin', nombre: 'San Martín de los Andes', anio: '', imagen: 'assets/img/viajes/mini/san-martin.jpg' },
@@ -186,8 +187,8 @@ globalThis.CONFIG = {
         'Bariloche abre y cierra la lista: una en 2023 y otra con nieve hasta arriba.',
       ],
       // Orden correcto (del más viejo al más nuevo), con los ids de arriba.
-      ordenCorrecto: ['mdq', 'mendoza', 'bariloche-2023', 'san-martin', 'tucuman', 'rio', 'maceio', 'bariloche-2026'],
-      recompensa: { texto: 'Ocho viajes en orden. Volvé al mapa: se llenó de recuerdos 📸' },
+      ordenCorrecto: ['mdq', 'colon', 'mendoza', 'bariloche-2023', 'san-martin', 'tucuman', 'rio', 'maceio', 'bariloche-2026'],
+      recompensa: { texto: 'Nueve viajes en orden. Volvé al mapa: se llenó de recuerdos 📸' },
     },
     {
       id: 'colon',
@@ -235,7 +236,7 @@ globalThis.CONFIG = {
       pistas: ['El cerro no está en Bariloche: es el de la ciudad donde dormíamos.', 'Desde arriba se ve un lago que empieza con L.'],
       recompensa: {
         imagen: 'assets/img/fotos_nuestras/lago_lacar_arriba_cerro_colorado_marzo_2024.webp',
-        texto: 'Cumbre del Cerro Colorado. Vos mirando el Lácar; yo, a vos.',
+        texto: 'Cumbre del Cerro Colorado. Vos mirando el Lácar; yo, a vos 💓💓',
       },
     },
     {
@@ -285,19 +286,19 @@ globalThis.CONFIG = {
 
     proximo: {
       titulo: 'Próxima parada: los lagos',
-      texto: 'Bariloche, Villa La Angostura, San Martín de los Andes y El Bolsón. Una cabaña frente al lago, asado, y vos estrenando valija.',
+      texto: 'Febrero 2027: Bariloche, El Bolsón y Villa La Angostura. Una cabaña frente al lago, asado, y vos estrenando valija.',
       // Paradas en el orden en que se dibuja la ruta.
       ruta: [
         { nombre: 'El Bolsón', lat: -41.96, lon: -71.53 },
         { nombre: 'Bariloche', lat: -41.13, lon: -71.31 },
         { nombre: 'Villa La Angostura', lat: -40.76, lon: -71.65 },
-        { nombre: 'San Martín de los Andes', lat: -40.16, lon: -71.35 },
       ],
       // Fotos que van pasando. pendiente: true muestra el rótulo "foto pendiente".
       galeria: [
-        { src: 'assets/img/galeria/bariloche.svg', pie: 'Bariloche', pendiente: true },
-        { src: 'assets/img/galeria/angostura.svg', pie: 'Villa La Angostura', pendiente: true },
-        { src: 'assets/img/galeria/san-martin.svg', pie: 'San Martín de los Andes', pendiente: true },
+        // La primera también va como polaroid adentro de la valija 3D.
+        { src: 'assets/img/fotos_nuestras/Hotel_Bariloche_inacayal_agosto_2026.webp', pie: 'Bariloche: el lago desde la ventana' },
+        { src: 'assets/img/fotos_nuestras/villa_langostura.webp', pie: 'Villa La Angostura' },
+        { src: 'assets/img/fotos_nuestras/Bari_cerro_catedral_agos_2026_primera_vez_Tita_arriba_todo.webp', pie: 'Cerro Catedral, otra vez' },
         { src: 'assets/img/galeria/bolson.svg', pie: 'El Bolsón', pendiente: true },
         { src: 'assets/img/galeria/cabana.svg', pie: 'La cabaña frente al lago', pendiente: true },
         { src: 'assets/img/galeria/asado.svg', pie: 'Y el asado, obvio', pendiente: true },
@@ -305,6 +306,17 @@ globalThis.CONFIG = {
       cierre: 'Armá la valija. Yo pongo el fuego. 🔥',
       // Opcional: una línea extra al final. null para ocultarla.
       algunDia: null, // ej: '…y algún día: Riviera Maya o San Andrés ✈️'
+      // Opcional: la elección del viaje siguiente. Ella toca una opción y le cae el sello.
+      eleccion: {
+        titulo: 'Y para enero 2028…',
+        texto: 'La agencia tiene dos propuestas y un empate técnico. Elegí vos:',
+        opciones: [
+          { lugar: 'Riviera Maya', pais: 'México', emoji: '🌮', voto: 'Bombón',
+            mensaje: '¿Riviera Maya? Bombón ya está buscando pasajes 🌮' },
+          { lugar: 'San Andrés', pais: 'Colombia', emoji: '🏝️', voto: 'Tita',
+            mensaje: 'San Andrés: pedido registrado. La agencia lo negocia con Bombón 😏' },
+        ],
+      },
     },
   },
 

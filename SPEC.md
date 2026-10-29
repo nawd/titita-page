@@ -136,7 +136,8 @@ Nombres en español, camelCase; CSS con variables en `:root` (`--tinta`, `--bord
   - La valija 3D lleva un calco por destino (hasta 8).
 - **Fotos reales** (pedido del usuario, en `assets/img/fotos_nuestras/`; derivadas en `assets/img/viajes/`):
   - Foto borrosa con `rondas`: Río Traful → Ruinas de Quilmes → Río (cada ronda con sus respuestas, pistas y errores; `PP.respuestasDe(d, est)`, `PP.pistasDe`, `PP.erroresRonda`).
-  - Ordenar: los 8 viajes reales (MDQ ene 2023 → Mendoza feb 2023 → Bariloche ago 2023 → San Martín feb 2024 → Tucumán jun 2024 → Río ene 2025 → Maceió mar 2026 → Bariloche ago 2026), pin en Mar del Plata. Colón (feb 2023, mismo mes que Mendoza) queda fuera para no tener un orden ambiguo.
+  - Ordenar: los 9 viajes reales (MDQ ene 2023 → Colón feb 2023 → Mendoza may 2023 → Bariloche ago 2023 → San Martín mar 2024 → Tucumán jun 2024 → Río ene 2025 → Maceió mar 2026 → Bariloche ago 2026), pin en Mar del Plata.
   - El Cerro Colorado está en San Martín de los Andes (foto con el lago Lácar): el desafío `cerro` pasa ahí, con preguntas reales.
   - `mapa.recuerdos`: polaroids con lugar, mes y año que se pegan en el mapa al resolver el desafío de ordenar (las de Río y Quilmes, además, después de la foto borrosa). Tocarlas abre la foto grande con una nota.
-  - Foto del titular recortada de una foto de ella; en Mendoza, la foto de la multa queda bajo el barro.
+  - Foto del titular recortada de una foto de ella; en Mendoza, la foto embarrada de Cacheuta queda bajo el barro y la de la multa va como polaroid.
+  - Próximo viaje: febrero 2027, El Bolsón → Bariloche → Villa La Angostura, con fotos reales en la galería. Después, `final.proximo.eleccion`: enero 2028, Riviera Maya (México, voto de Bombón) o San Andrés (Colombia, voto de Tita); ella elige y se guarda en `progreso.estado.eleccion`. El repo público con las fotos está OK para el usuario.

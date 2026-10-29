@@ -424,6 +424,7 @@
         '<div id="galeria"></div>' +
         '<p class="cierre">' + esc(f.proximo.cierre) + '</p>' +
         (f.proximo.algunDia ? '<p class="guino">' + esc(f.proximo.algunDia) + '</p>' : '') +
+        (f.proximo.eleccion ? '<div class="eleccion" id="eleccion"></div>' : '') +
       '</article>';
     enlazarSonido(sec);
     $('#volver', sec).addEventListener('click', function () { location.hash = '#mapa'; });
@@ -566,6 +567,47 @@
     }
 
     PP.Galeria($('#galeria', sec), p.galeria, 4200);
+    if (p.eleccion) eleccion($('#eleccion', sec), p.eleccion);
+  }
+
+  // El viaje siguiente: dos opciones, ella elige y la agencia le pone el sello
+  function eleccion(cont, e) {
+    cont.innerHTML =
+      '<h3>' + esc(e.titulo) + '</h3>' +
+      (e.texto ? '<p>' + esc(e.texto) + '</p>' : '') +
+      '<div class="opciones-viaje">' + e.opciones.map(function (o, i) {
+        return '<button type="button" class="opcion-viaje" data-i="' + i + '" aria-pressed="false">' +
+          '<span class="emoji" aria-hidden="true">' + esc(o.emoji || '✈️') + '</span>' +
+          '<b>' + esc(o.lugar) + '</b><small>' + esc(o.pais) + (o.voto ? ' · voto de ' + esc(o.voto) : '') + '</small>' +
+          '<span class="sello-eleccion" aria-hidden="true"></span>' +
+        '</button>';
+      }).join('') + '</div>' +
+      '<p class="feedback ok" aria-live="polite"></p>';
+    var msj = $('.feedback', cont);
+    function marcar(i, animar) {
+      cont.querySelectorAll('.opcion-viaje').forEach(function (b, k) {
+        var elegida = k === i;
+        b.classList.toggle('elegida', elegida);
+        b.setAttribute('aria-pressed', elegida);
+        var lugar = $('.sello-eleccion', b);
+        lugar.innerHTML = '';
+        if (elegida && !animar) lugar.innerHTML = '<div class="sello" style="--rot:-12deg">' + PP.selloSVG(selloEleccion()) + '</div>';
+        if (elegida && animar) PP.estampar(lugar, selloEleccion(), -12);
+      });
+      msj.textContent = e.opciones[i].mensaje || '';
+    }
+    function selloEleccion() {
+      return { forma: 'rect', arriba: cfg.agencia.toUpperCase(), centro: 'ELEGIDO', centroTam: 24, abajo: e.titulo.replace(/[^\d]/g, '') || '', color: '#9b2c3a', semilla: 33 };
+    }
+    cont.addEventListener('click', function (ev) {
+      var b = ev.target.closest('.opcion-viaje');
+      if (!b || +b.dataset.i === prog.estado.eleccion) return;
+      prog.estado.eleccion = +b.dataset.i;
+      prog.guardar();
+      marcar(prog.estado.eleccion, true);
+      PP.confeti({ cantidad: 50, y: 0.7, fuerza: 0.7 });
+    });
+    if (typeof prog.estado.eleccion === 'number' && e.opciones[prog.estado.eleccion]) marcar(prog.estado.eleccion, false);
   }
 
   // ---------- Rutas ----------

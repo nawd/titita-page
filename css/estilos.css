@@ -513,6 +513,20 @@ body.lupa .tl {
 .puntos button::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--papel-borde); transition: background 0.3s, transform 0.3s; }
 .puntos button[aria-current='true']::before { background: var(--bordo); transform: scale(1.3); }
 .cierre { font: italic 22px var(--serif); color: var(--tinta); margin: 16px 0 4px !important; }
+.eleccion { margin-top: 22px; padding-top: 16px; border-top: 1.5px dashed var(--papel-borde); text-align: center; }
+.eleccion h3 { margin: 0 0 4px; font: 24px var(--serif); color: var(--bordo); }
+.opciones-viaje { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.opcion-viaje {
+  position: relative; display: grid; justify-items: center; gap: 2px; padding: 14px 8px 12px;
+  border-radius: 10px; border: 1.5px solid var(--papel-borde); background: rgba(255, 252, 242, 0.92);
+  color: var(--tinta); transition: transform 0.2s, border-color 0.2s;
+}
+.opcion-viaje .emoji { font-size: 34px; line-height: 1.2; }
+.opcion-viaje b { font: 17px var(--serif); }
+.opcion-viaje small { font: 11px var(--maquina); color: var(--tinta-suave); }
+.opcion-viaje.elegida { border-color: var(--bordo); transform: rotate(-1deg); }
+.sello-eleccion { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.sello-eleccion .sello { width: 82%; }
 
 /* ---------- Movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
