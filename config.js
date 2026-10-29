@@ -245,8 +245,8 @@ globalThis.CONFIG = {
       pais: 'Argentina',
       lat: -32.89,
       lon: -68.83,
-      enunciado: 'Mendoza: barro en las termas de Cacheuta, fiesta en Potrerillos y algo que pasó en Luján de Cuyo. Limpiá la foto con el dedo y contestá: ¿en qué bodega nos sellaron el historial de viajes?',
-      foto: 'assets/img/fotos_nuestras/mendoza_mayo_2023.webp',
+      enunciado: 'Mendoza: fiesta en Potrerillos, bodegas y las termas de Cacheuta, donde alguien terminó embarrado de pies a cabeza. Limpiá la foto con el dedo y contestá: ¿en qué bodega nos sellaron el historial de viajes?',
+      foto: 'assets/img/fotos_nuestras/Mendoza_barro_mayo_2023_termas_cacheuta.webp',
       // Fracción de la foto que hay que limpiar para que aparezca la respuesta (0 a 1).
       limpieza: 0.6,
       pistas: ['No fue en Decero.', 'Tiene nombre de tano y su finca, nombre de cielo.'],

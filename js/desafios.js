@@ -372,7 +372,7 @@
   // ---------- Limpiar el barro ----------
   // Una foto tapada de barro: se limpia frotando y, ya limpia, aparece la pregunta.
   PP.Desafios.barro = function (zona, d, est, api) {
-    var W = 320, H = 240;
+    var W = 300, H = 400;
     zona.innerHTML =
       '<figure class="barro">' +
         '<img alt="Foto escondida bajo el barro" src="' + esc(d.foto) + '">' +
