@@ -121,6 +121,32 @@
       '</svg>';
   };
 
+  // Dos gatitos sentados (uno azul, uno bordó) con las colas armando un corazón
+  PP.gatitosSVG = function () {
+    function gato(color, ojosAbiertos) {
+      var ojos = ojosAbiertos
+        ? '<circle cx="44.5" cy="45.5" r="1.6" fill="' + color + '"/><circle cx="55.5" cy="45.5" r="1.6" fill="' + color + '"/>'
+        : '<path d="M42 46 Q44.5 43.5 47 46 M53 46 Q55.5 43.5 58 46"/>';
+      return '<g stroke="' + color + '" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M67 92 C74 92 78 86 80 76 C76 70 68 64 68 57 C68 51 76 49 80 55" fill="none"/>' +
+        '<path d="M38 57 C30 66 29 86 32 96 L68 96 C71 86 70 66 62 57Z" fill="#f6f3e8"/>' +
+        '<path d="M42 96 Q44.5 91 47 96 M53 96 Q55.5 91 58 96" fill="none"/>' +
+        '<path d="M35 46 C35 38 37 34 38 27 L46 33 C48 32.5 52 32.5 54 33 L62 27 C63 34 65 38 65 46 C65 54 58 59 50 59 C42 59 35 54 35 46Z" fill="#f6f3e8"/>' +
+        '<path d="M39.5 30.5 L41 35 M60.5 30.5 L59 35" stroke-width="0.9"/>' +
+        '<g fill="none">' + ojos +
+        '<path d="M50 51 Q48.5 53.5 46.5 52.5 M50 51 Q51.5 53.5 53.5 52.5"/>' +
+        '<path d="M38 50 L30 49 M38 52.5 L30.5 54.5 M62 50 L70 49 M62 52.5 L69.5 54.5" stroke-width="0.8"/></g>' +
+        '<path d="M48.6 49.3 L51.4 49.3 L50 51Z" fill="' + color + '"/>' +
+        '<ellipse cx="41" cy="51" rx="2.2" ry="1.2" fill="#c97a86" stroke="none" opacity="0.45"/>' +
+        '<ellipse cx="59" cy="51" rx="2.2" ry="1.2" fill="#c97a86" stroke="none" opacity="0.45"/>' +
+        '</g>';
+    }
+    return '<svg class="gatitos" viewBox="24 22 112 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      gato('#1f3a5f', false) +
+      '<g transform="translate(160 0) scale(-1 1)">' + gato('#7a1f2b', true) + '</g>' +
+      '</svg>';
+  };
+
   // Logo circular de la agencia (header)
   PP.logoSVG = function () {
     var p = id('logo');

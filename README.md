@@ -63,7 +63,7 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
 6. **Postal 3D de la portada:** `portada` lleva el saludo y el título del frente (letras gordas rellenas con la foto `letras`, sobre la foto `fondo`), y el `mensaje`, `para` y `direccion` del dorso. Se ve solo la primera vez; para volver a verla, reseteá el progreso. Sin WebGL (o si Three.js no carga en 6 s) aparece la misma postal en 2D.
    **Valija 3D:** usa sola los sellos de todos los destinos (hasta 8), la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
 7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
-8. **Cheque:** `cheque.microtexto` es la respuesta del desafío del sobre impresa en la línea de firma; también el texto del dorso y de la etiqueta.
+8. **Cheque:** `cheque.microtexto` es la respuesta del desafío del sobre impresa en la línea de firma; también el texto del dorso y de la etiqueta. Las frases: `microArriba` y `microAbajo` (microtexto de los bordes), `posdata` (bajo la leyenda) y `gatitos` (la leyenda al lado de los dos gatitos sentados sobre el monto).
 9. **Tarjetas de los destinos sellados:** cada desafío tiene `tarjeta` (`foto` miniatura cuadrada o `null` para "foto pendiente", `lugar`, `fecha`, `emociones`, y `dx`/`dy` para correrla si se pisa con otra). Cuando lo sella, el pin del mapa pasa a ser esa tarjeta con el sello encimado; se agranda al pasar el mouse o con el primer toque en el celu (el segundo toque entra al desafío).
 10. **Recuerdos en el mapa:** `mapa.recuerdos` son las polaroids (`foto` miniatura cuadrada, `grande` para verla ampliada, `lugar`, `fecha`, `nota`, `lat`/`lon`, y `dx`/`dy`/`rot` para correrla y girarla). Aparecen recién cuando están sellados los desafíos de `recuerdosTras` (el de ordenar, porque las fechas lo resuelven) o de su propio `tras`.
 11. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
@@ -76,6 +76,9 @@ Si cambiás respuestas o el contenido de los desafíos después de que ella empe
 1. Elegí la foto, poné un nombre base (ej. `destino1`) y tocá **Generar**.
 2. Ajustá los % de desenfoque hasta que blur-1 todavía cueste.
 3. **Descargar las 4** y copialas a `assets/img/`. Pegá el bloque `imagenes:` que te da.
+
+### `tools/cheque-webp.mjs` — cheque en imagen
+`node tools/cheque-webp.mjs` saca el frente y el dorso del cheque como `assets/img/cheque/cheque-frente.webp` y `cheque-dorso.webp` (20 × 8 cm a 300 dpi = 2362 × 945 px). Usa Chrome o Edge en modo headless y necesita internet para las fuentes y el QR. Volvé a correrlo cada vez que cambies algo del cheque en `config.js`.
 
 ### `tools/mapa-gen.mjs` — mapa
 Solo si querés cambiar el encuadre: `node tools/mapa-gen.mjs` (descarga Natural Earth la primera vez en `tools/.cache/`).
@@ -113,7 +116,7 @@ El repo es `https://github.com/nawd/titita-page`.
 - [ ] Subido a GitHub Pages y abierto desde el celular.
 - [ ] Recorrido completo en el celu: los 7 destinos, la falsa derrota, la valija 3D abriéndose, el cheque aprobado con el monto correcto, la galería.
 - [ ] `cheque.html`: el microtexto de la firma es la respuesta del desafío del sobre.
-- [ ] Imprimir el cheque (escala 100%, gráficos de fondo activados) y **escanear el QR impreso** con el celu.
+- [ ] Imprimir el cheque (escala 100%, gráficos de fondo activados) y **escanear el QR impreso** con el celu. O imprimir `assets/img/cheque/cheque-frente.webp` a 20 × 8 cm (corré antes `node tools/cheque-webp.mjs`).
 - [ ] Imprimir la etiqueta en cartulina, recortar, doblar y ponerle hilo.
 - [ ] **Resetear el progreso** en tu celu (5 toques en el logo) para no dejar sellos puestos si ella usa el mismo dispositivo.
 - [ ] Sobre: cheque + etiqueta. 🧳

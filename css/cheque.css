@@ -57,6 +57,11 @@
   font: 3.6cqw 'Special Elite', monospace;
 }
 .ch-valor { font-weight: 400; letter-spacing: 0.06em; color: #7a1f2b; }
+.ch-monto { position: relative; }
+.ch-gatitos { position: absolute; right: 1.4cqw; bottom: calc(100% - 0.6cqw); display: flex; align-items: flex-end; gap: 0.6cqw; pointer-events: none; }
+.ch-gatitos svg { width: 9cqw; height: auto; display: block; }
+.ch-gatitos small { font: 1.05cqw 'Special Elite', monospace; letter-spacing: 0.04em; color: #7a1f2b; opacity: 0.85; white-space: nowrap; padding-bottom: 1cqw; }
+.ch-leyenda small { display: block; font-size: 1.15cqw; color: #1f3a5f; opacity: 0.8; margin-top: 0.4cqw; }
 
 .ch-pie { position: relative; margin-top: auto; display: grid; grid-template-columns: 11cqw 1fr 30cqw; gap: 2cqw; align-items: end; }
 .ch-qr { text-align: center; }

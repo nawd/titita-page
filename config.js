@@ -345,6 +345,11 @@ globalThis.CONFIG = {
     leyenda: 'Válido solo con todos los sellos del pasaporte',
     // Microtexto impreso en la línea de firma: la respuesta del desafío del sobre.
     microtexto: 'Gertrudis',
+    // Frases del cheque: microtexto de los bordes, posdata del pie y leyenda de los gatitos.
+    microArriba: 'Te amo Titita · Viajar con vos es mi lugar favorito',
+    microAbajo: 'Sin fecha de vencimiento · Paga intereses en besos · No endosable: es todo tuyo',
+    posdata: 'Sin vencimiento · Intereses en besos compuestos',
+    gatitos: 'Auditado por el Depto. de Mimos',
     dorso: 'Para la que me enseñó que el mejor destino es el que todavía no conocemos.',
     etiqueta: {
       frente: 'Equipaje de',
