@@ -490,6 +490,10 @@
         '<p class="cierre">' + esc(f.proximo.cierre) + '</p>' +
         (f.proximo.algunDia ? '<p class="guino">' + esc(f.proximo.algunDia) + '</p>' : '') +
         (f.proximo.eleccion ? '<div class="eleccion" id="eleccion"></div>' : '') +
+        (f.proximo.manana ? '<div class="manana" id="manana">' +
+          '<h3>' + esc(f.proximo.manana.titulo) + '</h3>' +
+          '<figure class="tarjeta-manana"><img alt="' + esc(f.proximo.manana.alt || '') + '" src="' + esc(f.proximo.manana.imagen) + '" width="598" height="632"></figure>' +
+        '</div>' : '') +
       '</article>';
     enlazarSonido(sec);
     $('#volver', sec).addEventListener('click', function () { location.hash = '#mapa'; });
@@ -609,30 +613,59 @@
       });
     }
 
-    // Zoom: Sudamérica entera → recuadro de la Patagonia
+    // Zoom cruzado: Sudamérica se agranda y el mapa de los lagos crece desde su recuadro,
+    // las dos capas alineadas; el fundido pasa a mitad de camino para no ver letras gigantes
     var W = marco.clientWidth;
     var hSa = (W / sa.cols) * sa.rows;
     var hPat = (W / pat.cols) * pat.rows;
     var a = PP.proyectar(sa, pat.latMax, pat.lonMin), b = PP.proyectar(sa, pat.latMin, pat.lonMax);
     var s1 = W / ((b.x - a.x) * W);
     var s0 = hPat / hSa;
-    capaSa.style.transform = 'translate(' + ((W - W * s0) / 2) + 'px,0) scale(' + s0 + ')';
+    var x0 = (W - W * s0) / 2, x1 = -a.x * W * s1, y1 = -a.y * hSa * s1;
+    function enSa(tx, ty, s) { return 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')'; }
+    capaSa.style.transform = enSa(x0, 0, s0);
     if (PP.reducirMovimiento()) {
       marco.classList.add('zoom');
       mostrarRuta();
     } else {
+      // Zoom geométrico alrededor del punto que queda fijo en pantalla (se siente parejo de punta a punta).
+      // Los lagos crecen hacia ese mismo punto desde PAT0 de su tamaño: con la escala exacta arrancarían
+      // diminutos y quedaría un hueco; así el fundido pasa antes de que Sudamérica se vea con letras gigantes.
+      var PAT0 = 0.4;
+      var ux = (x0 - x1) / (s1 - s0), uy = -y1 / (s1 - s0);
+      var fx = x0 + s0 * ux, fy = s0 * uy;
+      var cuadrosSa = [], cuadrosPat = [];
+      for (var k = 0; k <= 16; k++) {
+        var t = k / 16, s = s0 * Math.pow(s1 / s0, t), sPat = Math.pow(PAT0, 1 - t);
+        var o = Math.min(1, Math.max(0, (t - 0.15) / 0.35));
+        cuadrosSa.push({ offset: t, transform: enSa(fx - s * ux, fy - s * uy, s), opacity: 1 - o });
+        cuadrosPat.push({ offset: t, transform: enSa(fx - sPat * fx, fy - sPat * fy, sPat), opacity: o });
+      }
+      capaPat.style.transform = cuadrosPat[0].transform;
       setTimeout(function () {
-        capaSa.animate([
-          { transform: capaSa.style.transform },
-          { transform: 'translate(' + (-a.x * W * s1) + 'px,' + (-a.y * hSa * s1) + 'px) scale(' + s1 + ')' },
-        ], { duration: 2400, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' });
-        setTimeout(function () { marco.classList.add('zoom'); }, 1900);
-        setTimeout(mostrarRuta, 2600);
+        var anim = { duration: 2600, easing: 'cubic-bezier(.45,0,.25,1)', fill: 'forwards' };
+        capaSa.animate(cuadrosSa, anim);
+        capaPat.animate(cuadrosPat, anim).finished.then(function () {
+          marco.classList.add('zoom');
+          mostrarRuta();
+        });
       }, 700);
     }
 
     PP.Galeria($('#galeria', sec), p.galeria, 4200);
     if (p.eleccion) eleccion($('#eleccion', sec), p.eleccion);
+    if (p.manana) aparecerAlLlegar($('#manana', sec));
+  }
+
+  // Fade-in lento la primera vez que el elemento entra en pantalla
+  function aparecerAlLlegar(el) {
+    if (!('IntersectionObserver' in window)) { el.classList.add('visible'); return; }
+    var obs = new IntersectionObserver(function (entradas) {
+      if (!entradas[0].isIntersecting) return;
+      el.classList.add('visible');
+      obs.disconnect();
+    }, { threshold: 0.35 });
+    obs.observe(el);
   }
 
   // El viaje siguiente: dos opciones, ella elige y la agencia le pone el sello

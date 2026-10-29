@@ -338,6 +338,12 @@ globalThis.CONFIG = {
             mensaje: 'San Andrés: pedido registrado. La agencia lo negocia con Bombón 😏' },
         ],
       },
+      // Opcional: tarjeta sorpresa al final, aparece despacito al llegar. null para ocultarla.
+      manana: {
+        titulo: '¿Y mañana?',
+        imagen: 'assets/img/sorpresa/reserva.webp', // el nombre del restaurante ya va borroneado en la imagen
+        alt: 'Reserva para dos: viernes 30 de octubre de 2026, 20:15, en un restaurante secreto',
+      },
     },
   },
 
