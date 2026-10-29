@@ -48,7 +48,7 @@ globalThis.CONFIG = {
     // dx/dy corren la polaroid desde el lugar (en % del ancho/alto del mapa); rot la gira.
     recuerdosTras: ['destino-3'],
     recuerdos: [
-      { lugar: 'Colón', fecha: 'feb 2023', lat: -32.22, lon: -58.14, dx: 14, dy: 0, rot: 5,
+      { lugar: 'Colón', fecha: 'feb 2023', lat: -32.22, lon: -58.14, dx: 21, dy: 3, rot: 5,
         foto: 'assets/img/viajes/mini/colon.jpg', grande: 'assets/img/fotos_nuestras/Colón_febrero_2023_isla_san_francisco.webp',
         nota: 'Isla San Francisco. Sí, el viaje de la lancha 🥴' },
       { lugar: 'Mendoza', fecha: 'may 2023', lat: -33.04, lon: -68.88, dx: -18, dy: -7, rot: -6,
@@ -108,6 +108,9 @@ globalThis.CONFIG = {
   desafios: [
     {
       id: 'destino-1',
+      // Tarjeta del mapa cuando el destino está sellado (foto: null = "foto pendiente").
+      // dx/dy la corren (en % del mapa) para que no se pise con las de al lado.
+      tarjeta: { foto: 'assets/img/viajes/mini/rio.jpg', lugar: 'Río de Janeiro', fecha: 'Enero 2025', emociones: 'Paz y asombro 🌅' },
       tipo: 'blur',
       destino: 'Río de Janeiro', // se ve recién al sellar
       pais: 'Brasil',
@@ -140,6 +143,7 @@ globalThis.CONFIG = {
     },
     {
       id: 'destino-2',
+      tarjeta: { foto: 'assets/img/viajes/mini/kona.jpg', lugar: 'Bar Kona, R. Mejía', fecha: 'Agosto 2025', emociones: 'Ternura y risas 🍸', dx: -8 },
       tipo: 'memotest',
       destino: 'Buenos Aires',
       pais: 'Argentina',
@@ -163,6 +167,7 @@ globalThis.CONFIG = {
     },
     {
       id: 'destino-3',
+      tarjeta: { foto: null, lugar: 'Mar del Plata', fecha: 'Enero 2023', emociones: 'El primero de todos 💛', dx: 4, dy: 3 },
       tipo: 'order',
       destino: 'Mar del Plata',
       pais: 'Argentina',
@@ -192,6 +197,7 @@ globalThis.CONFIG = {
     },
     {
       id: 'colon',
+      tarjeta: { foto: 'assets/img/viajes/mini/colon.jpg', lugar: 'Colón, Entre Ríos', fecha: 'Febrero 2023', emociones: 'Risas y mareo 🥴', dx: 3, dy: -4 },
       tipo: 'lancha',
       destino: 'Colón',
       pais: 'Argentina',
@@ -220,6 +226,7 @@ globalThis.CONFIG = {
     },
     {
       id: 'san-martin',
+      tarjeta: { foto: 'assets/img/viajes/mini/san-martin.jpg', lugar: 'Cerro Colorado', fecha: 'Marzo 2024', emociones: 'Vértigo y orgullo ⛰️' },
       tipo: 'cerro',
       destino: 'San Martín de los Andes',
       pais: 'Argentina',
@@ -241,6 +248,7 @@ globalThis.CONFIG = {
     },
     {
       id: 'mendoza',
+      tarjeta: { foto: 'assets/img/viajes/mini/mendoza-barro.jpg', lugar: 'Termas de Cacheuta', fecha: 'Mayo 2023', emociones: 'Risas y barro 😂' },
       tipo: 'barro',
       destino: 'Mendoza',
       pais: 'Argentina',
@@ -259,6 +267,7 @@ globalThis.CONFIG = {
     },
     {
       id: 'destino-4',
+      tarjeta: { foto: 'assets/img/viajes/mini/gertrudis.jpg', lugar: 'Casa, con Gertrudis', fecha: 'Todos los días', emociones: 'Amor gatuno 🐱', dx: 4, dy: -3 },
       tipo: 'text',
       destino: 'El sobre',
       pais: 'Argentina',

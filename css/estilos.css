@@ -406,16 +406,44 @@ body.lupa .tl {
 .barro.lavada canvas { opacity: 0; pointer-events: none; }
 .barro figcaption { position: absolute; left: 8px; top: 8px; padding: 2px 8px; border-radius: 10px; background: rgba(42, 33, 28, 0.6); font: 11px var(--maquina); color: #fff; pointer-events: none; }
 
+/* ---------- Tarjetas de los destinos sellados ---------- */
+/* El botón es chico (zona táctil); la tarjeta se arma a 150px y se achica con scale */
+.pin.con-tarjeta { width: 38px; height: 44px; border-radius: 0; }
+.pin.con-tarjeta::before { display: none; }
+.tarjeta {
+  position: absolute; left: 50%; top: 50%; width: 150px; padding: 7px 7px 9px;
+  display: block; text-align: left; border-radius: 16px; background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  transform: translate(-50%, -50%) scale(0.24); transition: transform 0.28s cubic-bezier(.3, 1.3, .5, 1), box-shadow 0.28s;
+}
+.pin.con-tarjeta:focus-visible { z-index: 10; outline: none; }
+.pin.con-tarjeta.abierta, .pin.con-tarjeta:focus-visible { z-index: 10; }
+.pin.con-tarjeta.abierta .tarjeta, .pin.con-tarjeta:focus-visible .tarjeta { transform: translate(-50%, -50%) scale(1); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4); }
+@media (hover: hover) {
+  .pin.con-tarjeta:hover { z-index: 10; }
+  .pin.con-tarjeta:hover .tarjeta { transform: translate(-50%, -50%) scale(1); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4); }
+}
+.tarjeta-foto {
+  position: relative; display: grid; place-items: center; aspect-ratio: 136 / 96;
+  border-radius: 12px; background: #e7eaee; margin-bottom: 22px;
+}
+.tarjeta-foto img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+.tarjeta-foto i { font: normal 11px var(--maquina); color: var(--tinta-suave); }
+.tarjeta-sello { position: absolute; left: 50%; bottom: -22px; width: 44px; height: 44px; transform: translateX(-50%) rotate(-8deg); }
+.tarjeta-sello svg { width: 100%; height: 100%; }
+.tarjeta-dato { display: flex; align-items: center; gap: 5px; padding: 1px 6px; font: 11px/1.35 var(--mono); color: var(--tinta); }
+.tarjeta-dato svg { flex: none; width: 12px; height: 12px; fill: none; stroke: var(--bordo); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
 /* ---------- Recuerdos: polaroids en el mapa ---------- */
 .hilos { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 .hilos line { stroke: var(--bordo); stroke-width: 1; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; opacity: 0.7; }
 .polaroid {
-  position: absolute; z-index: 2; width: 15%; padding: 3px 3px 0; border: 0; border-radius: 1px;
+  position: absolute; z-index: 2; width: 10.5%; padding: 2px 2px 0; border: 0; border-radius: 1px;
   background: #fffdf7; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
 }
 .polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; }
-.polaroid span { display: block; padding: 2px 0 3px; font: 7px/1.25 var(--maquina); color: var(--tinta); text-align: center; white-space: nowrap; }
+.polaroid span { display: block; padding: 1px 0 2px; font: 5.5px/1.2 var(--maquina); color: var(--tinta); text-align: center; white-space: nowrap; }
 .polaroid.nueva { animation: pegar 0.7s cubic-bezier(.3, 1.4, .5, 1) both; }
 @keyframes pegar {
   from { opacity: 0; transform: translate(-50%, -50%) rotate(calc(var(--rot, 0deg) - 25deg)) scale(2.4); }

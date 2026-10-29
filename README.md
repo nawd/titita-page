@@ -63,8 +63,9 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
 6. **Valija 3D:** usa sola los sellos de todos los destinos (hasta 8), la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
 7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
 8. **Cheque:** `cheque.microtexto` es la respuesta del desafío del sobre impresa en la línea de firma; también el texto del dorso y de la etiqueta.
-9. **Recuerdos en el mapa:** `mapa.recuerdos` son las polaroids (`foto` miniatura cuadrada, `grande` para verla ampliada, `lugar`, `fecha`, `nota`, `lat`/`lon`, y `dx`/`dy`/`rot` para correrla y girarla). Aparecen recién cuando están sellados los desafíos de `recuerdosTras` (el de ordenar, porque las fechas lo resuelven) o de su propio `tras`.
-10. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
+9. **Tarjetas de los destinos sellados:** cada desafío tiene `tarjeta` (`foto` miniatura cuadrada o `null` para "foto pendiente", `lugar`, `fecha`, `emociones`, y `dx`/`dy` para correrla si se pisa con otra). Cuando lo sella, el pin del mapa pasa a ser esa tarjeta con el sello encimado; se agranda al pasar el mouse o con el primer toque en el celu (el segundo toque entra al desafío).
+10. **Recuerdos en el mapa:** `mapa.recuerdos` son las polaroids (`foto` miniatura cuadrada, `grande` para verla ampliada, `lugar`, `fecha`, `nota`, `lat`/`lon`, y `dx`/`dy`/`rot` para correrla y girarla). Aparecen recién cuando están sellados los desafíos de `recuerdosTras` (el de ordenar, porque las fechas lo resuelven) o de su propio `tras`.
+11. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
 
 Si cambiás respuestas o el contenido de los desafíos después de que ella empezó, subí `version` (por ej. `'v5'`) para que el progreso guardado se reinicie.
 

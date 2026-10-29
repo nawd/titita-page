@@ -27,6 +27,26 @@
     return { forma: forma, arriba: nombre, abajo: d.pais.toUpperCase(), centro: '0' + (i + 1), sub: chico ? '' : 'SELLADO', color: COLORES[i % COLORES.length], semilla: i * 13 + 5 };
   }
 
+  // Íconos de la tarjeta del mapa (lugar, fecha, emociones)
+  var ICONOS = {
+    lugar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+    fecha: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
+    emociones: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>',
+  };
+
+  // Tarjeta de un destino sellado: foto, sello encimado abajo al medio, lugar, fecha y emociones.
+  // Se arma a tamaño real y el CSS la achica en el mapa; al pasar el mouse o tocarla, se agranda.
+  function tarjetaHTML(d, i) {
+    var t = d.tarjeta;
+    return '<span class="tarjeta">' +
+      '<span class="tarjeta-foto">' + (t.foto ? '<img alt="" src="' + esc(t.foto) + '" loading="lazy">' : '<i>📷 foto pendiente</i>') +
+        '<span class="tarjeta-sello">' + PP.selloSVG(selloDe(d, i, true)) + '</span></span>' +
+      ['lugar', 'fecha', 'emociones'].map(function (k) {
+        return t[k] ? '<span class="tarjeta-dato">' + ICONOS[k] + '<span>' + esc(t[k]) + '</span></span>' : '';
+      }).join('') +
+    '</span>';
+  }
+
   function contadorHTML() {
     return '<span class="contador" aria-live="polite">Sellos <b>' + prog.sellos() + '/' + cfg.desafios.length + '</b></span>';
   }
@@ -153,15 +173,31 @@
     cfg.desafios.forEach(function (d, i) {
       var est = prog.de(d.id);
       var p = PP.proyectar(PP_MAPA.sudamerica, d.lat, d.lon);
+      var t = est.hecho && d.tarjeta;
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'pin' + (est.hecho ? ' sellado' : '');
-      b.style.left = (p.x * 100) + '%';
-      b.style.top = (p.y * 100) + '%';
-      b.setAttribute('aria-label', est.hecho ? d.destino + ' (sellado)' : 'Destino ' + (i + 1));
-      b.innerHTML = '<span class="punto">' + (est.hecho ? PP.selloSVG(selloDe(d, i, true)) : i + 1) + '</span>';
-      b.addEventListener('click', function () { location.hash = '#d/' + d.id; });
+      b.className = 'pin' + (est.hecho ? ' sellado' : '') + (t ? ' con-tarjeta' : '');
+      b.style.left = (p.x * 100 + ((t && t.dx) || 0)) + '%';
+      b.style.top = (p.y * 100 + ((t && t.dy) || 0)) + '%';
+      b.setAttribute('aria-label', t ? d.destino + ' (sellado): ' + t.lugar + ', ' + t.fecha + ', ' + t.emociones
+        : est.hecho ? d.destino + ' (sellado)' : 'Destino ' + (i + 1));
+      b.innerHTML = t ? tarjetaHTML(d, i) : '<span class="punto">' + (est.hecho ? PP.selloSVG(selloDe(d, i, true)) : i + 1) + '</span>';
+      var puntero = 'mouse';
+      b.addEventListener('pointerdown', function (e) { puntero = e.pointerType; });
+      b.addEventListener('click', function () {
+        // En el celu, el primer toque agranda la tarjeta y el segundo entra al desafío
+        if (t && puntero !== 'mouse' && !b.classList.contains('abierta')) {
+          cont.querySelectorAll('.pin.abierta').forEach(function (x) { x.classList.remove('abierta'); });
+          b.classList.add('abierta');
+          return;
+        }
+        location.hash = '#d/' + d.id;
+      });
       cont.appendChild(b);
+    });
+    // Tocar afuera cierra la tarjeta agrandada
+    cont.addEventListener('pointerdown', function (e) {
+      cont.querySelectorAll('.pin.abierta').forEach(function (x) { if (!x.contains(e.target)) x.classList.remove('abierta'); });
     });
 
     pegarRecuerdos(cont);
