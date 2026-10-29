@@ -39,22 +39,26 @@
   };
 
   // ---------- Agua del mapa ----------
-  // Oleaje de un punto del mar (columna, fila) en el segundo t: corrimiento en celdas y escala del punto
+  // Oleaje de un punto del mar (columna, fila) en el segundo t: corrimiento en celdas y escala.
+  // Dos marejadas que avanzan en diagonal: cada punto gira en un circulito (como el agua de verdad)
+  // y crece en la cresta, así se ven las líneas de olas viajando.
   PP.oleaje = function (c, r, t) {
+    var f1 = c * 0.42 + r * 0.2 - t * 1.7; // marejada principal, hacia la costa
+    var f2 = -c * 0.16 + r * 0.33 - t * 1.05; // mar de fondo, más lento y cruzado
     return {
-      x: 0.22 * Math.sin(t * 1.1 + r * 0.32 + c * 0.13),
-      y: 0.16 * Math.cos(t * 0.85 + c * 0.27 - r * 0.11),
-      escala: 0.82 + 0.28 * Math.sin(t * 1.5 - (c + r * 0.6) * 0.28),
+      x: 0.16 * Math.cos(f1) + 0.07 * Math.cos(f2),
+      y: 0.12 * Math.sin(f1) + 0.07 * Math.sin(f2),
+      escala: 0.86 + 0.19 * Math.sin(f1) + 0.07 * Math.sin(f2),
     };
   };
 
-  // Agujero del puntero: (dx, dy) va del puntero al punto. Adentro del radio, el punto se corre
-  // hacia afuera (más cuanto más cerca) y se achica hasta desaparecer en el centro.
+  // Agujero del puntero, sutil: (dx, dy) va del puntero al punto. Adentro del radio, el punto se
+  // corre un poco hacia afuera y se achica, sin llegar a desaparecer.
   PP.empujeAgua = function (dx, dy, radio) {
     var d = Math.sqrt(dx * dx + dy * dy);
     if (d >= radio) return { x: 0, y: 0, escala: 1 };
-    var k = 1 - d / radio, empuje = k * k * radio * 0.6;
-    return { x: d ? (dx / d) * empuje : 0, y: d ? (dy / d) * empuje : 0, escala: Math.min(1, d / (radio * 0.5)) };
+    var k = 1 - d / radio, suave = k * k * (3 - 2 * k), empuje = suave * radio * 0.22;
+    return { x: d ? (dx / d) * empuje : 0, y: d ? (dy / d) * empuje : 0, escala: 1 - 0.35 * suave };
   };
 
   // Onda de un toque: anillo que se abre a `vel` px/s. Devuelve cuánto empuja (0..1) a un punto

@@ -133,6 +133,12 @@ await test('fracción limpia del barro (canal alfa)', () => {
   igual(PP.fraccionLimpia(px([0, 255, 10, 255]), 1), 0.5);
   igual(PP.fraccionLimpia(px([0, 255, 0, 255]), 2), 1);
 });
+await test('el oleaje avanza: la cresta de un momento está más adelante después', () => {
+  // A lo largo de una fila, la cresta (punto más grande) se corre con el tiempo
+  const cresta = (t) => { let mejor = 0, col = 0; for (let c = 0; c < 18; c++) { const e = PP.oleaje(c, 50, t).escala; if (e > mejor) { mejor = e; col = c; } } return col; };
+  const a = cresta(0), b = cresta(0.4);
+  if (a === b) throw new Error('la cresta no se mueve');
+});
 await test('el oleaje mueve poco cada punto del mar', () => {
   for (let t = 0; t < 10; t += 0.37) {
     for (const [c, r] of [[0, 0], [12, 40], [59, 98]]) {
@@ -142,11 +148,13 @@ await test('el oleaje mueve poco cada punto del mar', () => {
     }
   }
 });
-await test('el puntero hace un agujero: empuja hacia afuera y achica, lejos no toca', () => {
+await test('el puntero hace un agujero sutil: empuja un poco y achica sin borrar, lejos no toca', () => {
   igual(PP.empujeAgua(100, 0, 50), { x: 0, y: 0, escala: 1 });
   const cerca = PP.empujeAgua(10, 0, 50);
   if (!(cerca.x > 0 && cerca.y === 0)) throw new Error('no empuja hacia afuera: ' + JSON.stringify(cerca));
-  if (!(cerca.escala < 0.5)) throw new Error('no achica cerca del centro');
+  if (!(cerca.escala < 0.9 && cerca.escala >= 0.5)) throw new Error('cerca del centro tiene que achicar un poco: ' + cerca.escala);
+  if (!(cerca.x < 50 * 0.4)) throw new Error('empuja demasiado: ' + cerca.x);
+  if (!(PP.empujeAgua(0, 0, 50).escala >= 0.5)) throw new Error('en el centro los puntos no desaparecen');
   const masLejos = PP.empujeAgua(0, -40, 50);
   if (!(masLejos.y < 0 && Math.abs(masLejos.y) < cerca.x)) throw new Error('el empuje no baja con la distancia');
   const centro = PP.empujeAgua(0, 0, 50);

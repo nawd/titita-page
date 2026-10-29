@@ -171,7 +171,7 @@
     this.fuerza = this.animar ? this.fuerza + (meta - this.fuerza) * 0.2 : meta;
     if (this.fuerza < 0.01) this.fuerza = 0;
     var p = this.fuerza ? this.puntero : null;
-    var radioAgujero = cel * 5;
+    var radioAgujero = cel * 3;
     var ondas = this.ondas.filter(function (o) { return ahora - o.t < VIDA_ONDA * 1000; });
     this.ondas = ondas;
     var velOnda = cel * 16, anchoOnda = cel * 2.5;
@@ -179,6 +179,8 @@
     for (var clave in this.agua) {
       var pts = this.agua[clave];
       ctx.fillStyle = clave === 'lago' ? COLOR_LAGO : colorMar(+clave);
+      // Mar adentro las olas se mueven más; contra la costa y en los lagos, casi quietas
+      var fuerzaOla = clave === 'lago' ? 0.35 : 0.45 + 0.55 * Math.min(1, (+clave - 1) / 6);
       ctx.beginPath();
       for (var i = 0; i < pts.length; i += 2) {
         var c = pts[i], r = pts[i + 1];
@@ -186,13 +188,13 @@
         var x = (c + 0.5) * cel, y = (r + 0.5) * cel;
         if (this.animar) {
           var o = PP.oleaje(c, r, t);
-          x += o.x * cel;
-          y += o.y * cel;
-          radio *= o.escala;
+          x += o.x * cel * fuerzaOla;
+          y += o.y * cel * fuerzaOla;
+          radio *= 1 + (o.escala - 1) * fuerzaOla;
         }
         for (var k = 0; k < ondas.length; k++) {
           var ox = x - ondas[k].x, oy = y - ondas[k].y, d = Math.sqrt(ox * ox + oy * oy) || 1;
-          var empuje = PP.onda(d, (ahora - ondas[k].t) / 1000, velOnda, anchoOnda, VIDA_ONDA) * cel * 0.9;
+          var empuje = PP.onda(d, (ahora - ondas[k].t) / 1000, velOnda, anchoOnda, VIDA_ONDA) * cel * 0.5;
           x += (ox / d) * empuje;
           y += (oy / d) * empuje;
         }
