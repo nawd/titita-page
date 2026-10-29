@@ -39,7 +39,7 @@ globalThis.CONFIG = {
       'Tocá un destino para empezar. Podés ir en el orden que quieras: acá nadie te apura, ' +
       'salvo la valija. Mirá todo con atención, que esta agencia esconde cosas.',
     // Caracteres con los que se dibuja la tierra (se repiten en loop).
-    textoTierra: 'viajar con vos es mi lugar favorito · ',
+    textoTierra: 'viajar con vos es mi lugar favorito · Te amo Titita, por Bombón · ',
     leyenda: { visitado: 'Ya fuimos', otro: 'Nos falta', mar: 'Mar' },
     // Países "visitados" (códigos ISO numéricos de Natural Earth): Argentina y Brasil.
     visitados: ['032', '076'],
