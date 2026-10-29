@@ -15,6 +15,33 @@
     return !!habilitada && !estado.falsaVista && estado.errores >= limite;
   };
 
+  // Vaivén de la lancha en [-1, 1] (0 = pareja con el muelle). Dos senos desfasados
+  // para que el bamboleo sea "borracho"; con cada salto se mueve un poco más rápido.
+  PP.vaivenLancha = function (t, paso) {
+    var f = 0.5 + 0.12 * (paso || 0);
+    return 0.62 * Math.sin(2 * Math.PI * f * t) + 0.38 * Math.sin(2 * Math.PI * f * 1.7 * t + 1.3);
+  };
+
+  PP.enMuelle = function (vaiven, tolerancia) {
+    return Math.abs(vaiven) <= tolerancia;
+  };
+
+  // Cerro: un acierto sube un tramo, un error resbala uno
+  PP.tramoTras = function (tramo, acierto, total) {
+    return acierto ? Math.min(total, tramo + 1) : Math.max(0, tramo - 1);
+  };
+
+  // Fracción de píxeles ya limpios (alfa casi 0) en datos RGBA de un canvas,
+  // mirando uno de cada `salto` píxeles
+  PP.fraccionLimpia = function (datos, salto) {
+    var paso = 4 * (salto || 1), limpios = 0, total = 0;
+    for (var i = 3; i < datos.length; i += paso) {
+      total++;
+      if (datos[i] < 32) limpios++;
+    }
+    return total ? limpios / total : 0;
+  };
+
   PP.mezclar = function (lista) {
     var a = lista.slice();
     for (var i = a.length - 1; i > 0; i--) {

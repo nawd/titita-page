@@ -1,6 +1,6 @@
-# Pasaporte · Banco de Nosotros
+# Pasaporte · Turismo Bombón
 
-Un regalo en forma de juego: un cheque impreso de un banco ficticio con un QR que lleva a un **pasaporte** web. Ella resuelve 4 destinos sobre un mapa de Sudamérica escrito con letras, junta 4 sellos, y el banco "aprueba" el cheque: aparece una **valija 3D** que se abre y de adentro sale el cheque, se revela el monto, aparece tu mensaje y el mapa vuela a los lagos del sur, con fotos del próximo viaje.
+Un regalo en forma de juego: un cheque de viajero impreso de una agencia de turismo ficticia (Turismo Bombón) con un QR que lleva a un **pasaporte** web. Ella resuelve 7 destinos sobre un mapa de Sudamérica escrito con letras, junta un sello por destino, y la agencia "aprueba" el cheque: aparece una **valija 3D** que se abre y de adentro sale el cheque, se revela el monto, aparece tu mensaje y el mapa vuela a los lagos del sur, con fotos del próximo viaje.
 
 - HTML + CSS + JS vanilla, sin build. Funciona en GitHub Pages tal cual.
 - La valija 3D usa Three.js desde CDN y se carga solo al final; si el celu no tiene WebGL, el final sigue en 2D.
@@ -33,10 +33,13 @@ Abrí `http://localhost:8080`. Las respuestas de ejemplo son:
 |---|---|---|
 | 1 · Río de Janeiro | foto borrosa | `rio de janeiro` (también `rio`, `janeiro`) |
 | 2 · Buenos Aires | memotest | completar los pares y escribir `aventura` |
-| 3 · Córdoba | ordenar | Córdoba → Florianópolis → Mendoza → Río → Salta |
-| 4 · El sobre | texto | `brujula` (también `la brujula`) |
+| 3 · Salta | ordenar | Colón → Río → Búzios → Bariloche → Mendoza → Tucumán → Salta (provisorio: poné el orden real) |
+| 4 · Colón | lancha | tocar «¡Saltá!» 3 veces cuando la lancha queda pareja con el muelle |
+| 5 · Bariloche | cerro | contestar bien las 3 preguntas (en el ejemplo: la última opción, la última, la primera) |
+| 6 · Mendoza | barro | limpiar la foto con el dedo y escribir `luigi bosca` (también `luigi`, `bosca`) |
+| 7 · El sobre | texto | `gertrudis` (también `bernie`, `bernis`) |
 
-La pista oculta del ejemplo es la palabra **FIRMA** (letras apenas más violetas en los textos del titular y del mapa; mantené apretado el logo del banco para resaltarlas).
+La pista oculta del ejemplo es la palabra **FIRMA** (letras apenas más violetas en los textos del titular y del mapa; mantené apretado el logo de la agencia para resaltarlas).
 
 Para probarlo en el celu sin subir nada: con la compu y el celu en el mismo wifi, entrá desde el celu a `http://<IP de la compu>:8080` (la IP la ves con `ipconfig`).
 
@@ -49,16 +52,20 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
 3. **Desafíos:** cada uno tiene `destino`, `pais`, `lat`/`lon` (dónde va el pin), `enunciado`, 2 `pistas` (aparecen a los 2 y 4 errores), `recompensa` y sus `respuestas`: una lista en texto plano con todas las formas que aceptás. Se comparan sin mayúsculas, tildes, puntuación ni espacios de más, así que `'Río de Janeiro'` ya acepta `rio de janeiro!`. Por tipo:
    - `blur`: `imagenes` con las 4 versiones (usá `tools/blur.html`).
    - `memotest`: `cartas` con 6 fotos y `palabraClave` (ya vale como respuesta; `respuestas` es para sumar otras).
-   - `order`: `sellos` con `id` y `nombre` (opcional `imagen` y `anio`) y `ordenCorrecto` con los `id` del más viejo al más nuevo. Los sellos se muestran mezclados.
+   - `order`: `sellos` con `id` y `nombre` (opcional `imagen` y `anio`) y `ordenCorrecto` con los `id` del más viejo al más nuevo. Los sellos se muestran mezclados. Para sumar un viaje, agregalo a `sellos` y poné su `id` en `ordenCorrecto`.
+   - `lancha`: `etapas` (un salto por etapa), `tolerancia` (0 a 1, más grande = más fácil) y `mensajesSplash` para cuando se cae al agua. No lleva `respuestas`.
+   - `cerro`: `cerro` (nombre) y `preguntas`, cada una con `pregunta`, `opciones` y `correcta` (posición de la correcta, 0 = la primera; en pantalla se mezclan). No lleva `respuestas`.
+   - `barro`: `foto` (la que queda tapada de barro), `limpieza` (qué fracción hay que limpiar, 0 a 1) y `respuestas` para la pregunta del enunciado.
    - `text`: solo `respuestas`.
-4. **Pista oculta:** `pistaOculta.palabra` (ayuda para el desafío 4) y en qué textos se esconden sus letras. El test avisa si la palabra no entra en esos textos.
+   - Los errores de `memotest`, `lancha` y `cerro` cuentan para las pistas pero no disparan la falsa derrota.
+4. **Pista oculta:** `pistaOculta.palabra` (ayuda para el desafío del sobre) y en qué textos se esconden sus letras. El test avisa si la palabra no entra en esos textos.
 5. **Mensaje final:** `final.monto` (número, sin puntos), `final.moneda` y `final.mensaje` (tu frase). El resto de `final`: título, guiño a la etiqueta, ruta de los lagos, galería y cierre.
-6. **Valija 3D:** usa sola los sellos de los 4 destinos, la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
+6. **Valija 3D:** usa sola los sellos de todos los destinos (hasta 8), la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
 7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
-8. **Cheque:** `cheque.microtexto` es la respuesta del desafío 4 impresa en la línea de firma; también el texto del dorso y de la etiqueta.
+8. **Cheque:** `cheque.microtexto` es la respuesta del desafío del sobre impresa en la línea de firma; también el texto del dorso y de la etiqueta.
 9. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
 
-Si cambiás respuestas o el contenido de los desafíos después de que ella empezó, subí `version` (por ej. `'v2'`) para que el progreso guardado se reinicie.
+Si cambiás respuestas o el contenido de los desafíos después de que ella empezó, subí `version` (por ej. `'v4'`) para que el progreso guardado se reinicie.
 
 ## Herramientas (`/tools`, uso local)
 
@@ -91,18 +98,18 @@ El repo es `https://github.com/nawd/titita-page`.
 ## Probarlo en el celular
 
 1. Abrí `https://nawd.github.io/titita-page/` en el celu (o escaneá el QR de `cheque.html` desde la pantalla).
-2. Jugá los 4 destinos: tocar, arrastrar los sellos, el memotest, el input con el teclado del celu.
-3. Mantené apretado el logo del banco (arriba a la izquierda) para ver la pista oculta.
-4. Al terminar, **reseteá**: 5 toques rápidos en el logo del banco → confirmar.
+2. Jugá los 7 destinos: tocar, arrastrar los sellos, el memotest, la lancha, el cerro, frotar el barro, el input con el teclado del celu.
+3. Mantené apretado el logo de la agencia (arriba a la izquierda) para ver la pista oculta.
+4. Al terminar, **reseteá**: 5 toques rápidos en el logo de la agencia → confirmar.
 
 ## Checklist antes de imprimir
 
 - [ ] `config.js` sin `[CORCHETES]` (nombre, tu firma, fecha, recuerdos).
-- [ ] Respuestas, `ordenCorrecto`, `final.monto` y `final.mensaje` puestos en `config.js`.
+- [ ] Respuestas, `ordenCorrecto` (y sus pistas), las preguntas del cerro, la foto del barro, `final.monto` y `final.mensaje` puestos en `config.js` (buscá `[EDITAR]`).
 - [ ] `node tests/run.mjs` en verde (chequea que cada desafío acepte su respuesta y que el microtexto del cheque sea válido).
 - [ ] Subido a GitHub Pages y abierto desde el celular.
-- [ ] Recorrido completo en el celu: los 4 destinos, la falsa derrota, la valija 3D abriéndose, el cheque aprobado con el monto correcto, la galería.
-- [ ] `cheque.html`: el microtexto de la firma es la respuesta del desafío 4.
+- [ ] Recorrido completo en el celu: los 7 destinos, la falsa derrota, la valija 3D abriéndose, el cheque aprobado con el monto correcto, la galería.
+- [ ] `cheque.html`: el microtexto de la firma es la respuesta del desafío del sobre.
 - [ ] Imprimir el cheque (escala 100%, gráficos de fondo activados) y **escanear el QR impreso** con el celu.
 - [ ] Imprimir la etiqueta en cartulina, recortar, doblar y ponerle hilo.
 - [ ] **Resetear el progreso** en tu celu (5 toques en el logo) para no dejar sellos puestos si ella usa el mismo dispositivo.
@@ -114,4 +121,4 @@ El repo es `https://github.com/nawd/titita-page`.
 node tests/run.mjs
 ```
 
-Prueban la normalización, la validación de respuestas, las reglas del juego y que `config.js` sea coherente: cada desafío acepta su respuesta, el orden usa todos los sellos, el microtexto es la respuesta del desafío 4 y la pista oculta entra en los textos.
+Prueban la normalización, la validación de respuestas, las reglas del juego y que `config.js` sea coherente: cada desafío acepta su respuesta, el orden usa todos los sellos, cada tipo existe, las preguntas del cerro tienen su opción correcta, el microtexto es la respuesta del desafío del sobre y la pista oculta entra en los textos.

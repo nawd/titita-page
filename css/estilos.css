@@ -218,6 +218,8 @@ body.lupa .tl {
 }
 .casilla.llena { border-style: solid; border-color: transparent; }
 .casilla .sello { width: 92%; }
+/* con una cantidad impar de destinos, la última casilla va centrada */
+.casilla:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 5px); }
 
 /* ---------- Sello de tinta ---------- */
 .sello { display: block; pointer-events: none; }
@@ -338,6 +340,72 @@ body.lupa .tl {
   background: var(--papel); color: var(--tinta); font-size: 12px; padding: 0;
 }
 
+.lista-orden.compacta { gap: 6px; }
+.lista-orden.compacta .item-orden { padding: 5px 6px 5px 8px; }
+.lista-orden.compacta .mini { width: 38px; height: 38px; }
+
+/* lancha */
+.lancha { --mareo: 1; }
+.lancha-escena {
+  display: block; width: 100%; border-radius: 8px; border: 4px solid #fff;
+  background: linear-gradient(#f6e3b8, #e9cfa0 70%); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  /* visión doble: se va pasando con cada salto */
+  filter: blur(calc(var(--mareo) * 0.9px)) drop-shadow(calc(var(--mareo) * 7px) 0 0 rgba(122, 31, 43, 0.28));
+  transition: filter 0.6s;
+}
+.lancha-escena .agua-fondo { fill: #2f5480; }
+.lancha-escena .ola { fill: #3d6a9c; opacity: 0.85; }
+.lancha-escena .muelle rect { fill: #8a6542; }
+.lancha-escena .muelle .marca { stroke: var(--oro); stroke-width: 4; stroke-linecap: round; }
+.lancha-escena .casco { fill: var(--bordo); }
+.lancha-escena .borda { stroke: #fff8ec; stroke-width: 3; }
+.lancha-escena .cabina { fill: #fff8ec; }
+.lancha-escena .vidrio { fill: #8fd0e8; }
+.lancha-escena .titita circle { fill: var(--tinta); }
+.lancha-escena .titita path { stroke: var(--tinta); stroke-width: 3; stroke-linecap: round; fill: none; }
+.lancha-escena .gotas { fill: #8fd0e8; opacity: 0; }
+.lancha-escena.salpica .gotas { animation: salpica 0.7s ease-out; }
+@keyframes salpica { 0% { opacity: 1; transform: translateY(6px); } 100% { opacity: 0; transform: translateY(-14px); } }
+.lancha-etapa, .cerro-altura { margin: 10px 0 0 !important; text-align: center; font: 13px var(--maquina); color: var(--tinta-suave); letter-spacing: 0.05em; }
+.lancha-saltar { font-size: 18px; padding: 16px; }
+
+/* cerro */
+.cerro-escena {
+  display: block; width: 100%; border-radius: 8px; border: 4px solid #fff;
+  background: linear-gradient(#cfe6f2, #f3ead3); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+.cerro-escena .lejos { fill: #9fb3c4; }
+.cerro-escena .monte { fill: #9b4a3a; }
+.cerro-escena .nieve { fill: #fffaf0; }
+.cerro-escena .sendero { fill: none; stroke: #f3ead3; stroke-width: 2; stroke-dasharray: 4 4; }
+.cerro-escena .hito { fill: #f3ead3; stroke: var(--tinta); stroke-width: 1.5; }
+.cerro-escena .bandera path { stroke: var(--tinta); stroke-width: 2; }
+.cerro-escena .bandera .tela { fill: var(--oro); stroke: none; }
+.cerro-escena .escalador { transition: transform 0.8s cubic-bezier(.5, 0, .3, 1.3); }
+.cerro-escena .escalador circle { fill: var(--tinta); }
+.cerro-escena .escalador path { stroke: var(--tinta); stroke-width: 2.5; stroke-linecap: round; fill: none; }
+.cerro-pregunta {
+  margin-top: 12px; padding: 12px; border-radius: 8px;
+  background: #fff7df; border: 1px solid #e8d6a6;
+}
+.cerro-texto { margin: 0 0 10px !important; font: 15px var(--maquina); color: var(--tinta); }
+.cerro-opciones { display: grid; gap: 8px; }
+.opcion {
+  text-align: left; padding: 10px 12px; border-radius: 8px;
+  border: 1.5px solid var(--papel-borde); background: rgba(255, 252, 242, 0.92);
+  font: 14px var(--maquina); color: var(--tinta);
+}
+.opcion.bien { border-color: var(--verde); background: rgba(47, 107, 69, 0.12); }
+.opcion.mal { border-color: var(--bordo); background: rgba(122, 31, 43, 0.1); }
+.cerro-opciones.ocupado .opcion { pointer-events: none; }
+
+/* barro */
+.barro { margin: 0; position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 4 / 3; background: #ddd; border: 4px solid #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); }
+.barro img { width: 100%; height: 100%; object-fit: cover; }
+.barro canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; transition: opacity 0.9s; }
+.barro.lavada canvas { opacity: 0; pointer-events: none; }
+.barro figcaption { position: absolute; left: 8px; top: 8px; padding: 2px 8px; border-radius: 10px; background: rgba(42, 33, 28, 0.6); font: 11px var(--maquina); color: #fff; pointer-events: none; }
+
 /* ---------- Capas: rechazo ---------- */
 .capa {
   position: fixed; inset: 0; z-index: 70;
@@ -428,5 +496,6 @@ body.lupa .tl {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   #portada.abriendo .tapa { transform: none; opacity: 0; transition: opacity 0.3s !important; }
   .pin::before { display: none; }
+  .lancha-escena { filter: none; }
   .galeria figure { transition: opacity 0.3s !important; }
 }

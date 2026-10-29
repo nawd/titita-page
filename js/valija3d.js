@@ -169,6 +169,18 @@
     return c;
   }
 
+  // [x, z, giro] de cada calco: la mitad (redondeando para arriba) atrás, el resto adelante
+  function lugaresSellos(n) {
+    var giros = [0.25, -0.3, 0.4, -0.15, 0.1, -0.35, 0.3, -0.2];
+    var fila1 = Math.ceil(n / 2), lugares = [];
+    for (var k = 0; k < n; k++) {
+      var enFila = k < fila1 ? fila1 : n - fila1, j = k < fila1 ? k : k - fila1;
+      var paso = Math.min(0.4, 1.4 / enFila);
+      lugares.push([(j - (enFila - 1) / 2) * paso, k < fila1 ? -0.22 : 0.22, giros[k]]);
+    }
+    return lugares;
+  }
+
   // ---------- Curvas ----------
   function rebote(x) {
     var n = 7.5625, d = 2.75;
@@ -353,16 +365,16 @@
     etDorso.rotation.y = Math.PI;
     etiqueta.add(etDorso);
 
-    // Calcos de los sellos en la tapa
-    // entre las dos correas, en una grilla de 2×2
-    var lugares = [[-0.19, -0.22, 0.25], [0.2, 0.21, -0.3], [0.19, -0.23, 0.4], [-0.2, 0.22, -0.15]];
-    for (var k = 0; k < (op.sellos || []).length && k < lugares.length; k++) {
+    // Calcos de los sellos en la tapa: dos filas, por encima de las correas
+    var lugares = lugaresSellos(Math.min((op.sellos || []).length, 8));
+    var lado = lugares.length > 4 ? 0.3 : 0.36;
+    for (var k = 0; k < lugares.length; k++) {
       var tex = canvasTex(await texSello(op.sellos[k]), true);
-      var calco = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.36),
+      var calco = new THREE.Mesh(new THREE.PlaneGeometry(lado, lado),
         new THREE.MeshStandardMaterial({ map: tex, transparent: true, roughness: 0.8, polygonOffset: true, polygonOffsetFactor: -2 }));
       calco.rotation.x = -Math.PI / 2;
       calco.rotation.z = lugares[k][2];
-      calco.position.set(lugares[k][0], ALTO_TAPA / 2 + 0.028, lugares[k][1]);
+      calco.position.set(lugares[k][0], ALTO_TAPA / 2 + 0.04, lugares[k][1]);
       tapa.add(calco);
     }
 

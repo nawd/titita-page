@@ -7,9 +7,9 @@
   var esc = PP.esc;
   var $ = function (sel, raiz) { return (raiz || document).querySelector(sel); };
 
-  var FORMAS = ['circulo', 'rect', 'oval', 'circulo'];
-  var COLORES = ['#1f3a5f', '#7a1f2b', '#2f6b45', '#2f5480'];
-  var ROT = [-8, 6, -4, 10];
+  var FORMAS = ['circulo', 'rect', 'oval', 'circulo', 'rect', 'oval', 'circulo'];
+  var COLORES = ['#1f3a5f', '#7a1f2b', '#2f6b45', '#2f5480', '#5b3a7a', '#8a5a1f', '#9b2c3a'];
+  var ROT = [-8, 6, -4, 10, -6, 8, -3];
 
   PP.sonido.activo = !!prog.estado.sonido;
 
@@ -126,7 +126,7 @@
       '<article class="hoja" data-pag="3">' +
         '<h2><span class="chico">Visas y sellos</span>Sellos del pasaporte</h2>' +
         '<div class="grilla-sellos" id="casillas"></div>' +
-        '<button class="boton ancho" id="ir-final" type="button" hidden>Presentar el cheque en la agencia 🧳</button>' +
+        '<button class="boton ancho" id="ir-final" type="button" hidden>Presentar el cheque 🧳</button>' +
       '</article>';
 
     // Pista oculta
@@ -246,7 +246,7 @@
       var todos = prog.sellos() === cfg.desafios.length;
       b.hidden = false;
       b.className = todos ? 'boton ancho' : 'boton tinta ancho';
-      b.textContent = todos ? 'Presentar el cheque en la agencia 🧳' : 'Volver al mapa';
+      b.textContent = todos ? 'Presentar el cheque 🧳' : 'Volver al mapa';
       b.onclick = function () { location.hash = todos ? '#final' : '#mapa'; };
     }
 
@@ -312,7 +312,7 @@
     }
 
     var zonaApi = PP.Desafios[d.tipo]($('#zona', sec), d, est, api);
-    form.hidden = !(zonaApi.conFormulario || (d.tipo === 'memotest' && est.memoCompleto)) || est.hecho;
+    form.hidden = !zonaApi.conFormulario || est.hecho;
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var v = input.value;

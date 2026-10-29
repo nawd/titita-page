@@ -98,8 +98,8 @@ globalThis.CONFIG = {
       tipo: 'memotest',
       destino: 'Buenos Aires',
       pais: 'Argentina',
-      lat: -34.6,
-      lon: -58.4,
+      lat: -34.9,
+      lon: -58.6,
       enunciado: 'Encontrá los 6 pares de fotos. Cuando termines, la agencia te va a dictar una palabra clave.',
       cartas: [
         'assets/img/ejemplo/memo-1.svg',
@@ -119,23 +119,87 @@ globalThis.CONFIG = {
     {
       id: 'destino-3',
       tipo: 'order',
-      destino: 'Colón',
+      destino: 'Salta',
       pais: 'Argentina',
-      lat: -31.4,
-      lon: -64.2,
+      lat: -24.8,
+      lon: -65.4,
       enunciado: 'Ordená los sellos de nuestros viajes del más viejo (arriba) al más nuevo (abajo). Arrastralos o usá las flechitas.',
       // ids + nombre visible. Opcional: imagen: 'assets/img/...'. El orden acá NO importa.
+      // Para sumar un viaje: agregalo acá y poné su id en ordenCorrecto.
       sellos: [
-        { id: 'mendoza', nombre: 'Mendoza', anio: '' },
+        { id: 'colon', nombre: 'Colón', anio: '' },
         { id: 'rio', nombre: 'Río', anio: '' },
-        { id: 'cordoba', nombre: 'Córdoba', anio: '' },
+        { id: 'bariloche', nombre: 'Bariloche', anio: '' },
+        { id: 'buzios', nombre: 'Búzios', anio: '' },
+        { id: 'mendoza', nombre: 'Mendoza', anio: '' },
+        { id: 'tucuman', nombre: 'Tucumán', anio: '' },
         { id: 'salta', nombre: 'Salta', anio: '' },
-        { id: 'florianopolis', nombre: 'Florianópolis', anio: '' },
       ],
-      pistas: ['El primero fue el que tuvo más sierras.', 'El último fue el más al norte de Argentina.'],
-      // Orden correcto (del más viejo al más nuevo), con los ids de arriba.
-      ordenCorrecto: ['cordoba', 'florianopolis', 'mendoza', 'rio', 'salta'],
-      recompensa: { texto: 'Cinco viajes en orden y ni un ataque de nervios. Sos la mejor copiloto.' },
+      pistas: [
+        'El primero fue a orillas de un río, no del mar.', // [EDITAR PISTA]
+        'Los dos de Brasil fueron uno atrás del otro.', // [EDITAR PISTA]
+      ],
+      // Orden correcto (del más viejo al más nuevo), con los ids de arriba. [EDITAR: orden real]
+      ordenCorrecto: ['colon', 'rio', 'buzios', 'bariloche', 'mendoza', 'tucuman', 'salta'],
+      recompensa: { texto: 'Siete viajes en orden y ni un ataque de nervios. Sos la mejor copiloto.' },
+    },
+    {
+      id: 'colon',
+      tipo: 'lancha',
+      destino: 'Colón',
+      pais: 'Argentina',
+      // Corrido un poquito al norte para que el pin no se pise con el de Buenos Aires.
+      lat: -31.2,
+      lon: -57.9,
+      enunciado: 'Colón, Entre Ríos. Alguien tomó de más y no se puede bajar de la lancha 🥴. Tocá «¡Saltá!» justo cuando la lancha quede pareja con el muelle.',
+      // Un salto por cada etapa hasta tierra firme.
+      etapas: ['Al borde de la lancha', 'Un pie en el muelle', '¡Tierra firme!'],
+      // Qué tan cerca del muelle tiene que estar (0 a 1: más grande = más fácil).
+      tolerancia: 0.18,
+      mensajesSplash: [
+        '¡Splash! Saludos al río Uruguay.',
+        'Casi. El muelle se movió (el muelle, claro).',
+        'Ese salto fue más de fe que de puntería.',
+        'El marinero te pide, por favor, que lo intentes de nuevo.',
+      ],
+      pistas: [
+        'No es el muelle el que se mueve 🍷. Esperá a que la lancha quede derechita.',
+        'Mirá la rayita dorada: cuando la lancha la toca, saltá.',
+      ],
+      recompensa: { texto: 'Bajaste de la lancha. Esta vez sin que nadie te tenga que bajar a upa. [TU RECUERDO]' },
+    },
+    {
+      id: 'bariloche',
+      tipo: 'cerro',
+      destino: 'Bariloche',
+      pais: 'Argentina',
+      lat: -41.13,
+      lon: -71.31,
+      cerro: 'Cerro Colorado',
+      enunciado: 'Subimos el Cerro Colorado. Cada respuesta correcta te sube un tramo; cada error, resbalón. ¡A la cumbre!',
+      // correcta = posición de la opción correcta (0 = la primera). Las opciones se mezclan solas.
+      preguntas: [
+        { pregunta: '¿Qué llevamos para la subida?', opciones: ['Mate y bizcochitos', 'Chocolate de Bariloche', 'Nada, éramos unos inconscientes'], correcta: 2 }, // [EDITAR]
+        { pregunta: '¿Quién se cansó primero?', opciones: ['Vos', 'Yo', 'Los dos, pero nadie lo admitió'], correcta: 2 }, // [EDITAR]
+        { pregunta: '¿Qué hicimos al llegar arriba?', opciones: ['La foto de la cumbre', 'Tirarnos al piso', 'Prometer que nunca más'], correcta: 0 }, // [EDITAR]
+      ],
+      pistas: ['En la montaña conviene ir despacio: leé bien cada opción.', 'Acordate de la cara que teníamos en la cumbre.'],
+      recompensa: { texto: 'Cumbre. Con vos, hasta las subidas valen la pena. [TU RECUERDO]' },
+    },
+    {
+      id: 'mendoza',
+      tipo: 'barro',
+      destino: 'Mendoza',
+      pais: 'Argentina',
+      lat: -32.89,
+      lon: -68.83,
+      enunciado: 'Termas de Cacheuta: alguien terminó embarrado de pies a cabeza. Limpiá la foto con el dedo y contestá: ¿en qué bodega nos hicieron completar el historial de viajes y nos sellaron el pasaporte?',
+      foto: 'assets/img/ejemplo/barro.svg', // [FOTO DE BOMBÓN EMBARRADO]
+      // Fracción de la foto que hay que limpiar para que aparezca la respuesta (0 a 1).
+      limpieza: 0.6,
+      pistas: ['No fue en Decero.', 'Tiene nombre de tano.'],
+      respuestas: ['Luigi Bosca', 'Luigi', 'Bosca', 'Bodega Luigi Bosca'],
+      recompensa: { texto: 'En Luigi Bosca nos sellaron el historial de viajes; ahora el sello te lo pongo yo. Salud 🍷' },
     },
     {
       id: 'destino-4',

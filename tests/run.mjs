@@ -8,6 +8,7 @@ const cargar = (ruta) => vm.runInThisContext(readFileSync(raiz + ruta, 'utf8'), 
 
 cargar('js/respuestas.js');
 cargar('js/logica.js');
+cargar('js/desafios.js');
 cargar('config.js');
 const { PP, CONFIG } = globalThis;
 
@@ -84,6 +85,39 @@ await test('mezclar distinto funciona con objetos (sellos)', () => {
   igual(m.length, 3);
   if (m.every((x, i) => x === sellos[i])) throw new Error('quedó en orden');
 });
+await test('juegos sin input se sellan con JUEGO_COMPLETO', () => {
+  for (const tipo of ['lancha', 'cerro']) {
+    igual(PP.verificar({ tipo }, PP.JUEGO_COMPLETO), PP.normalizar(PP.JUEGO_COMPLETO));
+    igual(PP.verificar({ tipo }, 'cualquier cosa'), null);
+  }
+});
+await test('la lancha se bambolea entre -1 y 1 y pasa por el muelle seguido', () => {
+  for (const paso of [0, 1, 2]) {
+    let ventanaSinMuelle = 0;
+    for (let t = 0; t < 30; t += 0.01) {
+      const v = PP.vaivenLancha(t, paso);
+      if (v < -1 || v > 1) throw new Error('fuera de rango: ' + v);
+      ventanaSinMuelle = PP.enMuelle(v, 0.15) ? 0 : ventanaSinMuelle + 0.01;
+      if (ventanaSinMuelle > 2.5) throw new Error('más de 2.5 s sin pasar por el muelle (paso ' + paso + ')');
+    }
+  }
+});
+await test('enMuelle respeta la tolerancia', () => {
+  igual([0, 0.1, -0.15, 0.2, -0.9].map((v) => PP.enMuelle(v, 0.15)), [true, true, true, false, false]);
+});
+await test('el cerro sube con aciertos y resbala con errores, sin pasarse', () => {
+  igual(PP.tramoTras(0, true, 3), 1);
+  igual(PP.tramoTras(3, true, 3), 3);
+  igual(PP.tramoTras(2, false, 3), 1);
+  igual(PP.tramoTras(0, false, 3), 0);
+});
+await test('fracción limpia del barro (canal alfa)', () => {
+  const px = (alfas) => Uint8ClampedArray.from(alfas.flatMap((a) => [90, 60, 30, a]));
+  igual(PP.fraccionLimpia(px([255, 255, 255, 255]), 1), 0);
+  igual(PP.fraccionLimpia(px([0, 0, 0, 0]), 1), 1);
+  igual(PP.fraccionLimpia(px([0, 255, 10, 255]), 1), 0.5);
+  igual(PP.fraccionLimpia(px([0, 255, 0, 255]), 2), 1);
+});
 await test('distribuir letras de la pista oculta', () => {
   igual(PP.posicionesPista(['Hola fiera', 'ramo'], 'FIRA'), [[0, 5], [0, 6], [0, 8], [1, 1]]);
   igual(PP.posicionesPista(['abc', 'xyz'], 'cx'), [[0, 2], [1, 0]]);
@@ -102,6 +136,19 @@ await test('cada desafío tiene respuesta y acepta la principal', () => {
 await test('el orden correcto usa todos los sellos y ninguno de más', () => {
   for (const d of CONFIG.desafios.filter((x) => x.tipo === 'order')) {
     igual([...d.ordenCorrecto].sort(), d.sellos.map((s) => s.id).sort());
+  }
+});
+await test('cada desafío tiene un tipo conocido', () => {
+  for (const d of CONFIG.desafios) {
+    if (typeof PP.Desafios[d.tipo] !== 'function') throw new Error(d.id + ': tipo desconocido "' + d.tipo + '"');
+  }
+});
+await test('las preguntas del cerro tienen la correcta entre sus opciones', () => {
+  for (const d of CONFIG.desafios.filter((x) => x.tipo === 'cerro')) {
+    if (!d.preguntas || !d.preguntas.length) throw new Error(d.id + ' sin preguntas');
+    d.preguntas.forEach((p, k) => {
+      if (!(p.opciones || [])[p.correcta]) throw new Error(d.id + ': la pregunta ' + (k + 1) + ' no tiene su opción correcta');
+    });
   }
 });
 await test('el microtexto del cheque es una respuesta válida', () => {

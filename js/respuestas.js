@@ -17,8 +17,12 @@
     return tipo === 'order' ? String(intento) : PP.normalizar(intento);
   };
 
+  // Lo que mandan los juegos sin input (lancha, cerro) al terminarlos
+  PP.JUEGO_COMPLETO = 'juego completo';
+
   // Respuestas válidas de un desafío según su tipo (la primera es la principal)
   PP.respuestasDe = function (d) {
+    if (d.tipo === 'lancha' || d.tipo === 'cerro') return [PP.JUEGO_COMPLETO];
     if (d.tipo === 'order') return [(d.ordenCorrecto || []).join('>')];
     if (d.tipo === 'memotest') return [d.palabraClave].concat(d.respuestas || []);
     return d.respuestas || [];
