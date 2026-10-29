@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Cheque · Banco de Nosotros</title>
+<title>Cheque de viajero · Turismo Bombón</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap">
@@ -37,7 +37,7 @@
     <h2>Dorso del cheque</h2>
     <div class="dorso">
       <div>
-        <div class="endoso">Endoso<div class="linea"></div><div class="linea"></div><small>No escribir debajo de esta línea · Uso exclusivo del Banco de Nosotros</small></div>
+        <div class="endoso">Endoso<div class="linea"></div><div class="linea"></div><small>No escribir debajo de esta línea · Uso exclusivo de la agencia</small></div>
         <p class="mensaje" id="dorso-mensaje"></p>
         <p class="firma" id="dorso-firma"></p>
       </div>
@@ -110,7 +110,7 @@
     var et = cfg.cheque.etiqueta;
     $('et-frente').textContent = et.frente;
     $('et-nombre').textContent = cfg.nombre;
-    $('et-codigo').textContent = 'BDN ' + cfg.numeroCheque;
+    $('et-codigo').textContent = 'TB ' + cfg.numeroCheque;
     $('et-dorso').textContent = et.dorsoTitulo;
     $('et-pie-1').textContent = et.pie;
     $('et-pie-2').textContent = et.pie;

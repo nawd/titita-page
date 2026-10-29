@@ -5,14 +5,14 @@
 // ============================================================================
 globalThis.CONFIG = {
   // Cambiá la versión si querés que el progreso guardado se reinicie para todos.
-  version: 'v1',
+  version: 'v3',
 
   // URL pública (GitHub Pages). El QR del cheque apunta acá.
   siteUrl: 'https://nawd.github.io/titita-page/',
 
   nombre: 'Titita',
-  autor: '[TU NOMBRE]',
-  banco: 'Banco de Nosotros',
+  autor: 'Bombón',
+  agencia: 'Turismo Bombón',
 
   // Fecha de ustedes: se usa como n° de cheque y fecha de expedición.
   fecha: '14/02/2022', // [NUESTRA FECHA]
@@ -20,7 +20,7 @@ globalThis.CONFIG = {
 
   portada: {
     titulo: 'Pasaporte',
-    subtitulo: 'Expedido por el Banco de Nosotros',
+    subtitulo: 'Expedido por Turismo Bombón',
     boton: 'Abrir pasaporte',
   },
 
@@ -29,15 +29,15 @@ globalThis.CONFIG = {
     nacionalidad: 'De acá y de donde estemos juntos',
     profesion: 'Buscadora oficial de pistas',
     bienvenida:
-      'Este pasaporte habilita a su titular a viajar sin fecha de regreso. Para cobrar el cheque, ' +
-      'el banco pide cuatro sellos: uno por cada destino del mapa. Los empleados del banco son ' +
+      'Este pasaporte habilita a su titular a viajar sin fecha de regreso. Para cobrar el cheque de viajero, ' +
+      'la agencia pide un sello por cada destino del mapa. Los empleados de la agencia son ' +
       'pocos, románticos y bastante exigentes.',
   },
 
   mapa: {
     intro:
       'Tocá un destino para empezar. Podés ir en el orden que quieras: acá nadie te apura, ' +
-      'salvo la valija. Mirá todo con atención, que este banco esconde cosas.',
+      'salvo la valija. Mirá todo con atención, que esta agencia esconde cosas.',
     // Caracteres con los que se dibuja la tierra (se repiten en loop).
     textoTierra: 'viajar con vos es mi lugar favorito · ',
     leyenda: { visitado: 'Ya fuimos', otro: 'Nos falta', mar: 'Mar' },
@@ -48,13 +48,13 @@ globalThis.CONFIG = {
   limiteErrores: 6,
 
   mensajesError: [
-    'Mmm, no. El banco te mira raro.',
+    'Mmm, no. La agencia te mira raro.',
     'Casi. Bueno, no tan casi.',
     'Ese no es. ¿Seguro que viniste conmigo?',
     'Respuesta rechazada por el departamento de recuerdos.',
     'Error 404: recuerdo no encontrado.',
     'Nop. Pero te queda lindo intentar.',
-    'El cajero está llorando de la risa.',
+    'El guía está llorando de la risa.',
   ],
 
   falsaDerrota: {
@@ -66,7 +66,7 @@ globalThis.CONFIG = {
   },
 
   // Pista escondida: estas letras aparecen en un color apenas distinto dentro de los
-  // textos listados (en orden). Mantener apretado el sello del banco las resalta.
+  // textos listados (en orden). Mantener apretado el logo de la agencia las resalta.
   pistaOculta: {
     palabra: 'FIRMA',
     textos: ['titular.bienvenida', 'mapa.intro'],
@@ -80,7 +80,7 @@ globalThis.CONFIG = {
       pais: 'Brasil',
       lat: -22.9,
       lon: -43.2,
-      enunciado: '¿Dónde estamos? La foto se va aclarando con cada intento fallido (el banco es generoso, no tonto).',
+      enunciado: '¿Dónde estamos? La foto se va aclarando con cada intento fallido (la agencia es generosa, no tonta).',
       // De más borrosa a nítida. Generalas con tools/blur.html.
       imagenes: [
         'assets/img/ejemplo/rio-blur-3.svg',
@@ -100,7 +100,7 @@ globalThis.CONFIG = {
       pais: 'Argentina',
       lat: -34.6,
       lon: -58.4,
-      enunciado: 'Encontrá los 6 pares de fotos. Cuando termines, el banco te va a dictar una palabra clave.',
+      enunciado: 'Encontrá los 6 pares de fotos. Cuando termines, la agencia te va a dictar una palabra clave.',
       cartas: [
         'assets/img/ejemplo/memo-1.svg',
         'assets/img/ejemplo/memo-2.svg',
@@ -119,7 +119,7 @@ globalThis.CONFIG = {
     {
       id: 'destino-3',
       tipo: 'order',
-      destino: 'Córdoba',
+      destino: 'Colón',
       pais: 'Argentina',
       lat: -31.4,
       lon: -64.2,
@@ -147,16 +147,16 @@ globalThis.CONFIG = {
       enunciado: 'La respuesta siempre estuvo en tus manos. ¿Cuál es la palabra?',
       pistas: [
         'Agarrá el cheque y mirálo de muuuy cerca.',
-        'Hay letras tímidas en este pasaporte. Mantené apretado el sello del banco 👀',
+        'Hay cosas que te pueden ayudar 🔎',
       ],
-      respuestas: ['Brujula', 'La brujula', 'Una brujula'],
+      respuestas: ['Gertrudis', 'bernie', 'bernis'],
       recompensa: { texto: 'Lo tuviste en la mano todo el tiempo. Como a mí.' },
     },
   ],
 
   final: {
     titulo: 'Tu próximo destino necesita una valija',
-    verificando: 'Verificando sellos con el gerente…',
+    verificando: 'Verificando sellos con el gerente de la agencia…',
     sello: 'APROBADO',
     monto: 250000,
     moneda: '$',
@@ -190,14 +190,14 @@ globalThis.CONFIG = {
   },
 
   cheque: {
-    leyenda: 'Válido solo con 4 sellos en el pasaporte',
-    // Microtexto impreso en la línea de firma y en el borde: la respuesta del desafío 4.
-    microtexto: 'BRUJULA',
+    leyenda: 'Válido solo con todos los sellos del pasaporte',
+    // Microtexto impreso en la línea de firma: la respuesta del desafío del sobre.
+    microtexto: 'Gertrudis',
     dorso: 'Para la que me enseñó que el mejor destino es el que todavía no conocemos.',
     etiqueta: {
       frente: 'Equipaje de',
       dorsoTitulo: 'Destino',
-      pie: 'Banco de Nosotros — Depto. de Valijas',
+      pie: 'Turismo Bombón — Depto. de Valijas',
     },
   },
 };

@@ -30,7 +30,7 @@
     function mostrarPalabra(animar) {
       var p = document.createElement('div');
       p.className = 'palabra-clave' + (animar ? ' revela' : '');
-      p.innerHTML = 'El banco te dicta la palabra clave:<b>' + esc(d.palabraClave) + '</b>';
+      p.innerHTML = 'La agencia te dicta la palabra clave:<b>' + esc(d.palabraClave) + '</b>';
       zona.appendChild(p);
       api.mostrarFormulario();
     }

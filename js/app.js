@@ -67,7 +67,7 @@
 
   // ---------- Portada ----------
   function portada() {
-    $('#portada-banco').textContent = cfg.banco;
+    $('#portada-banco').textContent = cfg.agencia;
     $('#portada-escudo').innerHTML = PP.escudoSVG();
     $('#portada-titulo').textContent = cfg.portada.titulo;
     $('#portada-nombre').textContent = 'de ' + cfg.nombre;
@@ -94,8 +94,8 @@
     var nombreMrz = PP.normalizar(cfg.nombre).toUpperCase().replace(/ /g, '<');
     sec.innerHTML =
       '<header class="barra">' +
-        '<button class="logo-banco" id="logo" type="button" aria-label="' + esc(cfg.banco) + '">' + PP.logoSVG() + '</button>' +
-        '<span class="marca">' + esc(cfg.banco) + '<small>Pasaporte de viaje</small></span>' +
+        '<button class="logo-banco" id="logo" type="button" aria-label="' + esc(cfg.agencia) + '">' + PP.logoSVG() + '</button>' +
+        '<span class="marca">' + esc(cfg.agencia) + '<small>Pasaporte de viaje</small></span>' +
         contadorHTML() + botonSonido() +
       '</header>' +
       '<article class="hoja" data-pag="1">' +
@@ -106,12 +106,12 @@
             '<div><dt>Nacionalidad</dt><dd>' + esc(t.nacionalidad) + '</dd></div>' +
             '<div><dt>Profesión</dt><dd>' + esc(t.profesion) + '</dd></div>' +
             '<div><dt>Expedición</dt><dd>' + esc(cfg.fecha) + '</dd></div>' +
-            '<div><dt>Autoridad</dt><dd>' + esc(cfg.banco) + '</dd></div>' +
+            '<div><dt>Autoridad</dt><dd>' + esc(cfg.agencia) + '</dd></div>' +
           '</dl>' +
         '</div>' +
         '<p class="bienvenida" data-pista="0">' + esc(t.bienvenida) + '</p>' +
         '<p class="mrz" aria-hidden="true">P&lt;NOS' + esc(nombreMrz) + '&lt;&lt;' + new Array(Math.max(4, 30 - nombreMrz.length)).join('&lt;') +
-          '<br>' + esc(cfg.numeroCheque) + '&lt;4SELLOS&lt;&lt;VALIJA&lt;&lt;&lt;&lt;&lt;&lt;&lt;0' + prog.sellos() + '</p>' +
+          '<br>' + esc(cfg.numeroCheque) + '&lt;' + cfg.desafios.length + 'SELLOS&lt;&lt;VALIJA&lt;&lt;&lt;&lt;&lt;&lt;&lt;0' + prog.sellos() + '</p>' +
       '</article>' +
       '<article class="hoja" data-pag="2">' +
         '<h2><span class="chico">Destinos</span>Mapa de viajes</h2>' +
@@ -126,7 +126,7 @@
       '<article class="hoja" data-pag="3">' +
         '<h2><span class="chico">Visas y sellos</span>Sellos del pasaporte</h2>' +
         '<div class="grilla-sellos" id="casillas"></div>' +
-        '<button class="boton ancho" id="ir-final" type="button" hidden>Presentar el cheque en el banco 🏦</button>' +
+        '<button class="boton ancho" id="ir-final" type="button" hidden>Presentar el cheque en la agencia 🧳</button>' +
       '</article>';
 
     // Pista oculta
@@ -246,7 +246,7 @@
       var todos = prog.sellos() === cfg.desafios.length;
       b.hidden = false;
       b.className = todos ? 'boton ancho' : 'boton tinta ancho';
-      b.textContent = todos ? 'Presentar el cheque en el banco 🏦' : 'Volver al mapa';
+      b.textContent = todos ? 'Presentar el cheque en la agencia 🧳' : 'Volver al mapa';
       b.onclick = function () { location.hash = todos ? '#final' : '#mapa'; };
     }
 
@@ -344,7 +344,7 @@
         contadorHTML() + botonSonido() +
       '</header>' +
       '<article class="hoja final-hoja" data-pag="✓">' +
-        '<h2><span class="chico">' + esc(cfg.banco) + '</span>Cobro del cheque</h2>' +
+        '<h2><span class="chico">' + esc(cfg.agencia) + '</span>Cobro del cheque</h2>' +
         '<div class="escena-valija" id="escena-valija"></div>' +
         '<div class="cheque-pantalla" id="cheque" hidden>' + PP.chequeHTML(cfg, { monto: '????' }) + '</div>' +
         '<p class="verificando" id="verificando" aria-live="polite"></p>' +
@@ -366,7 +366,7 @@
     enlazarSonido(sec);
     $('#volver', sec).addEventListener('click', function () { location.hash = '#mapa'; });
     mostrar('final');
-    // La valija 3D se arma mientras el banco "verifica" los sellos
+    // La valija 3D se arma mientras la agencia "verifica" los sellos
     var foto = (f.proximo.galeria || [])[0];
     var valija = PP.Valija3D($('#escena-valija', sec), cfg, {
       sellos: cfg.desafios.map(function (d, i) { return PP.selloSVG(selloDe(d, i)); }),
@@ -408,7 +408,7 @@
     chequeEl.classList.add('revela');
     await esperar(500);
     await PP.estampar($('.ch-sello', sec), {
-      forma: 'rect', arriba: cfg.banco.toUpperCase(), centro: f.sello, centroTam: 30,
+      forma: 'rect', arriba: cfg.agencia.toUpperCase(), centro: f.sello, centroTam: 30,
       abajo: new Date().toLocaleDateString('es-AR'), color: '#9b2c3a', semilla: 21,
     }, -9);
     PP.confeti({ cantidad: 140, x: 0.5, y: 0.35, fuerza: 1.1 });

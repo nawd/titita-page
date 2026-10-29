@@ -89,7 +89,7 @@
     ctx.strokeRect(14, 14, 972, 372);
     ctx.fillStyle = '#7a1f2b';
     ctx.font = '58px "IM Fell English", Georgia, serif';
-    ctx.fillText(cfg.banco, 44, 92);
+    ctx.fillText(cfg.agencia, 44, 92);
     ctx.fillStyle = '#1f3a5f';
     ctx.font = '26px "Special Elite", monospace';
     ctx.fillText('Páguese a', 44, 200);
@@ -110,7 +110,7 @@
     return c;
   }
 
-  function texEtiqueta(titulo, texto, chico) {
+  function texEtiqueta(titulo, texto, chico, pie) {
     var w = 280, h = 480;
     var c = lienzo(w, h), ctx = c.getContext('2d');
     ctx.beginPath();
@@ -138,7 +138,7 @@
     ctx.fillText(texto, w / 2, chico ? 290 : 300);
     ctx.fillStyle = '#3b2a18';
     ctx.font = '18px "Special Elite", monospace';
-    ctx.fillText('Banco de Nosotros', w / 2, 440);
+    ctx.fillText(pie, w / 2, 440);
     return c;
   }
 
@@ -343,8 +343,8 @@
     etiqueta.add(hilo);
     var et = cfg.cheque.etiqueta;
     var ancho = 0.17, largo = 0.27;
-    var matEtFrente = new THREE.MeshStandardMaterial({ map: canvasTex(texEtiqueta(et.frente.toUpperCase(), cfg.nombre), true), transparent: true, alphaTest: 0.5, roughness: 0.9 });
-    var matEtDorso = new THREE.MeshStandardMaterial({ map: canvasTex(texEtiqueta(et.dorsoTitulo.toUpperCase(), 'Los lagos', true), true), transparent: true, alphaTest: 0.5, roughness: 0.9 });
+    var matEtFrente = new THREE.MeshStandardMaterial({ map: canvasTex(texEtiqueta(et.frente.toUpperCase(), cfg.nombre, false, cfg.agencia), true), transparent: true, alphaTest: 0.5, roughness: 0.9 });
+    var matEtDorso = new THREE.MeshStandardMaterial({ map: canvasTex(texEtiqueta(et.dorsoTitulo.toUpperCase(), 'Los lagos', true, cfg.agencia), true), transparent: true, alphaTest: 0.5, roughness: 0.9 });
     var etFrente = malla(new THREE.PlaneGeometry(ancho, largo), matEtFrente);
     etFrente.position.y = -0.06 - largo / 2 + 0.02;
     etiqueta.add(etFrente);

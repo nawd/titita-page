@@ -1,4 +1,4 @@
-// Gráficos generados en SVG: sellos de tinta, guilloché, escudo y logo del banco.
+// Gráficos generados en SVG: sellos de tinta, guilloché, escudo y logo de la agencia.
 (function (PP) {
   'use strict';
 
@@ -97,7 +97,7 @@
     return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
   };
 
-  // Escudo del banco: globo con meridianos, corazón y laureles
+  // Escudo de la agencia: globo con meridianos, corazón y laureles
   PP.escudoSVG = function (color) {
     color = color || '#e3c88a';
     var hojas = '';
@@ -121,15 +121,15 @@
       '</svg>';
   };
 
-  // Logo circular del banco (header)
+  // Logo circular de la agencia (header)
   PP.logoSVG = function () {
     var p = id('logo');
     return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
       '<circle cx="50" cy="50" r="47" fill="#7a1f2b" stroke="#c9a45c" stroke-width="2"/>' +
       '<circle cx="50" cy="50" r="33" fill="none" stroke="#c9a45c" stroke-width="1"/>' +
       '<path id="' + p + '" d="M 50 50 m -40 0 a 40 40 0 1 1 80 0 a 40 40 0 1 1 -80 0" fill="none"/>' +
-      '<text font-family="Special Elite, monospace" font-size="9.5" fill="#e3c88a" letter-spacing="1.6"><textPath href="#' + p + '">BANCO DE NOSOTROS · DESDE SIEMPRE ·</textPath></text>' +
-      '<text x="50" y="58" text-anchor="middle" font-family="IM Fell English, serif" font-size="24" fill="#e3c88a">BdN</text>' +
+      '<text font-family="Special Elite, monospace" font-size="9.5" fill="#e3c88a" letter-spacing="1.6"><textPath href="#' + p + '">TURISMO BOMBÓN · DESDE SIEMPRE ·</textPath></text>' +
+      '<text x="50" y="58" text-anchor="middle" font-family="IM Fell English, serif" font-size="24" fill="#e3c88a">TB</text>' +
       '</svg>';
   };
 })(globalThis.PP = globalThis.PP || {});

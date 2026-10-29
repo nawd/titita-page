@@ -1,4 +1,4 @@
-// Cheque del Banco de Nosotros. Se usa en la pantalla final y en cheque.html (impresión).
+// Cheque de viajero de la agencia. Se usa en la pantalla final y en cheque.html (impresión).
 // Medidas en unidades cqw: el mismo diseño escala a 343px en el celu o a 20cm en papel.
 (function (PP) {
   'use strict';
@@ -22,12 +22,12 @@
     var fondo = PP.svgComoUrl(PP.guillocheRoseta(400, '#2f5480', 0.28));
     var banda = PP.svgComoUrl(PP.guillocheBanda(600, 60, '#7a1f2b', 0.35, 18));
     return '<div class="cheque-marco"><div class="cheque" style="--fondo:' + fondo.replace(/"/g, "'") + ';--banda:' + banda.replace(/"/g, "'") + '">' +
-      '<div class="ch-micro-borde arriba">' + microtexto(cfg.banco + ' · ' + ch.leyenda, 3300, '#2f5480') + '</div>' +
-      '<div class="ch-micro-borde abajo">' + microtexto(cfg.banco + ' · ' + cfg.fecha, 3300, '#2f5480') + '</div>' +
+      '<div class="ch-micro-borde arriba">' + microtexto(cfg.agencia + ' · ' + ch.leyenda, 3300, '#2f5480') + '</div>' +
+      '<div class="ch-micro-borde abajo">' + microtexto(cfg.agencia + ' · ' + cfg.fecha, 3300, '#2f5480') + '</div>' +
       '<header class="ch-cab">' +
         '<div class="ch-banco"><span class="ch-logo">' + PP.logoSVG() + '</span>' +
-          '<div><b>' + esc(cfg.banco) + '</b><small>Casa Central · Sucursal Corazón</small></div></div>' +
-        '<div class="ch-num">Cheque N° <b>' + esc(cfg.numeroCheque) + '</b><small>Fecha: ' + esc(cfg.fecha) + '</small></div>' +
+          '<div><b>' + esc(cfg.agencia) + '</b><small>Agencia de viajes · Sucursal Corazón</small></div></div>' +
+        '<div class="ch-num">Cheque de viajero N° <b>' + esc(cfg.numeroCheque) + '</b><small>Fecha: ' + esc(cfg.fecha) + '</small></div>' +
       '</header>' +
       '<div class="ch-cuerpo">' +
         '<div class="ch-linea"><span>Páguese a</span><b class="ch-nombre">' + esc(cfg.nombre) + '</b></div>' +
