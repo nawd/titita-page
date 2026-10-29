@@ -15,8 +15,8 @@ globalThis.CONFIG = {
   agencia: 'Turismo Bombón',
 
   // Fecha de ustedes: se usa como n° de cheque y fecha de expedición.
-  fecha: '14/02/2022', // [NUESTRA FECHA]
-  numeroCheque: '14022022', // [NUESTRA FECHA SIN BARRAS]
+  fecha: '30/10/2026', // [NUESTRA FECHA]
+  numeroCheque: '30032023', // [NUESTRA FECHA SIN BARRAS]
 
   // Postal 3D de la portada: frente con foto y letras gordas, dorso con el mensaje.
   portada: {
@@ -299,7 +299,7 @@ globalThis.CONFIG = {
     titulo: 'Tu próximo destino necesita una valija',
     verificando: 'Verificando sellos con el gerente de la agencia…',
     sello: 'APROBADO',
-    monto: 250000,
+    monto: 400000,
     moneda: '$',
     mensaje: 'Te amorch Titita, sos muy especial para mi',
     guinoEtiqueta: '¿Ahora entendés la etiqueta del sobre? 🧳',
