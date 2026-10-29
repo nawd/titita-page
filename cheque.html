@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cheque · Banco de Nosotros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="css/cheque.css">
+<link rel="stylesheet" href="css/impresion.css">
+</head>
+<body>
+  <section class="panel no-print">
+    <h1>Cheque, dorso y etiqueta</h1>
+    <p>Todo sale de <code>config.js</code>. Para imprimir:</p>
+    <ol>
+      <li>Imprimir en A4, <b>escala 100%</b> (sin "ajustar a la página"), márgenes "ninguno".</li>
+      <li>Activá <b>gráficos de fondo</b> en el diálogo de impresión.</li>
+      <li>Cheque: papel de 120–180 g. La etiqueta: <b>cartulina</b>, recortala, doblala por la línea y pasale un hilo por el agujero.</li>
+      <li>Dorso: imprimilo del otro lado (duplex, borde largo) o en otra hoja y pegalo.</li>
+    </ol>
+    <p>Microtexto en la línea de firma: <code id="micro"></code> · QR a: <code id="url"></code></p>
+    <p id="aviso-qr" class="aviso" hidden>No se pudo cargar el generador de QR (¿sin internet?). Recargá con conexión antes de imprimir.</p>
+    <label><input type="checkbox" id="con-dorso" checked> Incluir dorso</label>
+    <label><input type="checkbox" id="con-etiqueta" checked> Incluir etiqueta</label>
+    <br><button type="button" onclick="print()">Imprimir</button>
+  </section>
+
+  <section class="pagina" id="pag-cheque">
+    <h2>Frente del cheque · 20 × 8 cm</h2>
+    <div class="corte" id="cheque"></div>
+  </section>
+
+  <section class="pagina" id="pag-dorso">
+    <h2>Dorso del cheque</h2>
+    <div class="dorso">
+      <div>
+        <div class="endoso">Endoso<div class="linea"></div><div class="linea"></div><small>No escribir debajo de esta línea · Uso exclusivo del Banco de Nosotros</small></div>
+        <p class="mensaje" id="dorso-mensaje"></p>
+        <p class="firma" id="dorso-firma"></p>
+      </div>
+      <svg class="mini-etiqueta" viewBox="0 0 60 100" aria-hidden="true">
+        <path d="M14 0 H46 L60 14 V100 H0 V14Z" fill="#e3c99b" stroke="#c9a46a" stroke-width="1.5"/>
+        <circle cx="30" cy="11" r="4" fill="#eef1e6" stroke="#c9a46a" stroke-width="2"/>
+        <path d="M30 7 C 20 -8, 45 -14, 50 -30" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+        <rect x="0" y="26" width="60" height="8" fill="#7a1f2b"/>
+        <text x="30" y="52" text-anchor="middle" font-family="Special Elite, monospace" font-size="6" fill="#3b2a18" letter-spacing="1.5">EQUIPAJE</text>
+        <path d="M8 66 H52 M8 78 H52" stroke="#6b5235" stroke-width="0.8"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="pagina" id="pag-etiqueta">
+    <h2>Etiqueta de equipaje · doblar por la línea punteada</h2>
+    <div class="etiqueta-doble">
+      <div class="etiqueta">
+        <span class="agujero"></span>
+        <div class="franja"></div>
+        <div class="rotulo" id="et-frente"></div>
+        <div class="nombre" id="et-nombre"></div>
+        <div class="codigo" id="et-codigo"></div>
+        <div class="pie" id="et-pie-1"></div>
+      </div>
+      <div class="etiqueta">
+        <span class="agujero"></span>
+        <div class="franja"></div>
+        <div class="rotulo" id="et-dorso"></div>
+        <div class="renglon"></div>
+        <div class="renglon"></div>
+        <div class="rotulo" style="margin-top:6mm">Vuelo</div>
+        <div class="renglon"></div>
+        <div class="pie" id="et-pie-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="config.js"></script>
+  <script src="js/graficos.js"></script>
+  <script src="js/cheque.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script>
+  (function () {
+    var cfg = globalThis.CONFIG;
+    var $ = function (id) { return document.getElementById(id); };
+
+    // QR como SVG a partir de la matriz de módulos
+    function qrSVG(texto) {
+      if (typeof qrcode !== 'function') return null;
+      var qr = qrcode(0, 'M');
+      qr.addData(texto);
+      qr.make();
+      var n = qr.getModuleCount();
+      var d = '';
+      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += 'M' + c + ' ' + r + 'h1v1h-1z';
+      return '<svg viewBox="-1 -1 ' + (n + 2) + ' ' + (n + 2) + '" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" role="img" aria-label="QR al pasaporte">' +
+        '<rect x="-1" y="-1" width="' + (n + 2) + '" height="' + (n + 2) + '" fill="#fff"/><path d="' + d + '" fill="#1f3a5f"/></svg>';
+    }
+
+    var qr = qrSVG(cfg.siteUrl);
+    $('aviso-qr').hidden = !!qr;
+    $('cheque').innerHTML = PP.chequeHTML(cfg, { monto: '????', qr: qr });
+    $('micro').textContent = cfg.cheque.microtexto;
+    $('url').textContent = cfg.siteUrl;
+
+    $('dorso-mensaje').textContent = cfg.cheque.dorso;
+    $('dorso-firma').textContent = '— ' + cfg.autor;
+
+    var et = cfg.cheque.etiqueta;
+    $('et-frente').textContent = et.frente;
+    $('et-nombre').textContent = cfg.nombre;
+    $('et-codigo').textContent = 'BDN ' + cfg.numeroCheque;
+    $('et-dorso').textContent = et.dorsoTitulo;
+    $('et-pie-1').textContent = et.pie;
+    $('et-pie-2').textContent = et.pie;
+
+    function alternar(id, pag) {
+      $(id).addEventListener('change', function () { $(pag).classList.toggle('oculta', !this.checked); });
+    }
+    alternar('con-dorso', 'pag-dorso');
+    alternar('con-etiqueta', 'pag-etiqueta');
+  })();
+  </script>
+</body>
+</html>

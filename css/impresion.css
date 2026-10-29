@@ -1,0 +1,73 @@
+/* cheque.html: vista previa en pantalla + impresión en A4 */
+:root { --tinta: #1f3a5f; --bordo: #7a1f2b; --papel: #f3ead3; --kraft: #e3c99b; --kraft-2: #c9a46a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #3a302a; color: #222; font: 15px/1.5 'Courier Prime', 'Courier New', monospace; }
+
+.panel {
+  max-width: 820px; margin: 20px auto; padding: 18px 20px; border-radius: 10px;
+  background: var(--papel); color: var(--tinta);
+}
+.panel h1 { margin: 0 0 6px; font: 400 26px 'IM Fell English', Georgia, serif; color: var(--bordo); }
+.panel ol { margin: 8px 0; padding-left: 20px; }
+.panel label { display: inline-flex; gap: 6px; align-items: center; margin-right: 16px; }
+.panel button { font: inherit; border: 0; border-radius: 6px; padding: 10px 16px; background: var(--bordo); color: #fff; cursor: pointer; margin-top: 10px; }
+.panel code { background: rgba(0, 0, 0, 0.06); padding: 1px 4px; border-radius: 3px; }
+.aviso { color: var(--bordo); }
+
+.pagina { width: 210mm; max-width: 100%; margin: 0 auto 24px; padding: 14mm 5mm; background: #fff; overflow-x: auto; }
+.pagina h2 { font: 12px 'Special Elite', monospace; letter-spacing: 0.1em; color: #888; margin: 0 0 6mm; text-transform: uppercase; text-align: center; }
+.corte { width: 200mm; margin: 0 auto; outline: 0.25mm dashed #aaa; outline-offset: 2mm; }
+.corte .cheque { border-radius: 0; box-shadow: none; }
+
+/* Dorso del cheque */
+.dorso {
+  position: relative; width: 200mm; height: 80mm; margin: 0 auto; overflow: hidden;
+  background: #eef1e6; color: var(--tinta);
+  outline: 0.25mm dashed #aaa; outline-offset: 2mm;
+  display: grid; grid-template-columns: 1fr 62mm; gap: 8mm; padding: 9mm 10mm;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.dorso::before { content: ''; position: absolute; inset: 3mm; border: 0.3mm solid rgba(31, 58, 95, 0.35); pointer-events: none; }
+.endoso { font: 9pt 'Special Elite', monospace; }
+.endoso .linea { border-bottom: 0.25mm solid rgba(31, 58, 95, 0.5); height: 8mm; }
+.endoso small { display: block; margin-top: 3mm; font-size: 7pt; opacity: 0.7; letter-spacing: 0.05em; }
+.dorso .mensaje { font: italic 14pt/1.35 'IM Fell English', Georgia, serif; margin: 6mm 0 0; }
+.dorso .firma { font: 9pt 'Special Elite', monospace; margin-top: 4mm; }
+.mini-etiqueta { align-self: center; justify-self: center; width: 40mm; transform: rotate(8deg); }
+
+/* Etiqueta de equipaje (para doblar) */
+.etiqueta-doble { display: flex; width: 120mm; margin: 0 auto; position: relative; }
+.etiqueta-doble::after { /* línea de doblez */
+  content: 'doblar'; position: absolute; left: 50%; top: -6mm; bottom: -2mm; border-left: 0.3mm dashed #999;
+  font: 7pt monospace; color: #999; padding-left: 1mm;
+}
+.etiqueta {
+  position: relative; width: 60mm; height: 110mm;
+  clip-path: polygon(14mm 0, calc(100% - 14mm) 0, 100% 14mm, 100% 100%, 0 100%, 0 14mm);
+  background: var(--kraft) linear-gradient(160deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.05));
+  color: #3b2a18;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 24mm 6mm 7mm;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.etiqueta .agujero {
+  position: absolute; top: 7mm; left: 50%; width: 9mm; height: 9mm; margin-left: -4.5mm; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 0 2.2mm var(--kraft-2);
+}
+.etiqueta .franja { width: 100%; height: 7mm; background: var(--bordo); margin: 0 -6mm 5mm; width: calc(100% + 12mm); }
+.etiqueta .rotulo { font: 9pt 'Special Elite', monospace; letter-spacing: 0.25em; text-transform: uppercase; }
+.etiqueta .nombre { font: italic 400 26pt/1.05 'IM Fell English', Georgia, serif; margin: 4mm 0; color: var(--bordo); }
+.etiqueta .renglon { width: 100%; border-bottom: 0.3mm solid #6b5235; height: 9mm; }
+.etiqueta .pie { margin-top: auto; font: 7pt 'Special Elite', monospace; letter-spacing: 0.08em; opacity: 0.8; }
+.etiqueta .codigo { font: 8pt 'Courier Prime', monospace; letter-spacing: 0.3em; margin-top: 3mm; }
+
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .pagina { margin: 0; padding: 14mm 5mm; width: 210mm; overflow: visible; break-after: page; }
+  .pagina:last-child { break-after: auto; }
+  .pagina h2 { display: none; }
+  .pagina.oculta { display: none; }
+}
+.pagina.oculta { opacity: 0.35; }

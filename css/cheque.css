@@ -1,0 +1,73 @@
+/* Cheque: todo en cqw para que escale igual en pantalla y en papel (20 × 8 cm) */
+.cheque-marco { container-type: inline-size; width: 100%; }
+.cheque {
+  position: relative; overflow: hidden;
+  aspect-ratio: 20 / 8;
+  padding: 3.2cqw 3.6cqw 2.4cqw;
+  display: flex; flex-direction: column;
+  background-color: #eef1e6;
+  background-image:
+    var(--fondo), var(--fondo),
+    linear-gradient(115deg, rgba(143, 208, 232, 0.25), rgba(243, 234, 211, 0.6) 45%, rgba(201, 164, 92, 0.18));
+  background-size: 44cqw 44cqw, 30cqw 30cqw, 100% 100%;
+  background-position: 70% 50%, 6% 110%, 0 0;
+  background-repeat: no-repeat;
+  border-radius: 1.2cqw;
+  box-shadow: 0 0.4cqw 2cqw rgba(0, 0, 0, 0.35);
+  color: #1f3a5f;
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 1.9cqw;
+  line-height: 1.25;
+  text-align: left;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.cheque::before { /* bandas de guilloché arriba y abajo */
+  content: ''; position: absolute; left: 0; right: 0; top: 1.6cqw; height: 2.4cqw;
+  background: var(--banda) center / 100% 100%; opacity: 0.9; pointer-events: none;
+}
+.cheque::after {
+  content: ''; position: absolute; inset: 0.9cqw; border: 0.18cqw solid rgba(31, 58, 95, 0.45); border-radius: 0.8cqw; pointer-events: none;
+}
+.ch-micro-borde { position: absolute; left: 1.4cqw; right: 1.4cqw; height: 0.6cqw; line-height: 0; }
+.ch-micro-borde.arriba { top: 0.3cqw; }
+.ch-micro-borde.abajo { bottom: 0.3cqw; }
+.cheque .micro { width: 100%; height: 100%; display: block; }
+
+.ch-cab { position: relative; display: flex; justify-content: space-between; align-items: flex-start; margin-top: 2.2cqw; }
+.ch-banco { display: flex; align-items: center; gap: 1.2cqw; }
+.ch-logo { width: 6.4cqw; height: 6.4cqw; display: block; }
+.ch-logo svg { width: 100%; height: 100%; }
+.ch-banco b { display: block; font: 400 3.3cqw/1 'IM Fell English', Georgia, serif; color: #7a1f2b; letter-spacing: 0.04em; }
+.ch-banco small { font: 1.45cqw 'Special Elite', monospace; letter-spacing: 0.1em; opacity: 0.75; }
+.ch-num { text-align: right; font: 1.6cqw 'Special Elite', monospace; }
+.ch-num b { font-size: 2.2cqw; color: #7a1f2b; letter-spacing: 0.08em; }
+.ch-num small { display: block; font-size: 1.5cqw; opacity: 0.8; }
+
+.ch-cuerpo { position: relative; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 0.6cqw 2cqw; margin-top: 2.2cqw; align-items: end; }
+.ch-linea { display: flex; align-items: baseline; gap: 1.2cqw; border-bottom: 0.15cqw solid rgba(31, 58, 95, 0.55); padding-bottom: 0.3cqw; }
+.ch-linea span { font: 1.6cqw 'Special Elite', monospace; white-space: nowrap; opacity: 0.8; }
+.ch-nombre { font: italic 400 3.6cqw/1 'IM Fell English', Georgia, serif; color: #1f3a5f; }
+.ch-suma { grid-column: 1; }
+.ch-suma i { font: italic 2.3cqw 'IM Fell English', Georgia, serif; }
+.ch-monto {
+  grid-column: 2; grid-row: 1 / span 2; align-self: center;
+  display: flex; align-items: center; gap: 0.8cqw;
+  border: 0.25cqw solid #1f3a5f; border-radius: 0.6cqw; padding: 1cqw 1.6cqw;
+  background: rgba(255, 255, 255, 0.55); min-width: 24cqw;
+  font: 3.6cqw 'Special Elite', monospace;
+}
+.ch-valor { font-weight: 400; letter-spacing: 0.06em; color: #7a1f2b; }
+
+.ch-pie { position: relative; margin-top: auto; display: grid; grid-template-columns: 11cqw 1fr 30cqw; gap: 2cqw; align-items: end; }
+.ch-qr { text-align: center; }
+.ch-qr svg { width: 9.5cqw; height: 9.5cqw; display: block; margin: 0 auto; background: #fff; padding: 0.4cqw; }
+.ch-qr small { display: block; font: 1.1cqw 'Special Elite', monospace; margin-top: 0.3cqw; }
+.ch-leyenda { font: 1.5cqw 'Special Elite', monospace; text-align: center; color: #7a1f2b; letter-spacing: 0.04em; padding-bottom: 1cqw; }
+.ch-firma { text-align: center; }
+.ch-firma-espacio { height: 4.5cqw; }
+.ch-firma .micro { width: 100%; height: 0.6cqw; display: block; }
+.ch-firma small { display: block; font: 1.2cqw 'Special Elite', monospace; margin-top: 0.3cqw; opacity: 0.8; }
+.ch-micr { position: relative; margin-top: 0.8cqw; font: 1.7cqw 'Courier Prime', monospace; letter-spacing: 0.25em; opacity: 0.75; }
+
+.ch-sello { position: absolute; left: 50%; top: 52%; width: 30cqw; transform: translate(-50%, -50%); pointer-events: none; }
+.ch-sello .sello { width: 100%; }

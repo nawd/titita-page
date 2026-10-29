@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Generador de fotos borrosas</title>
+<style>
+  :root { --papel: #f4ecd8; --tinta: #1f3a5f; --bordo: #7a1f2b; --linea: #cbbd9a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--papel); color: var(--tinta); font: 15px/1.5 ui-monospace, Consolas, monospace; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-family: Georgia, serif; color: var(--bordo); margin: 0 0 4px; }
+  .fila { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; margin: 14px 0; }
+  label { display: grid; gap: 2px; font-size: 13px; }
+  input[type=text], input[type=number] { padding: 8px; font: inherit; border: 1px solid var(--linea); border-radius: 6px; background: #fffaf0; width: 140px; }
+  button { font: inherit; padding: 10px 16px; border: 0; border-radius: 6px; background: var(--bordo); color: #fff; cursor: pointer; }
+  .grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  figure { margin: 0; background: #fffaf0; border: 1px solid var(--linea); border-radius: 8px; padding: 8px; }
+  figure img { width: 100%; border-radius: 4px; display: block; }
+  figcaption { font-size: 12px; margin-top: 6px; display: flex; justify-content: space-between; gap: 6px; align-items: center; }
+  figcaption a { color: var(--bordo); }
+  pre { background: #fffaf0; border: 1px solid var(--linea); padding: 12px; border-radius: 6px; white-space: pre-wrap; font-size: 12px; }
+  .ayuda { font-size: 12px; opacity: .75; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Fotos borrosas para el desafío 1</h1>
+  <p>Elegí una foto y descargá 4 versiones: <b>blur-3</b> (la más borrosa), <b>blur-2</b>, <b>blur-1</b> y <b>nítida</b>. Todo pasa en tu compu.</p>
+
+  <div class="fila">
+    <label>Foto <input type="file" id="archivo" accept="image/*"></label>
+    <label>Nombre base <input type="text" id="base" value="destino1"></label>
+    <label>Ancho máx. (px) <input type="number" id="ancho" value="1080" min="300" max="2400"></label>
+  </div>
+  <div class="fila">
+    <label>Blur 3 (%) <input type="number" id="b3" value="4" step="0.5" min="0"></label>
+    <label>Blur 2 (%) <input type="number" id="b2" value="2" step="0.5" min="0"></label>
+    <label>Blur 1 (%) <input type="number" id="b1" value="0.8" step="0.1" min="0"></label>
+    <button type="button" id="generar">Generar</button>
+    <button type="button" id="todas" disabled>Descargar las 4</button>
+  </div>
+  <p class="ayuda">El desenfoque es un % del ancho de la foto (así se ve igual en fotos grandes o chicas). Si con blur-1 ya se reconoce demasiado, subilo.</p>
+
+  <div class="grilla" id="salida"></div>
+
+  <h2>Pegá esto en el desafío de tipo <code>blur</code></h2>
+  <p class="ayuda">Poné los 4 archivos en <code>assets/img/</code>.</p>
+  <pre id="config">—</pre>
+</main>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var imagen = null;
+  var resultados = [];
+
+  $('archivo').addEventListener('change', function () {
+    var f = this.files[0];
+    if (!f) return;
+    var img = new Image();
+    img.onload = function () { imagen = img; generar(); };
+    img.src = URL.createObjectURL(f);
+    $('base').value = f.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  });
+
+  var soportaFiltro = (function () {
+    var c = document.createElement('canvas').getContext('2d');
+    return typeof c.filter === 'string';
+  })();
+
+  // Blur con ctx.filter si existe; si no, reducir y volver a agrandar (Safari viejo)
+  function desenfocar(img, ancho, alto, radio) {
+    var c = document.createElement('canvas');
+    c.width = ancho; c.height = alto;
+    var ctx = c.getContext('2d');
+    if (!radio) { ctx.drawImage(img, 0, 0, ancho, alto); return c; }
+    if (soportaFiltro) {
+      // se dibuja un poco más grande para que el blur no oscurezca los bordes
+      var m = radio * 2;
+      ctx.filter = 'blur(' + radio + 'px)';
+      ctx.drawImage(img, -m, -m, ancho + m * 2, alto + m * 2);
+      return c;
+    }
+    var f = Math.max(1, radio / 2);
+    var chico = document.createElement('canvas');
+    chico.width = Math.max(2, Math.round(ancho / f)); chico.height = Math.max(2, Math.round(alto / f));
+    var cc = chico.getContext('2d');
+    cc.imageSmoothingQuality = 'high';
+    cc.drawImage(img, 0, 0, chico.width, chico.height);
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(chico, 0, 0, ancho, alto);
+    return c;
+  }
+
+  function generar() {
+    if (!imagen) return;
+    var max = +$('ancho').value || 1080;
+    var esc = Math.min(1, max / imagen.naturalWidth);
+    var ancho = Math.round(imagen.naturalWidth * esc), alto = Math.round(imagen.naturalHeight * esc);
+    var base = $('base').value || 'foto';
+    var niveles = [
+      ['blur-3', +$('b3').value], ['blur-2', +$('b2').value], ['blur-1', +$('b1').value], ['nitida', 0],
+    ];
+    $('salida').innerHTML = '';
+    resultados = [];
+    var pendientes = niveles.length;
+    niveles.forEach(function (n, i) {
+      var canvas = desenfocar(imagen, ancho, alto, (n[1] / 100) * ancho);
+      canvas.toBlob(function (blob) {
+        var nombre = base + '-' + n[0] + '.jpg';
+        var url = URL.createObjectURL(blob);
+        resultados[i] = { nombre: nombre, url: url };
+        var fig = document.createElement('figure');
+        fig.innerHTML = '<img alt="" src="' + url + '"><figcaption><span>' + nombre + ' · ' + Math.round(blob.size / 1024) + ' KB</span><a download="' + nombre + '" href="' + url + '">Descargar</a></figcaption>';
+        fig.style.order = i;
+        $('salida').appendChild(fig);
+        if (--pendientes === 0) {
+          $('todas').disabled = false;
+          $('config').textContent = 'imagenes: [\n' + resultados.map(function (r) { return "  'assets/img/" + r.nombre + "',"; }).join('\n') + '\n],';
+        }
+      }, 'image/jpeg', 0.82);
+    });
+  }
+
+  $('generar').addEventListener('click', generar);
+  $('todas').addEventListener('click', function () {
+    resultados.forEach(function (r, i) {
+      setTimeout(function () {
+        var a = document.createElement('a');
+        a.href = r.url; a.download = r.nombre;
+        document.body.appendChild(a); a.click(); a.remove();
+      }, i * 400);
+    });
+  });
+})();
+</script>
+</body>
+</html>

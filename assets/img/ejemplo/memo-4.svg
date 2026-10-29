@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <rect width="300" height="400" fill="#c9a45c"/><circle cx="150" cy="180" r="100" fill="#fff" opacity=".12"/>
+  <text x="150" y="215" text-anchor="middle" font-size="110">📸</text>
+  <text x="150" y="340" text-anchor="middle" font-family="Courier New, monospace" font-size="26" fill="#fff">Fotos</text>
+  <text x="150" y="375" text-anchor="middle" font-family="Courier New, monospace" font-size="14" fill="#fff" opacity=".7">FOTO DE EJEMPLO 4</text></svg>

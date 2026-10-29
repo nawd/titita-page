@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600"><defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9cc9e6"/><stop offset="1" stop-color="#f6e3c0"/></linearGradient></defs>
+  <rect width="800" height="600" fill="url(#c)"/>
+  <path d="M0 330 L120 170 L190 240 L300 120 L420 260 L520 150 L640 280 L720 190 L800 260 V420 H0Z" fill="#5b6f86"/>
+  <path d="M300 120 L270 160 L300 150 L330 165Z M520 150 L495 185 L520 175 L548 190Z M120 170 L100 200 L125 192 L140 205Z" fill="#fff"/>
+  <path d="M0 380 L90 300 L200 360 L330 290 L470 370 L600 300 L800 380 V430 H0Z" fill="#3d5468"/><rect y="420" width="800" height="180" fill="#2f7fa8"/>
+  <path d="M40 460 h120 M300 490 h180 M560 450 h150 M120 540 h200" stroke="#9fd3e6" stroke-width="3" opacity=".6"/><circle cx="640" cy="110" r="40" fill="#fff4cf"/><text x="786" y="586" text-anchor="end" font-family="Courier New, monospace" font-size="16" fill="#fff" opacity=".75">MOCK · FOTO PENDIENTE</text></svg>

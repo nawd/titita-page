@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2a211c">
+<title>Pasaporte · Banco de Nosotros</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%B3%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/cheque.css">
+</head>
+<body>
+  <!-- Filtro de tinta compartido (sello de rechazo) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="tinta" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="3" result="r"/>
+      <feDisplacementMap in="SourceGraphic" in2="r" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <section id="portada" class="pantalla" aria-label="Portada del pasaporte">
+    <div class="tapa">
+      <div class="relieve pais" id="portada-banco"></div>
+      <div id="portada-escudo"></div>
+      <div class="relieve">
+        <h1 id="portada-titulo"></h1>
+        <div class="de" id="portada-nombre"></div>
+      </div>
+      <div>
+        <div class="relieve sub" id="portada-sub"></div>
+        <button class="boton-abrir" id="abrir" type="button"></button>
+      </div>
+    </div>
+  </section>
+
+  <main id="app">
+    <section id="pasaporte" class="pantalla" aria-label="Pasaporte"></section>
+    <section id="desafio" class="pantalla" aria-label="Desafío"></section>
+    <section id="final" class="pantalla" aria-label="Cobro del cheque"></section>
+  </main>
+
+  <canvas id="confeti" aria-hidden="true"></canvas>
+
+  <noscript><p style="color:#fff;padding:20px">Este pasaporte necesita JavaScript.</p></noscript>
+
+  <script src="config.js"></script>
+  <script src="js/cripto.js"></script>
+  <script src="js/logica.js"></script>
+  <script src="js/graficos.js"></script>
+  <script src="js/mapa-data.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="js/progreso.js"></script>
+  <script src="js/efectos.js"></script>
+  <script src="js/desafios.js"></script>
+  <script src="js/cheque.js"></script>
+  <script src="js/galeria.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

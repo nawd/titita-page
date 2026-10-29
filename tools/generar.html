@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Generador de respuestas</title>
+<style>
+  :root { --papel: #f4ecd8; --tinta: #1f3a5f; --bordo: #7a1f2b; --linea: #cbbd9a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--papel); color: var(--tinta); font: 15px/1.5 ui-monospace, Consolas, monospace; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-family: Georgia, serif; color: var(--bordo); margin: 0 0 4px; }
+  h2 { font-family: Georgia, serif; margin: 28px 0 8px; font-size: 18px; }
+  fieldset { border: 1px dashed var(--linea); border-radius: 8px; margin: 0 0 12px; padding: 12px; }
+  legend { padding: 0 6px; font-weight: bold; }
+  label { display: block; margin: 8px 0 2px; font-size: 13px; }
+  input, textarea { width: 100%; padding: 8px; font: inherit; border: 1px solid var(--linea); border-radius: 6px; background: #fffaf0; color: inherit; }
+  textarea { min-height: 70px; }
+  button { font: inherit; padding: 10px 16px; border: 0; border-radius: 6px; background: var(--bordo); color: #fff; cursor: pointer; }
+  button.sec { background: var(--tinta); }
+  pre { background: #fffaf0; border: 1px solid var(--linea); padding: 12px; border-radius: 6px; white-space: pre-wrap; word-break: break-all; max-height: 360px; overflow: auto; font-size: 12px; }
+  .ayuda { font-size: 12px; opacity: .75; margin: 2px 0 0; }
+  .fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .ok { color: #1b6b3a; } .mal { color: var(--bordo); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Generador de respuestas</h1>
+  <p>Uso local: abrí este archivo con doble clic. Nada sale de tu compu. Lee los desafíos de <code>config.js</code> y te devuelve los bloques para pegar.</p>
+  <p class="ayuda">Las respuestas se normalizan (minúsculas, sin tildes, sin puntuación). En "ordenar" escribí los ids en el orden correcto separados por coma.</p>
+
+  <form id="form"></form>
+
+  <h2>Mensaje final (se cifra)</h2>
+  <fieldset>
+    <label for="monto">Monto (solo números)</label>
+    <input id="monto" inputmode="numeric" value="250000">
+    <label for="moneda">Moneda</label>
+    <input id="moneda" value="$">
+    <label for="mensaje">Tu mensaje</label>
+    <textarea id="mensaje">Te amorch Titita, sos muy especial para mi</textarea>
+  </fieldset>
+
+  <div class="fila">
+    <button id="generar" type="button">Generar</button>
+    <span id="estado" aria-live="polite"></span>
+  </div>
+
+  <h2>1. Pegá cada <code>respuestas:</code> en su desafío</h2>
+  <pre id="salidaRespuestas">—</pre>
+  <h2>2. Reemplazá <code>final.cifrado</code></h2>
+  <pre id="salidaFinal">—</pre>
+
+  <h2>Probar una respuesta contra el config actual</h2>
+  <fieldset>
+    <div class="fila">
+      <select id="probarDesafio"></select>
+      <input id="probarTexto" placeholder="lo que escribiría ella" style="flex:1">
+      <button id="probar" class="sec" type="button">Probar</button>
+    </div>
+    <p id="probarRes" aria-live="polite"></p>
+  </fieldset>
+</main>
+
+<script src="../config.js"></script>
+<script src="../js/cripto.js"></script>
+<script>
+(function () {
+  var cfg = globalThis.CONFIG;
+  var form = document.getElementById('form');
+  var estado = document.getElementById('estado');
+
+  if (!PP.hayCripto()) {
+    estado.textContent = 'Este navegador no tiene WebCrypto en este contexto. Abrilo con doble clic (file://) o desde localhost.';
+  }
+
+  cfg.desafios.forEach(function (d, i) {
+    // Para "order" no se precarga nada: el orden del config es el que se muestra mezclado, no el correcto
+    var ejemplo = d.tipo === 'memotest' ? d.palabraClave : '';
+    var fs = document.createElement('fieldset');
+    fs.innerHTML =
+      '<legend>' + (i + 1) + '. ' + d.id + ' · ' + d.tipo + '</legend>' +
+      '<label for="c' + i + '">' + (d.tipo === 'order' ? 'Ids en orden correcto' : 'Respuesta principal') + '</label>' +
+      '<input id="c' + i + '" value="' + ejemplo + '">' +
+      (d.tipo === 'order' ? '<p class="ayuda">Ids disponibles: ' + d.sellos.map(function (s) { return s.id; }).join(', ') + '</p>' :
+       d.tipo === 'memotest' ? '<p class="ayuda">Tiene que coincidir con palabraClave del config.</p>' :
+       '<label for="v' + i + '">Otras respuestas válidas (una por línea)</label><textarea id="v' + i + '"></textarea>');
+    form.appendChild(fs);
+
+    var opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = d.id;
+    document.getElementById('probarDesafio').appendChild(opt);
+  });
+
+  function leer(i) {
+    var d = cfg.desafios[i];
+    var principal = document.getElementById('c' + i).value;
+    if (d.tipo === 'order') {
+      principal = principal.split(',').map(function (s) { return s.trim(); }).filter(Boolean).join('>');
+      return { canonica: principal, variantes: [] };
+    }
+    var v = document.getElementById('v' + i);
+    var variantes = v ? v.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean) : [];
+    return { canonica: principal, variantes: variantes };
+  }
+
+  document.getElementById('generar').addEventListener('click', async function () {
+    estado.textContent = 'Generando… (tarda unos segundos)';
+    try {
+      var bloques = [];
+      var canonicas = [];
+      for (var i = 0; i < cfg.desafios.length; i++) {
+        var d = cfg.desafios[i];
+        var r = leer(i);
+        if (!PP.valorIntento(d.tipo, r.canonica)) throw new Error('Falta la respuesta del desafío ' + (i + 1));
+        var res = await PP.generarRespuestas(d.tipo, r.canonica, r.variantes);
+        canonicas.push(PP.valorIntento(d.tipo, r.canonica));
+        bloques.push('// ' + d.id + '\nrespuestas: ' + JSON.stringify(res) + ',');
+      }
+      var datos = {
+        monto: Number(document.getElementById('monto').value.replace(/\D/g, '')),
+        moneda: document.getElementById('moneda').value,
+        mensaje: document.getElementById('mensaje').value,
+      };
+      var final = await PP.cifrarFinal(datos, canonicas);
+      document.getElementById('salidaRespuestas').textContent = bloques.join('\n\n');
+      document.getElementById('salidaFinal').textContent = 'cifrado: ' + JSON.stringify(final) + ',';
+      estado.innerHTML = '<span class="ok">Listo. Copiá y pegá en config.js.</span>';
+    } catch (e) {
+      estado.innerHTML = '<span class="mal">' + e.message + '</span>';
+    }
+  });
+
+  document.getElementById('probar').addEventListener('click', async function () {
+    var d = cfg.desafios[document.getElementById('probarDesafio').value];
+    var txt = document.getElementById('probarTexto').value;
+    if (d.tipo === 'order') txt = txt.split(',').map(function (s) { return s.trim(); }).join('>');
+    var c = await PP.verificar(d.respuestas, d.tipo, txt);
+    document.getElementById('probarRes').innerHTML = c
+      ? '<span class="ok">✔ Válida (canónica: ' + c + ')</span>'
+      : '<span class="mal">✘ No coincide con el config actual</span>';
+  });
+})();
+</script>
+</body>
+</html>
