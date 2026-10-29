@@ -154,7 +154,7 @@
       '<circle cx="50" cy="50" r="47" fill="#7a1f2b" stroke="#c9a45c" stroke-width="2"/>' +
       '<circle cx="50" cy="50" r="33" fill="none" stroke="#c9a45c" stroke-width="1"/>' +
       '<path id="' + p + '" d="M 50 50 m -40 0 a 40 40 0 1 1 80 0 a 40 40 0 1 1 -80 0" fill="none"/>' +
-      '<text font-family="Special Elite, monospace" font-size="9.5" fill="#e3c88a" letter-spacing="1.6"><textPath href="#' + p + '">TURISMO BOMBÓN · DESDE SIEMPRE ·</textPath></text>' +
+      '<text font-family="Special Elite, monospace" font-size="9.5" fill="#e3c88a" letter-spacing="1.6"><textPath href="#' + p + '">TURISMO BOMBONES · DESDE SIEMPRE ·</textPath></text>' +
       '<text x="50" y="58" text-anchor="middle" font-family="IM Fell English, serif" font-size="24" fill="#e3c88a">TB</text>' +
       '</svg>';
   };

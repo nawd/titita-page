@@ -12,7 +12,7 @@ globalThis.CONFIG = {
 
   nombre: 'Titita',
   autor: 'Bombón',
-  agencia: 'Turismo Bombón',
+  agencia: 'Turismo Bombones',
 
   // Fecha de ustedes: se usa como n° de cheque y fecha de expedición.
   fecha: '30/10/2026', // [NUESTRA FECHA]
@@ -21,7 +21,7 @@ globalThis.CONFIG = {
   // Postal 3D de la portada: frente con foto y letras gordas, dorso con el mensaje.
   portada: {
     saludo: 'Saludos desde',
-    titulo: 'Turismo Bombón', // letras gordas del frente
+    titulo: 'Turismo Bombones', // letras gordas del frente
     fondo: 'assets/img/fotos_nuestras/lago_lacar_arriba_cerro_colorado_marzo_2024.webp',
     letras: 'assets/img/fotos_nuestras/Colón_febrero_2023_isla_san_francisco.webp', // foto que rellena las letras
     mensaje:
@@ -296,13 +296,13 @@ globalThis.CONFIG = {
   ],
 
   final: {
-    titulo: 'Tu próximo destino necesita una valija',
+    titulo: '"Para la valija de nuestro próximo viaje juntos"',
     verificando: 'Verificando sellos con el gerente de la agencia…',
     sello: 'APROBADO',
-    monto: 400000,
+    monto: 350000,
     moneda: '$',
     mensaje: 'Te amorch Titita, sos muy especial para mi',
-    guinoEtiqueta: '¿Ahora entendés la etiqueta del sobre? 🧳',
+    guinoEtiqueta: '💓👨‍❤️‍👨💓',
     boton: 'Ver el próximo destino',
 
     proximo: {
@@ -317,12 +317,12 @@ globalThis.CONFIG = {
       // Fotos que van pasando. pendiente: true muestra el rótulo "foto pendiente".
       galeria: [
         // La primera también va como polaroid adentro de la valija 3D.
+        { src: 'assets/img/galeria/asado.svg', pie: 'Y el asado, obvio', pendiente: false },
+        { src: 'assets/img/galeria/bolson.svg', pie: 'El Bolsón', pendiente: false },
         { src: 'assets/img/fotos_nuestras/Hotel_Bariloche_inacayal_agosto_2026.webp', pie: 'Bariloche: el lago desde la ventana' },
-        { src: 'assets/img/galeria/bolson.svg', pie: 'El Bolsón', pendiente: true },
         { src: 'assets/img/fotos_nuestras/villa_langostura.webp', pie: 'Villa La Angostura' },
-        { src: 'assets/img/galeria/cabana.svg', pie: 'La cabaña frente al lago', pendiente: true },
-        { src: 'assets/img/fotos_nuestras/Bari_cerro_catedral_agos_2026_primera_vez_Tita_arriba_todo.webp', pie: 'Cerro Catedral, otra vez' },
-        { src: 'assets/img/galeria/asado.svg', pie: 'Y el asado, obvio', pendiente: true },
+        { src: 'assets/img/galeria/cabana.svg', pie: 'La cabaña frente al lago', pendiente: false },
+        // { src: 'assets/img/fotos_nuestras/Bari_cerro_catedral_agos_2026_primera_vez_Tita_arriba_todo.webp', pie: 'Cerro Catedral, otra vez' },
       ],
       cierre: 'Armá la valija. Yo pongo el fuego. 🔥',
       // Opcional: una línea extra al final. null para ocultarla.
@@ -360,7 +360,7 @@ globalThis.CONFIG = {
     etiqueta: {
       frente: 'Equipaje de',
       dorsoTitulo: 'Destino',
-      pie: 'Turismo Bombón — Depto. de Valijas',
+      pie: 'Turismo Bombones — Depto. de Valijas',
     },
   },
 };
