@@ -318,10 +318,10 @@ globalThis.CONFIG = {
       galeria: [
         // La primera también va como polaroid adentro de la valija 3D.
         { src: 'assets/img/fotos_nuestras/Hotel_Bariloche_inacayal_agosto_2026.webp', pie: 'Bariloche: el lago desde la ventana' },
-        { src: 'assets/img/fotos_nuestras/villa_langostura.webp', pie: 'Villa La Angostura' },
-        { src: 'assets/img/fotos_nuestras/Bari_cerro_catedral_agos_2026_primera_vez_Tita_arriba_todo.webp', pie: 'Cerro Catedral, otra vez' },
         { src: 'assets/img/galeria/bolson.svg', pie: 'El Bolsón', pendiente: true },
+        { src: 'assets/img/fotos_nuestras/villa_langostura.webp', pie: 'Villa La Angostura' },
         { src: 'assets/img/galeria/cabana.svg', pie: 'La cabaña frente al lago', pendiente: true },
+        { src: 'assets/img/fotos_nuestras/Bari_cerro_catedral_agos_2026_primera_vez_Tita_arriba_todo.webp', pie: 'Cerro Catedral, otra vez' },
         { src: 'assets/img/galeria/asado.svg', pie: 'Y el asado, obvio', pendiente: true },
       ],
       cierre: 'Armá la valija. Yo pongo el fuego. 🔥',
