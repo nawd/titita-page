@@ -180,7 +180,7 @@ body.lupa .tl {
 .mapa { position: relative; margin: 12px -6px 6px; touch-action: manipulation; }
 .mapa canvas { display: block; width: 100%; }
 .pin {
-  position: absolute; transform: translate(-50%, -50%);
+  position: absolute; transform: translate(-50%, -50%); z-index: 3;
   width: 40px; height: 40px; border-radius: 50%;
   border: 0; background: transparent; padding: 0;
   display: grid; place-items: center;
@@ -405,6 +405,29 @@ body.lupa .tl {
 .barro canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; transition: opacity 0.9s; }
 .barro.lavada canvas { opacity: 0; pointer-events: none; }
 .barro figcaption { position: absolute; left: 8px; top: 8px; padding: 2px 8px; border-radius: 10px; background: rgba(42, 33, 28, 0.6); font: 11px var(--maquina); color: #fff; pointer-events: none; }
+
+/* ---------- Recuerdos: polaroids en el mapa ---------- */
+.hilos { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+.hilos line { stroke: var(--bordo); stroke-width: 1; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; opacity: 0.7; }
+.polaroid {
+  position: absolute; z-index: 2; width: 15%; padding: 3px 3px 0; border: 0; border-radius: 1px;
+  background: #fffdf7; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+}
+.polaroid img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.polaroid span { display: block; padding: 2px 0 3px; font: 7px/1.25 var(--maquina); color: var(--tinta); text-align: center; white-space: nowrap; }
+.polaroid.nueva { animation: pegar 0.7s cubic-bezier(.3, 1.4, .5, 1) both; }
+@keyframes pegar {
+  from { opacity: 0; transform: translate(-50%, -50%) rotate(calc(var(--rot, 0deg) - 25deg)) scale(2.4); }
+  to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot, 0deg)); }
+}
+.polaroid-grande {
+  margin: 0; width: min(88vw, 400px); padding: 12px 12px 14px; border-radius: 2px;
+  background: #fffdf7; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5); transform: rotate(var(--rot, 0deg));
+}
+.polaroid-grande img { width: 100%; max-height: 62vh; object-fit: cover; }
+.polaroid-grande figcaption { padding-top: 10px; font: 14px/1.45 var(--maquina); color: var(--tinta); text-align: center; }
+.polaroid-grande figcaption b { display: block; font: 20px var(--serif); color: var(--bordo); }
 
 /* ---------- Capas: rechazo ---------- */
 .capa {

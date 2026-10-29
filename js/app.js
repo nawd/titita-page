@@ -164,6 +164,8 @@
       cont.appendChild(b);
     });
 
+    pegarRecuerdos(cont);
+
     // Casillas de sellos
     var casillas = $('#casillas', sec);
     cfg.desafios.forEach(function (d, i) {
@@ -187,6 +189,56 @@
     if (prog.sellos() >= cfg.desafios.length - 1) PP.precargarThree();
     irFinal.addEventListener('click', function () { location.hash = '#final'; });
     mostrar('pasaporte');
+  }
+
+  // ---------- Recuerdos: polaroids en el mapa ----------
+  // Aparecen cuando están resueltos los desafíos de los que dependen (si no, darían las respuestas)
+  function pegarRecuerdos(cont) {
+    var vistos = prog.estado.recuerdosVistos || [];
+    var hilos = '', nuevos = 0;
+    (cfg.mapa.recuerdos || []).forEach(function (r) {
+      var listo = (r.tras || cfg.mapa.recuerdosTras || []).every(function (idD) { return prog.de(idD).hecho; });
+      if (!listo) return;
+      var p = PP.proyectar(PP_MAPA.sudamerica, r.lat, r.lon);
+      var x = p.x * 100 + (r.dx || 0), y = p.y * 100 + (r.dy || 0);
+      hilos += '<line x1="' + (p.x * 100).toFixed(2) + '" y1="' + (p.y * 100).toFixed(2) + '" x2="' + x.toFixed(2) + '" y2="' + y.toFixed(2) + '"/>';
+      var nuevo = vistos.indexOf(r.foto) < 0;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'polaroid' + (nuevo ? ' nueva' : '');
+      b.style.left = x + '%';
+      b.style.top = y + '%';
+      b.style.setProperty('--rot', (r.rot || 0) + 'deg');
+      if (nuevo) b.style.animationDelay = (0.5 + nuevos++ * 0.3) + 's';
+      b.setAttribute('aria-label', 'Recuerdo: ' + r.lugar + ', ' + r.fecha);
+      b.innerHTML = '<img alt="" src="' + esc(r.foto) + '"><span>' + esc(r.lugar) + '<br>' + esc(r.fecha) + '</span>';
+      b.addEventListener('click', function () { verRecuerdo(r); });
+      cont.appendChild(b);
+      if (nuevo) vistos.push(r.foto);
+    });
+    if (!hilos) return;
+    cont.insertAdjacentHTML('afterbegin', '<svg class="hilos" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' + hilos + '</svg>');
+    prog.estado.recuerdosVistos = vistos;
+    prog.guardar();
+  }
+
+  function verRecuerdo(r) {
+    var capa = document.createElement('div');
+    capa.className = 'capa';
+    capa.setAttribute('role', 'dialog');
+    capa.setAttribute('aria-label', r.lugar + ', ' + r.fecha);
+    capa.innerHTML =
+      '<figure class="polaroid-grande" style="--rot:' + ((r.rot || 0) / 3).toFixed(1) + 'deg">' +
+        '<img alt="' + esc(r.lugar) + '" src="' + esc(r.grande || r.foto) + '">' +
+        '<figcaption><b>' + esc(r.lugar) + ' · ' + esc(r.fecha) + '</b>' + (r.nota ? esc(r.nota) : '') + '</figcaption>' +
+        '<button type="button" class="boton tinta ancho">Cerrar</button>' +
+      '</figure>';
+    function cerrar() { capa.remove(); document.removeEventListener('keydown', tecla); }
+    function tecla(e) { if (e.key === 'Escape') cerrar(); }
+    capa.addEventListener('click', cerrar);
+    document.addEventListener('keydown', tecla);
+    document.body.appendChild(capa);
+    capa.querySelector('button').focus();
   }
 
   // ---------- Desafío ----------
@@ -224,7 +276,7 @@
     var input = $('#intento', sec);
     var feedback = $('#feedback', sec);
     var pistasEl = $('#pistas', sec);
-    var vistas = PP.pistasVisibles(est.errores);
+    var vistas = PP.pistasVisibles(PP.pistasDe(d, est).errores);
 
     function titulos() {
       $('#visa-num', sec).textContent = 'Visa N° 0' + (i + 1) + (est.hecho ? ' · ' + d.pais : ' · destino secreto');
@@ -232,8 +284,9 @@
     }
 
     function pintarPistas(animar) {
-      var n = PP.pistasVisibles(est.errores);
-      pistasEl.innerHTML = d.pistas.map(function (texto, k) {
+      var p = PP.pistasDe(d, est);
+      var n = PP.pistasVisibles(p.errores);
+      pistasEl.innerHTML = p.lista.map(function (texto, k) {
         if (k < n) return '<div class="pista' + (animar && k >= vistas ? ' nueva' : '') + '">' + esc(texto) + '</div>';
         return '<div class="pista bloqueada">Pista ' + (k + 1) + ' · se desbloquea con ' + (k === 0 ? 2 : 4) + ' errores</div>';
       }).join('');
@@ -270,7 +323,16 @@
       },
       intentar: async function (valor, elTemblar) {
         if (est.hecho) return true;
-        if (PP.verificar(d, valor)) {
+        if (PP.verificar(d, valor, est)) {
+          // Con rondas, un acierto puede pasar a la siguiente foto en vez de sellar
+          var otraRonda = zonaApi.acierto && zonaApi.acierto();
+          if (otraRonda) {
+            feedback.className = 'feedback ok';
+            feedback.textContent = otraRonda;
+            input.value = '';
+            pintarPistas(false);
+            return true;
+          }
           await sellar();
           return true;
         }

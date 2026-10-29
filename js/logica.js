@@ -11,6 +11,18 @@
     return errores >= 4 ? 2 : errores >= 2 ? 1 : 0;
   };
 
+  // Errores de la ronda actual (se cuentan desde que empezó)
+  PP.erroresRonda = function (est) {
+    return est.errores - (est.baseRonda || 0);
+  };
+
+  // Pistas a mostrar y errores que las desbloquean: las de la ronda si tiene, si no las del desafío
+  PP.pistasDe = function (d, est) {
+    var r = d.rondas && d.rondas[Math.min(est.ronda || 0, d.rondas.length - 1)];
+    if (r && r.pistas) return { lista: r.pistas, errores: PP.erroresRonda(est) };
+    return { lista: d.pistas || [], errores: d.rondas ? PP.erroresRonda(est) : est.errores };
+  };
+
   PP.tocaFalsaDerrota = function (estado, limite, habilitada) {
     return !!habilitada && !estado.falsaVista && estado.errores >= limite;
   };

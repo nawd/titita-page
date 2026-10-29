@@ -10,19 +10,43 @@
   PP.Desafios = {};
 
   // ---------- Foto blureada ----------
-  PP.Desafios.blur = function (zona, d, est) {
+  // Una o varias rondas (d.rondas); cada una se aclara con los errores de esa ronda.
+  PP.Desafios.blur = function (zona, d, est, api) {
     zona.innerHTML = '<figure class="foto-blur"><img alt="Foto misteriosa de un lugar"><figcaption></figcaption></figure>';
     var img = zona.querySelector('img');
     var cap = zona.querySelector('figcaption');
-    var total = d.imagenes.length;
+    var rondas = d.rondas || [{ imagenes: d.imagenes }];
+    var mostrando = null; // ronda recién acertada: se ve nítida un momento antes de pasar a la siguiente
+
+    function ronda() { return rondas[Math.min(est.ronda || 0, rondas.length - 1)]; }
+
     function actualizar() {
-      var n = est.hecho ? total - 1 : Math.min(est.errores, total - 2);
-      if (img.getAttribute('src') !== d.imagenes[n]) img.src = d.imagenes[n];
-      cap.textContent = est.hecho ? '¡Nítida!' : 'Desenfoque nivel ' + (total - 1 - n);
-      if (!est.hecho && n + 1 < total - 1) new Image().src = d.imagenes[n + 1];
+      var r = mostrando || ronda();
+      var total = r.imagenes.length;
+      var nitida = est.hecho || !!mostrando;
+      var n = nitida ? total - 1 : Math.min(PP.erroresRonda(est), total - 2);
+      if (img.getAttribute('src') !== r.imagenes[n]) img.src = r.imagenes[n];
+      var numero = rondas.length > 1 ? 'Foto ' + (rondas.indexOf(r) + 1) + ' de ' + rondas.length + ' · ' : '';
+      cap.textContent = nitida ? numero + (r.pie || '¡Nítida!') : numero + 'Desenfoque nivel ' + (total - 1 - n);
+      if (!nitida && n + 1 < total - 1) new Image().src = r.imagenes[n + 1];
     }
+
+    // Respuesta correcta: si quedan rondas, avanza y devuelve el mensaje; si era la última, null (se sella)
+    function acierto() {
+      var k = Math.min(est.ronda || 0, rondas.length - 1);
+      if (k >= rondas.length - 1) return null;
+      mostrando = rondas[k];
+      est.ronda = k + 1;
+      est.baseRonda = est.errores;
+      api.guardar();
+      new Image().src = rondas[k + 1].imagenes[0];
+      actualizar();
+      setTimeout(function () { mostrando = null; actualizar(); }, PP.reducirMovimiento() ? 900 : 2200);
+      return '¡Sí! ' + (mostrando.pie ? mostrando.pie + '. ' : '') + 'Ahí va la siguiente foto…';
+    }
+
     actualizar();
-    return { conFormulario: true, actualizar: actualizar };
+    return { conFormulario: true, actualizar: actualizar, acierto: acierto };
   };
 
   // ---------- Memotest ----------
@@ -351,7 +375,7 @@
     var W = 320, H = 240;
     zona.innerHTML =
       '<figure class="barro">' +
-        '<img alt="Foto de las termas" src="' + esc(d.foto) + '">' +
+        '<img alt="Foto escondida bajo el barro" src="' + esc(d.foto) + '">' +
         '<canvas width="' + W + '" height="' + H + '" aria-hidden="true"></canvas>' +
         '<figcaption>Frotá con el dedo para sacar el barro</figcaption>' +
       '</figure>' +

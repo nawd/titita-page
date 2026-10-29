@@ -1,5 +1,5 @@
 // Tests sin dependencias: node tests/run.mjs
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
@@ -85,6 +85,21 @@ await test('mezclar distinto funciona con objetos (sellos)', () => {
   igual(m.length, 3);
   if (m.every((x, i) => x === sellos[i])) throw new Error('quedó en orden');
 });
+await test('con rondas, cada ronda tiene sus respuestas', () => {
+  const d = { tipo: 'blur', rondas: [{ respuestas: ['Traful', 'rio traful'] }, { respuestas: ['Quilmes'] }] };
+  igual(PP.verificar(d, 'traful', { ronda: 0 }), 'traful');
+  igual(PP.verificar(d, 'quilmes', { ronda: 0 }), null);
+  igual(PP.verificar(d, 'Quilmes!', { ronda: 1 }), 'quilmes');
+  igual(PP.verificar(d, 'quilmes', { ronda: 9 }), 'quilmes');
+  igual(PP.verificar(d, 'traful'), 'traful');
+});
+await test('pistas por ronda cuentan solo los errores de esa ronda', () => {
+  const d = { pistas: ['g1', 'g2'], rondas: [{ pistas: ['a1', 'a2'] }, { pistas: ['b1', 'b2'] }, {}] };
+  igual(PP.pistasDe(d, { errores: 3, ronda: 0 }), { lista: ['a1', 'a2'], errores: 3 });
+  igual(PP.pistasDe(d, { errores: 5, ronda: 1, baseRonda: 3 }), { lista: ['b1', 'b2'], errores: 2 });
+  igual(PP.pistasDe(d, { errores: 5, ronda: 2, baseRonda: 5 }), { lista: ['g1', 'g2'], errores: 0 });
+  igual(PP.pistasDe({ pistas: ['x'] }, { errores: 4 }), { lista: ['x'], errores: 4 });
+});
 await test('juegos sin input se sellan con JUEGO_COMPLETO', () => {
   for (const tipo of ['lancha', 'cerro']) {
     igual(PP.verificar({ tipo }, PP.JUEGO_COMPLETO), PP.normalizar(PP.JUEGO_COMPLETO));
@@ -126,11 +141,27 @@ await test('distribuir letras de la pista oculta', () => {
 });
 
 console.log('config.js');
-await test('cada desafío tiene respuesta y acepta la principal', () => {
+await test('cada desafío (y cada ronda) tiene respuesta y acepta la principal', () => {
   for (const d of CONFIG.desafios) {
-    const validas = PP.respuestasDe(d).filter(Boolean);
-    if (!validas.length) throw new Error(d.id + ' no tiene respuestas');
-    if (!PP.verificar(d, validas[0])) throw new Error(d.id + ' no acepta su propia respuesta');
+    (d.rondas || [null]).forEach((_, ronda) => {
+      const est = { ronda };
+      const validas = PP.respuestasDe(d, est).filter(Boolean);
+      if (!validas.length) throw new Error(d.id + ' (ronda ' + (ronda + 1) + ') no tiene respuestas');
+      if (!PP.verificar(d, validas[0], est)) throw new Error(d.id + ' no acepta su propia respuesta');
+    });
+  }
+});
+await test('todas las imágenes de config.js existen', () => {
+  const rutas = JSON.stringify(CONFIG).match(/assets\/[^"]+\.(svg|jpe?g|png|webp)/g) || [];
+  const faltan = rutas.filter((r) => !existsSync(raiz + r));
+  if (faltan.length) throw new Error('faltan: ' + faltan.join(', '));
+});
+await test('los recuerdos del mapa dependen de desafíos que existen', () => {
+  const ids = CONFIG.desafios.map((d) => d.id);
+  for (const r of CONFIG.mapa.recuerdos || []) {
+    for (const idD of r.tras || CONFIG.mapa.recuerdosTras || []) {
+      if (!ids.includes(idD)) throw new Error(r.lugar + ': no existe el desafío ' + idD);
+    }
   }
 });
 await test('el orden correcto usa todos los sellos y ninguno de más', () => {

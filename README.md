@@ -15,7 +15,7 @@ cheque.html         cheque 20×8 cm + dorso + etiqueta de equipaje, para imprimi
 config.js           TODO el contenido editable
 css/                estilos del pasaporte, del cheque y de impresión
 js/                 lógica (respuestas, mapa, desafíos, efectos, galería…)
-assets/img/         fotos (ejemplo/ y galeria/ traen mocks para probar)
+assets/img/         fotos: fotos_nuestras/ (originales), viajes/ (borrosas y miniaturas), ejemplo/ y galeria/ (mocks)
 tools/blur.html     una foto → 4 versiones desenfocadas
 tools/mapa-gen.mjs  regenera js/mapa-data.js desde Natural Earth
 tests/run.mjs       tests (node tests/run.mjs)
@@ -31,12 +31,12 @@ Abrí `http://localhost:8080`. Las respuestas de ejemplo son:
 
 | Destino | Tipo | Respuesta de ejemplo |
 |---|---|---|
-| 1 · Río de Janeiro | foto borrosa | `rio de janeiro` (también `rio`, `janeiro`) |
+| 1 · Río de Janeiro | foto borrosa, 3 rondas | `traful`, después `quilmes`, después `rio` |
 | 2 · Buenos Aires | memotest | completar los pares y escribir `aventura` |
-| 3 · Salta | ordenar | Colón → Río → Búzios → Bariloche → Mendoza → Tucumán → Salta (provisorio: poné el orden real) |
+| 3 · Mar del Plata | ordenar | Mar del Plata → Mendoza → Bariloche (guiso) → San Martín → Tucumán → Río → Maceió → Bariloche (cuñado) |
 | 4 · Colón | lancha | tocar «¡Saltá!» 3 veces cuando la lancha queda pareja con el muelle |
-| 5 · Bariloche | cerro | contestar bien las 3 preguntas (en el ejemplo: la última opción, la última, la primera) |
-| 6 · Mendoza | barro | limpiar la foto con el dedo y escribir `luigi bosca` (también `luigi`, `bosca`) |
+| 5 · San Martín de los Andes | cerro | El Lácar · San Martín de los Andes · Villa La Angostura y Bariloche |
+| 6 · Mendoza | barro | limpiar la foto con el dedo y escribir `luigi bosca` (también `luigi`, `bosca`, `finca el paraiso`) |
 | 7 · El sobre | texto | `gertrudis` (también `bernie`, `bernis`) |
 
 La pista oculta del ejemplo es la palabra **FIRMA** (letras apenas más violetas en los textos del titular y del mapa; mantené apretado el logo de la agencia para resaltarlas).
@@ -50,9 +50,9 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
 1. **Datos generales:** `nombre`, `autor` (tu nombre, va en la firma), `fecha` y `numeroCheque` (la fecha de ustedes), `siteUrl` (la URL de Pages).
 2. **Titular:** `titular.foto` (una foto de ella), nacionalidad, profesión y el texto de bienvenida.
 3. **Desafíos:** cada uno tiene `destino`, `pais`, `lat`/`lon` (dónde va el pin), `enunciado`, 2 `pistas` (aparecen a los 2 y 4 errores), `recompensa` y sus `respuestas`: una lista en texto plano con todas las formas que aceptás. Se comparan sin mayúsculas, tildes, puntuación ni espacios de más, así que `'Río de Janeiro'` ya acepta `rio de janeiro!`. Por tipo:
-   - `blur`: `imagenes` con las 4 versiones (usá `tools/blur.html`).
+   - `blur`: `imagenes` con las 4 versiones (usá `tools/blur.html`). Para varias fotos seguidas, `rondas`: cada una con `imagenes`, `pie` (se ve al acertarla), `respuestas` y sus 2 `pistas`; los errores y las pistas cuentan por ronda.
    - `memotest`: `cartas` con 6 fotos y `palabraClave` (ya vale como respuesta; `respuestas` es para sumar otras).
-   - `order`: `sellos` con `id` y `nombre` (opcional `imagen` y `anio`) y `ordenCorrecto` con los `id` del más viejo al más nuevo. Los sellos se muestran mezclados. Para sumar un viaje, agregalo a `sellos` y poné su `id` en `ordenCorrecto`.
+   - `order`: `sellos` con `id` y `nombre` (opcional `imagen` y `anio`; ojo que `anio` se ve y una foto puede spoilear la foto borrosa) y `ordenCorrecto` con los `id` del más viejo al más nuevo. Los sellos se muestran mezclados. Para sumar un viaje, agregalo a `sellos` y poné su `id` en `ordenCorrecto`.
    - `lancha`: `etapas` (un salto por etapa), `tolerancia` (0 a 1, más grande = más fácil) y `mensajesSplash` para cuando se cae al agua. No lleva `respuestas`.
    - `cerro`: `cerro` (nombre) y `preguntas`, cada una con `pregunta`, `opciones` y `correcta` (posición de la correcta, 0 = la primera; en pantalla se mezclan). No lleva `respuestas`.
    - `barro`: `foto` (la que queda tapada de barro), `limpieza` (qué fracción hay que limpiar, 0 a 1) y `respuestas` para la pregunta del enunciado.
@@ -63,9 +63,10 @@ Todo está en `config.js`. Lo que dice `[CORCHETES]` es placeholder.
 6. **Valija 3D:** usa sola los sellos de todos los destinos (hasta 8), la primera foto de la galería (polaroid en la tapa) y el texto de `cheque.etiqueta` para la etiqueta que cuelga de la manija.
 7. **Galería:** en `final.proximo.galeria` cambiá cada `src` por tus fotos (ponelas en `assets/img/galeria/`) y borrá `pendiente: true` para que se vaya el rótulo "📷 foto pendiente".
 8. **Cheque:** `cheque.microtexto` es la respuesta del desafío del sobre impresa en la línea de firma; también el texto del dorso y de la etiqueta.
-9. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
+9. **Recuerdos en el mapa:** `mapa.recuerdos` son las polaroids (`foto` miniatura cuadrada, `grande` para verla ampliada, `lugar`, `fecha`, `nota`, `lat`/`lon`, y `dx`/`dy`/`rot` para correrla y girarla). Aparecen recién cuando están sellados los desafíos de `recuerdosTras` (el de ordenar, porque las fechas lo resuelven) o de su propio `tras`.
+10. **Mapa:** `mapa.textoTierra` es la frase con la que se "escribe" la tierra; `mapa.visitados` son los países en bordó (códigos ISO numéricos: Argentina `032`, Brasil `076`, Chile `152`, Uruguay `858`, Paraguay `600`).
 
-Si cambiás respuestas o el contenido de los desafíos después de que ella empezó, subí `version` (por ej. `'v4'`) para que el progreso guardado se reinicie.
+Si cambiás respuestas o el contenido de los desafíos después de que ella empezó, subí `version` (por ej. `'v5'`) para que el progreso guardado se reinicie.
 
 ## Herramientas (`/tools`, uso local)
 

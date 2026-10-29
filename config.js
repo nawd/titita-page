@@ -5,7 +5,7 @@
 // ============================================================================
 globalThis.CONFIG = {
   // Cambiá la versión si querés que el progreso guardado se reinicie para todos.
-  version: 'v3',
+  version: 'v4',
 
   // URL pública (GitHub Pages). El QR del cheque apunta acá.
   siteUrl: 'https://nawd.github.io/titita-page/',
@@ -25,7 +25,7 @@ globalThis.CONFIG = {
   },
 
   titular: {
-    foto: 'assets/img/ejemplo/titular.svg', // [FOTO DE ELLA]
+    foto: 'assets/img/viajes/titular.jpg',
     nacionalidad: 'De acá y de donde estemos juntos',
     profesion: 'Buscadora oficial de pistas',
     bienvenida:
@@ -43,6 +43,39 @@ globalThis.CONFIG = {
     leyenda: { visitado: 'Ya fuimos', otro: 'Nos falta', mar: 'Mar' },
     // Países "visitados" (códigos ISO numéricos de Natural Earth): Argentina y Brasil.
     visitados: ['032', '076'],
+    // Polaroids de nuestros viajes. Aparecen (pegándose) recién cuando están sellados los
+    // desafíos de `tras` (o de `recuerdosTras`): si no, darían las fechas del desafío de ordenar.
+    // dx/dy corren la polaroid desde el lugar (en % del ancho/alto del mapa); rot la gira.
+    recuerdosTras: ['destino-3'],
+    recuerdos: [
+      { lugar: 'Colón', fecha: 'feb 2023', lat: -32.22, lon: -58.14, dx: 14, dy: 0, rot: 5,
+        foto: 'assets/img/viajes/mini/colon.jpg', grande: 'assets/img/fotos_nuestras/Colón_febrero_2023_isla_san_francisco.webp',
+        nota: 'Isla San Francisco. Sí, el viaje de la lancha 🥴' },
+      { lugar: 'Mendoza', fecha: 'feb 2023', lat: -33.04, lon: -68.88, dx: -18, dy: -7, rot: -6,
+        foto: 'assets/img/viajes/mini/mendoza.jpg', grande: 'assets/img/fotos_nuestras/mendoza_mayo_2023.webp',
+        nota: 'Luján de Cuyo, 9 de la mañana, ni un auto en la calle: multa por una vuelta en U. Vos, mirando todo desde la ventana.' },
+      { lugar: 'Bariloche', fecha: 'ago 2023', lat: -41.13, lon: -71.31, dx: 20, dy: 3, rot: 6,
+        foto: 'assets/img/viajes/mini/bariloche-2023.jpg', grande: 'assets/img/fotos_nuestras/bariloche_cerro_catedral_agosto_2023.webp',
+        nota: 'Cerro Catedral: el guiso que nos devolvió el alma al cuerpo.' },
+      { lugar: 'San Martín', fecha: 'feb 2024', lat: -40.16, lon: -71.35, dx: -14, dy: -6, rot: 4,
+        foto: 'assets/img/viajes/mini/san-martin.jpg', grande: 'assets/img/fotos_nuestras/lago_lacar_arriba_cerro_colorado_marzo_2024.webp',
+        nota: 'El lago Lácar desde arriba del Cerro Colorado.' },
+      { lugar: 'V. La Angostura', fecha: 'feb 2024', lat: -40.76, lon: -71.65, dx: -13, dy: 7, rot: -5,
+        foto: 'assets/img/viajes/mini/villa-la-angostura.jpg', grande: 'assets/img/fotos_nuestras/villa_langostura.webp',
+        nota: 'Villa La Angostura, desde el auto.' },
+      { lugar: 'Tucumán', fecha: 'jun 2024', lat: -26.47, lon: -66.03, dx: -24, dy: -10, rot: 3, tras: ['destino-3', 'destino-1'],
+        foto: 'assets/img/viajes/mini/quilmes.jpg', grande: 'assets/img/fotos_nuestras/ruina_quilmes_tucuman_junio_2024.webp',
+        nota: 'Ruinas de Quilmes, entre cardones.' },
+      { lugar: 'Río', fecha: 'ene 2025', lat: -22.97, lon: -43.18, dx: 9, dy: 10, rot: -4, tras: ['destino-3', 'destino-1'],
+        foto: 'assets/img/viajes/mini/rio.jpg', grande: 'assets/img/fotos_nuestras/rio_enero_2025_haciendo_stand_up_paddle.webp',
+        nota: 'Stand up paddle al atardecer.' },
+      { lugar: 'Maceió', fecha: 'mar 2026', lat: -9.86, lon: -35.94, dx: -4, dy: -14, rot: 6,
+        foto: 'assets/img/viajes/mini/maceio.jpg', grande: 'assets/img/fotos_nuestras/brasil_maceio_marzo_2026.webp',
+        nota: 'Praia do Gunga (y los cuatriciclos).' },
+      { lugar: 'Bariloche', fecha: 'ago 2026', lat: -41.16, lon: -71.4, dx: 18, dy: 16, rot: -7,
+        foto: 'assets/img/viajes/mini/bariloche-2026.jpg', grande: 'assets/img/fotos_nuestras/Bari_cerro_catedral_agos_2026_primera_vez_Tita_arriba_todo.webp',
+        nota: 'Cerro Catedral con tu cuñado: la primera vez que llegaste arriba de todo.' },
+    ],
   },
 
   limiteErrores: 6,
@@ -76,22 +109,34 @@ globalThis.CONFIG = {
     {
       id: 'destino-1',
       tipo: 'blur',
-      destino: 'Río de Janeiro', // [NOMBRE DEL DESTINO] — se ve recién al sellar
+      destino: 'Río de Janeiro', // se ve recién al sellar
       pais: 'Brasil',
       lat: -22.9,
       lon: -43.2,
-      enunciado: '¿Dónde estamos? La foto se va aclarando con cada intento fallido (la agencia es generosa, no tonta).',
-      // De más borrosa a nítida. Generalas con tools/blur.html.
-      imagenes: [
-        'assets/img/ejemplo/rio-blur-3.svg',
-        'assets/img/ejemplo/rio-blur-2.svg',
-        'assets/img/ejemplo/rio-blur-1.svg',
-        'assets/img/ejemplo/rio-nitida.svg',
-      ],
-      pistas: ['Hacía muchísimo calor y había un Cristo mirándonos.', 'Empieza con R y tiene carnaval.'],
+      enunciado: '¿Dónde estamos? Son tres fotos y cada una se va aclarando con cada intento fallido (la agencia es generosa, no tonta).',
+      // Una ronda por foto. imagenes: de más borrosa a nítida (generalas con tools/blur.html).
       // Respuestas válidas: se comparan sin mayúsculas, tildes ni puntuación.
-      respuestas: ['Río de Janeiro', 'Rio', 'Rio Janeiro', 'Janeiro'],
-      recompensa: { texto: 'Todavía me acuerdo de tu cara cuando vimos el mar desde arriba. [TU RECUERDO]' },
+      rondas: [
+        {
+          imagenes: ['assets/img/viajes/traful-blur-3.jpg', 'assets/img/viajes/traful-blur-2.jpg', 'assets/img/viajes/traful-blur-1.jpg', 'assets/img/viajes/traful-nitida.jpg'],
+          pie: 'Río Traful, Neuquén · feb 2024',
+          respuestas: ['Río Traful', 'Traful', 'Villa Traful', 'Río Limay', 'Limay'],
+          pistas: ['Mate, termo y una playita de arena en la Patagonia.', 'Fue en el viaje de San Martín de los Andes. Es un río.'],
+        },
+        {
+          imagenes: ['assets/img/viajes/quilmes-blur-3.jpg', 'assets/img/viajes/quilmes-blur-2.jpg', 'assets/img/viajes/quilmes-blur-1.jpg', 'assets/img/viajes/quilmes-nitida.jpg'],
+          pie: 'Ruinas de Quilmes, Tucumán · jun 2024',
+          respuestas: ['Ruinas de Quilmes', 'Quilmes', 'Ruinas', 'Tucumán', 'Amaicha'],
+          pistas: ['Cardones gigantes y piedras con mucha historia.', 'Se llama igual que una cerveza 🍺'],
+        },
+        {
+          imagenes: ['assets/img/viajes/rio-blur-3.jpg', 'assets/img/viajes/rio-blur-2.jpg', 'assets/img/viajes/rio-blur-1.jpg', 'assets/img/viajes/rio-nitida.jpg'],
+          pie: 'Río de Janeiro · ene 2025',
+          respuestas: ['Río de Janeiro', 'Rio', 'Rio Janeiro', 'Janeiro'],
+          pistas: ['Stand up paddle al atardecer, en otro país.', 'Empieza con R y tiene carnaval.'],
+        },
+      ],
+      recompensa: { texto: 'Tres de tres. Ese atardecer arriba de la tabla no me lo olvido más.' },
     },
     {
       id: 'destino-2',
@@ -119,29 +164,30 @@ globalThis.CONFIG = {
     {
       id: 'destino-3',
       tipo: 'order',
-      destino: 'Salta',
+      destino: 'Mar del Plata',
       pais: 'Argentina',
-      lat: -24.8,
-      lon: -65.4,
+      lat: -38.0,
+      lon: -57.55,
       enunciado: 'Ordená los sellos de nuestros viajes del más viejo (arriba) al más nuevo (abajo). Arrastralos o usá las flechitas.',
-      // ids + nombre visible. Opcional: imagen: 'assets/img/...'. El orden acá NO importa.
+      // ids + nombre visible. Opcional: imagen (sin fotos que spoileen la foto borrosa). El orden acá NO importa.
       // Para sumar un viaje: agregalo acá y poné su id en ordenCorrecto.
       sellos: [
-        { id: 'colon', nombre: 'Colón', anio: '' },
-        { id: 'rio', nombre: 'Río', anio: '' },
-        { id: 'bariloche', nombre: 'Bariloche', anio: '' },
-        { id: 'buzios', nombre: 'Búzios', anio: '' },
-        { id: 'mendoza', nombre: 'Mendoza', anio: '' },
+        { id: 'mdq', nombre: 'Mar del Plata', anio: '' },
+        { id: 'mendoza', nombre: 'Mendoza', anio: '', imagen: 'assets/img/viajes/mini/mendoza.jpg' },
+        { id: 'bariloche-2023', nombre: 'Bariloche · el guiso', anio: '', imagen: 'assets/img/viajes/mini/bariloche-2023.jpg' },
+        { id: 'san-martin', nombre: 'San Martín de los Andes', anio: '', imagen: 'assets/img/viajes/mini/san-martin.jpg' },
         { id: 'tucuman', nombre: 'Tucumán', anio: '' },
-        { id: 'salta', nombre: 'Salta', anio: '' },
+        { id: 'rio', nombre: 'Río de Janeiro', anio: '' },
+        { id: 'maceio', nombre: 'Maceió', anio: '', imagen: 'assets/img/viajes/mini/maceio.jpg' },
+        { id: 'bariloche-2026', nombre: 'Bariloche · con el cuñado', anio: '', imagen: 'assets/img/viajes/mini/bariloche-2026.jpg' },
       ],
       pistas: [
-        'El primero fue a orillas de un río, no del mar.', // [EDITAR PISTA]
-        'Los dos de Brasil fueron uno atrás del otro.', // [EDITAR PISTA]
+        'El primero fue de playa, pero de este lado del charco.',
+        'Bariloche abre y cierra la lista: una en 2023 y otra con nieve hasta arriba.',
       ],
-      // Orden correcto (del más viejo al más nuevo), con los ids de arriba. [EDITAR: orden real]
-      ordenCorrecto: ['colon', 'rio', 'buzios', 'bariloche', 'mendoza', 'tucuman', 'salta'],
-      recompensa: { texto: 'Siete viajes en orden y ni un ataque de nervios. Sos la mejor copiloto.' },
+      // Orden correcto (del más viejo al más nuevo), con los ids de arriba.
+      ordenCorrecto: ['mdq', 'mendoza', 'bariloche-2023', 'san-martin', 'tucuman', 'rio', 'maceio', 'bariloche-2026'],
+      recompensa: { texto: 'Ocho viajes en orden. Volvé al mapa: se llenó de recuerdos 📸' },
     },
     {
       id: 'colon',
@@ -166,25 +212,31 @@ globalThis.CONFIG = {
         'No es el muelle el que se mueve 🍷. Esperá a que la lancha quede derechita.',
         'Mirá la rayita dorada: cuando la lancha la toca, saltá.',
       ],
-      recompensa: { texto: 'Bajaste de la lancha. Esta vez sin que nadie te tenga que bajar a upa. [TU RECUERDO]' },
+      recompensa: {
+        imagen: 'assets/img/fotos_nuestras/Colón_febrero_2023_isla_san_francisco.webp',
+        texto: 'Isla San Francisco, febrero 2023. Bajaste de la lancha, y esta vez sin que nadie te tenga que bajar a upa.',
+      },
     },
     {
-      id: 'bariloche',
+      id: 'san-martin',
       tipo: 'cerro',
-      destino: 'Bariloche',
+      destino: 'San Martín de los Andes',
       pais: 'Argentina',
-      lat: -41.13,
-      lon: -71.31,
+      lat: -40.16,
+      lon: -71.35,
       cerro: 'Cerro Colorado',
       enunciado: 'Subimos el Cerro Colorado. Cada respuesta correcta te sube un tramo; cada error, resbalón. ¡A la cumbre!',
       // correcta = posición de la opción correcta (0 = la primera). Las opciones se mezclan solas.
       preguntas: [
-        { pregunta: '¿Qué llevamos para la subida?', opciones: ['Mate y bizcochitos', 'Chocolate de Bariloche', 'Nada, éramos unos inconscientes'], correcta: 2 }, // [EDITAR]
-        { pregunta: '¿Quién se cansó primero?', opciones: ['Vos', 'Yo', 'Los dos, pero nadie lo admitió'], correcta: 2 }, // [EDITAR]
-        { pregunta: '¿Qué hicimos al llegar arriba?', opciones: ['La foto de la cumbre', 'Tirarnos al piso', 'Prometer que nunca más'], correcta: 0 }, // [EDITAR]
+        { pregunta: '¿Qué lago se veía desde arriba del cerro?', opciones: ['El Lácar', 'El Nahuel Huapi', 'El Traful'], correcta: 0 },
+        { pregunta: '¿Dónde nos hospedamos ese viaje?', opciones: ['San Martín de los Andes', 'Villa La Angostura', 'Bariloche'], correcta: 0 },
+        { pregunta: '¿Qué más recorrimos en ese viaje?', opciones: ['Villa La Angostura y Bariloche', 'El Bolsón y Esquel', 'Mendoza y San Juan'], correcta: 0 },
       ],
-      pistas: ['En la montaña conviene ir despacio: leé bien cada opción.', 'Acordate de la cara que teníamos en la cumbre.'],
-      recompensa: { texto: 'Cumbre. Con vos, hasta las subidas valen la pena. [TU RECUERDO]' },
+      pistas: ['El cerro no está en Bariloche: es el de la ciudad donde dormíamos.', 'Desde arriba se ve un lago que empieza con L.'],
+      recompensa: {
+        imagen: 'assets/img/fotos_nuestras/lago_lacar_arriba_cerro_colorado_marzo_2024.webp',
+        texto: 'Cumbre del Cerro Colorado. Vos mirando el Lácar; yo, a vos.',
+      },
     },
     {
       id: 'mendoza',
@@ -193,13 +245,16 @@ globalThis.CONFIG = {
       pais: 'Argentina',
       lat: -32.89,
       lon: -68.83,
-      enunciado: 'Termas de Cacheuta: alguien terminó embarrado de pies a cabeza. Limpiá la foto con el dedo y contestá: ¿en qué bodega nos hicieron completar el historial de viajes y nos sellaron el pasaporte?',
-      foto: 'assets/img/ejemplo/barro.svg', // [FOTO DE BOMBÓN EMBARRADO]
+      enunciado: 'Mendoza: barro en las termas de Cacheuta, fiesta en Potrerillos y algo que pasó en Luján de Cuyo. Limpiá la foto con el dedo y contestá: ¿en qué bodega nos sellaron el historial de viajes?',
+      foto: 'assets/img/fotos_nuestras/mendoza_mayo_2023.webp',
       // Fracción de la foto que hay que limpiar para que aparezca la respuesta (0 a 1).
       limpieza: 0.6,
-      pistas: ['No fue en Decero.', 'Tiene nombre de tano.'],
-      respuestas: ['Luigi Bosca', 'Luigi', 'Bosca', 'Bodega Luigi Bosca'],
-      recompensa: { texto: 'En Luigi Bosca nos sellaron el historial de viajes; ahora el sello te lo pongo yo. Salud 🍷' },
+      pistas: ['No fue en Decero.', 'Tiene nombre de tano y su finca, nombre de cielo.'],
+      respuestas: ['Luigi Bosca', 'Luigi', 'Bosca', 'Bodega Luigi Bosca', 'Finca El Paraíso', 'El Paraíso', 'Paraíso'],
+      recompensa: {
+        texto: 'Luigi Bosca, Finca El Paraíso: un sello en cada rincón de la bodega. Y en la cabaña de Potrerillos casi te comés ' +
+          'los pellets de la estufa pensando que eran palitos salados (el humo que se armó…). Salud 🍷',
+      },
     },
     {
       id: 'destino-4',
